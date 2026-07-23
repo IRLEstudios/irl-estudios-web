@@ -186,7 +186,7 @@
   a:focus-visible, .btn:focus-visible{outline:2px solid #fff; outline-offset:2px;}
 </style>
 </head>
-<body>
+<body data-page="opiniones">
 
 <a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
   <img class="hero-bg" src="assets/hero.jpg" alt="">
@@ -194,13 +194,14 @@
 <div class="wrap">
   <div class="col">
     <div class="panel">
-      <img src="assets/opiniones.png" alt="Sesión de producción en el Estudio A">
+      <img data-key-src="photo_image" src="assets/opiniones.png" alt="Sesión de producción en el Estudio A">
       <div class="divider"></div>
 
-      <div class="badge">Opiniones de <b>alumn@s</b></div>
+      <div class="badge" data-key-html="badge_html">Opiniones de <b>alumn@s</b></div>
 
       <div class="card">
 
+    <div data-key-html="course_iniciacion_html">
     <p class="course-heading">Curso Producción Musical Inicial</p>
 
     <p class="testimonial"><span class="name">Carlos</span>Me ha encantado el curso, ha cumplido con creces mis expectativas y me ha dado una nueva forma de disfrutar de la música... técnicamente es bastante completo y cubre todo lo que necesitaba.</p>
@@ -210,7 +211,9 @@
     <p class="testimonial"><span class="name">Celia</span>Termino el curso con conocimientos y herramientas que me hacen sentir súper capaz. Los bloqueos que podía tener antes de no saber por dónde empezar a hacer cosas se han deshecho completamente. El temario y el orden es lo justo para, en poco tiempo, aprender cosas básicas y bien aprendidas.</p>
 
     <p class="testimonial"><span class="name">Meng</span>En general el curso súper bien, aprendes un montón y está muy bien organizado. He notado un gran cambio desde la primera hasta la última clase, sobre todo el haber aprendido a seguir avanzando, encontrar una respuesta, terminar un proyecto, etc… en vez de bloquearme o quedarme estancada en una parte de algún proyecto. Sería un curso que recomendaría 100% por todo el enfoque tanto práctico como teórico.</p>
+    </div>
 
+    <div data-key-html="course_avanzada_html">
     <p class="course-heading">Curso Producción Musical Avanzada</p>
 
     <p class="testimonial"><span class="name">Jorge</span>Para mí la verdad ha sido mazo lo que necesitaba, al final llevo tiempo haciendo todo yo solo a base de tutoriales y de prueba-error y desde las primeras clases noto que todo lo que hago porfin me suena limpio. Ojalá lo hubiera hecho antes !!</p>
@@ -220,25 +223,30 @@
     <p class="testimonial"><span class="name">Carlos</span>Este curso ha sido la continuación natural del curso de iniciación y ha respondido todas las preguntas que me quedaban pendientes para tener un tema listo para compartirlo. Cubre aspectos de producción más complejos y en detalle, así como conceptos de mezcla y mastering.</p>
 
     <p class="testimonial">Ahora noto que me siento mucho más preparado para identificar y afrontar los problemas que se me presentan con los temas y tengo habilidades nuevas para hacer que suenen de manera mucho más profesional.</p>
+    </div>
 
+    <div data-key-html="course_diseno_html">
     <p class="course-heading">Curso Diseño Sonoro</p>
 
     <p class="testimonial"><span class="name">Pablo</span>Ha sido ultra útil el apoyo con las diapositivas teóricas porque ayudan a entender fácil todo y una vez terminadas las clases, esa ha sido mi manera de resolver dudas: volver a las diapos.</p>
 
     <p class="testimonial">El poner en práctica desde el primer minuto toda la teoría, hace que lo entiendas 100/100 porque lo haces allí y se resuelven las dudas en clase. Entender haciendo.<br>Ha sido súper atractivo el enfoque tan creativo desde el que se trataba el trabajo con el diseño del sonido.</p>
+    </div>
 
+    <div data-key-html="course_ableton_html">
     <p class="course-heading">Curso Directo en Ableton</p>
 
     <p class="testimonial"><span class="name">Celia</span>Este curso me ha abierto la cabeza a muchísimas posibilidades para el directo que ni siquiera sabía que existían.<br>Me ha ayudado a llevar mi directo a un punto mucho más rico y más profesional, más controlado y a un lugar en el que sacar más partido de la producción de las canciones.</p>
 
     <p class="testimonial">Alex crea un ambiente de aprendizaje súper cómodo, cercano y generoso. Además me pareció muy guay que una de las sesiones fuera práctica para realmente poder asentar todos los conocimientos y armar una sesión de directo a partir de unas canciones dadas. Con unas pocas sesiones terminas sabiendo todo lo que puedes hacer con Ableton y conocimientos de hardware y cosas técnicas. Lo recomendaría 100%</p>
-
-    <div class="cta-row" style="margin-top:20px;">
-      <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfiU-G0X45yWvva-gT-QxxiErAM3poCA1UHHzhLqLWKQNSKrQ/viewform?usp=header" target="_blank" rel="noopener">Inscripciones Oct/Nov 2026</a>
-      <a class="btn" href="https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda" target="_blank" rel="noopener">Dossier cursos</a>
     </div>
 
-    <p class="contact">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+    <div class="cta-row" style="margin-top:20px;">
+      <a class="btn primary" data-key="cta_primary_label" data-key-href="cta_primary_href" href="https://docs.google.com/forms/d/e/1FAIpQLSfiU-G0X45yWvva-gT-QxxiErAM3poCA1UHHzhLqLWKQNSKrQ/viewform?usp=header" target="_blank" rel="noopener">Inscripciones Oct/Nov 2026</a>
+      <a class="btn" data-key="cta_secondary_label" data-key-href="cta_secondary_href" href="https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda" target="_blank" rel="noopener">Dossier cursos</a>
+    </div>
+
+    <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
 
       </div>
     </div>
@@ -246,4 +254,5 @@
 </div>
 
 </body>
+<script src="assets/content-loader.js"></script>
 </html>

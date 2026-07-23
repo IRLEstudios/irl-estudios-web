@@ -1,0 +1,18 @@
+{
+  "photo_image": "assets/produccion-iniciacion.jpg",
+  "badge_html": "Curso - Producción musical <b>Iniciación</b>",
+  "lede_1_html": "Aprende a producir desde cero todos los estilos musicales.",
+  "lede_2_html": "El curso va dirigido a personas que quieran introducirse en la <b>producción musical y la composición</b> en géneros como el pop, indie, reggaeton o electrónica.",
+  "requirement_html": "<b>Para todos los niveles iniciales.</b><br>\n    Enseñanzas prácticas y adaptadas al trabajo profesional desde el primer día, aprende creando y genera un lenguaje propio con tu música.",
+  "lede_3_html": "Trabajaremos desde el estudio y aplicaremos cada día los aprendizajes en la práctica.",
+  "temario_html": "<p style=\"margin-bottom:4px;\"><b>Temario:</b></p>\n      <span class=\"list-line\">- Producción y composición: básicos, referencias, herramientas.</span>\n      <span class=\"list-line\">- Aprendizaje práctico en Ableton.</span>\n      <span class=\"list-line\">- Organización y flujo de trabajo en el DAW (programa de edición).</span>\n      <span class=\"list-line\">- Tipos de instrumentos y uso de instrumentos digitales.</span>\n      <span class=\"list-line\">- Samples y bancos de samples: uso, nomenclaturas y búsqueda.</span>\n      <span class=\"list-line\">- Uso de MIDI.</span>\n      <span class=\"list-line\">- Síntesis básica.</span>\n      <span class=\"list-line\">- Edición de sonido: cortes, ecualización, warping, automatizaciones...</span>\n      <span class=\"list-line\">- Efectos de sonido: delay, reverb, chorus, phaser, distorsión...</span>",
+  "metodologia_html": "<p style=\"margin-bottom:4px;\"><b>Metodología:</b></p>\n      <span class=\"list-line\">- 8 sesiones de 2 horas. (1 sesión por semana)</span>\n      <span class=\"list-line\">- Horarios adaptables al grupo. (Tardes entresemana o sábado por la mañana)</span>\n      <span class=\"list-line\">- Grupos reducidos de 4 personas para facilitar la comunicación y el aprendizaje.</span>",
+  "teacher_html": "Impartido por <b>TURIAN BOY</b>, productor musical, compositor, diseñador sonoro y docente en nuestro <a href=\"estudio-a.html\">Estudio A</a>.",
+  "price": "500€",
+  "note_price_html": "Incluye las 8 sesiones de aprendizaje en el estudio donde usaremos todo el material y grabaremos juntos instrumentos y voces.",
+  "cta_primary_label": "Inscripciones Oct/Nov 2026",
+  "cta_primary_href": "https://docs.google.com/forms/d/e/1FAIpQLSfiU-G0X45yWvva-gT-QxxiErAM3poCA1UHHzhLqLWKQNSKrQ/viewform?usp=header",
+  "cta_secondary_label": "Dossier cursos",
+  "cta_secondary_href": "https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda",
+  "contact_html": "Para más info escríbenos a nuestro mail: <a href=\"mailto:irlestudiosmadrid@gmail.com\">irlestudiosmadrid@gmail.com</a>"
+}

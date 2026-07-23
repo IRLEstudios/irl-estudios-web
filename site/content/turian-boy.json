@@ -1,0 +1,11 @@
+{
+  "photo_image": "assets/turian-boy.jpg",
+  "name": "turian boy",
+  "instagram_href": "https://www.instagram.com/turianboy/",
+  "bio_1_html": "Alex Vidal - TURIAN BOY es un compositor, <b>productor musical</b>, docente y artista multidisciplinar.",
+  "bio_2_html": "En su música navega entre géneros musicales diversos para consolidar su visión. Desde el pop al indie o la electrónica, su estilo abraza diferentes estilos y texturas pero siempre teniendo en el centro lo orgánico.",
+  "bio_3_html": "Además de su trabajo como productor y compositor pop, ejerce como <b>docente</b> de Diseño Sonoro y trabaja continuamente para proyectos de publicidad como compositor, <b>diseñador sonoro</b> y productor musical.",
+  "bio_4_html": "Con más de 10 años de experiencia en la industria musical, ha fundado <b><a href=\"index.html\">IRL Estudios</a></b> con la idea de tener un espacio donde dar cabida a la creación y el aprendizaje.",
+  "jobs_html": "<p style=\"margin-bottom:8px;\"><b>Trabajos</b></p>\n      <span class=\"list-line\">- Producción y composición de música pop</span>\n      <span class=\"list-line link-line\"><svg class=\"icon\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M11 5 6 9H3v6h3l5 4V5z\"/><path d=\"M15.5 8.5a5 5 0 0 1 0 7\" stroke=\"currentColor\" stroke-width=\"1.8\" fill=\"none\" stroke-linecap=\"round\"/></svg><a href=\"https://tidal.com/playlist/def703b0-90fd-4611-9196-e24e978cde64\" target=\"_blank\" rel=\"noopener\">Prod by turian boy</a></span>\n\n      <span class=\"list-line\">- Composición, diseño sonoro y productor para audiovisual (Publicidad, cortos...)</span>\n      <span class=\"list-line link-line\"><svg class=\"icon\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><rect x=\"2\" y=\"5\" width=\"15\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M17 10.5 22 7v10l-5-3.5z\"/></svg><a href=\"https://alexvidal4c.wixsite.com/home\" target=\"_blank\" rel=\"noopener\">Composición y diseño sonoro para audiovisual</a></span>\n\n      <span class=\"list-line\">- Docente Diseño Sonoro en <b>IED Madrid</b></span>",
+  "contact_html": "Para más info escríbenos a nuestro mail: <a href=\"mailto:irlestudiosmadrid@gmail.com\">irlestudiosmadrid@gmail.com</a>"
+}

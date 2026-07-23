@@ -203,25 +203,25 @@
   a:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
 </style>
 </head>
-<body>
+<body data-page="home">
 
 <section class="hero">
-  <img class="hero-bg" src="assets/hero.jpg" alt="Sintetizador Polysix y mesa de grabación Grundig TS1000 en el Estudio A de IRL Estudios">
+  <img class="hero-bg" data-key-src="hero_image" src="assets/hero.jpg" alt="Sintetizador Polysix y mesa de grabación Grundig TS1000 en el Estudio A de IRL Estudios">
   <div class="hero-scrim"></div>
 
   <div class="tag" aria-hidden="true">
-    <img src="assets/logo-tag.png" alt="">
+    <img data-key-src="tag_image" src="assets/logo-tag.png" alt="">
   </div>
 
   <div class="hero-inner">
     <div class="panel">
       <div class="panel-header">
-        <h1 class="brand">IRL Estudios</h1>
-        <span class="location">Madrid</span>
+        <h1 class="brand" data-key="brand_title">IRL Estudios</h1>
+        <span class="location" data-key="location">Madrid</span>
       </div>
 
       <div class="nav-block">
-        <div class="nav-title">Espacios</div>
+        <div class="nav-title" data-key="section_1_title">Espacios</div>
         <ul class="nav-links">
           <li><a href="estudio-a.html">Estudio A</a></li>
         </ul>
@@ -229,7 +229,7 @@
       </div>
 
       <div class="nav-block">
-        <div class="nav-title">Escuela de Sonido</div>
+        <div class="nav-title" data-key="section_2_title">Escuela de Sonido</div>
         <ul class="nav-links">
           <li><a href="produccion-musical-iniciacion.html">Producción Musical <em>Iniciación</em></a></li>
           <li><a href="produccion-musical-avanzada.html">Producción Musical <em>Avanzada</em></a></li>
@@ -244,7 +244,7 @@
       </div>
 
       <div class="nav-block">
-        <div class="nav-title">Nuestros Trabajos</div>
+        <div class="nav-title" data-key="section_3_title">Nuestros Trabajos</div>
         <ul class="nav-links">
           <li><a href="https://linktr.ee/IRL_WEB" target="_blank" rel="noopener">Publicidad y audiovisual</a></li>
           <li><a href="https://tidal.com/playlist/6fd13b22-cced-4410-b34c-35e5cb484462" target="_blank" rel="noopener">Producción musical</a></li>
@@ -256,7 +256,7 @@
       </div>
 
       <div class="nav-block">
-        <div class="nav-title">Equipo Humano</div>
+        <div class="nav-title" data-key="section_4_title">Equipo Humano</div>
         <ul class="nav-links">
           <li><a href="turian-boy.html">turian boy</a></li>
         </ul>
@@ -272,4 +272,5 @@
 </section>
 
 </body>
+<script src="assets/content-loader.js"></script>
 </html>
