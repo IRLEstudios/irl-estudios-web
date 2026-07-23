@@ -786,8 +786,13 @@ function uploadImage(file, onDone, onError) {
   })
     .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
     .then(function (result) {
-      if (result.ok) onDone(result.data.url);
-      else if (onError) onError(result.data.error);
+      if (result.ok) {
+        onDone(result.data.url);
+      } else if (onError) {
+        var msg = result.data.error || 'Error subiendo la imagen.';
+        if (result.data.detail) msg += ' (' + result.data.detail + ')';
+        onError(msg);
+      }
     })
     .catch(function () { if (onError) onError(); });
 }
@@ -829,7 +834,9 @@ document.getElementById('saveButton').onclick = function () {
         status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.';
         originalSnapshot = JSON.stringify(data);
       } else {
-        status.textContent = (result.body && result.body.error) || 'Error al guardar.';
+        var msg = (result.body && result.body.error) || 'Error al guardar.';
+        if (result.body && result.body.detail) msg += ' (' + result.body.detail + ')';
+        status.textContent = msg;
       }
     })
     .catch(function () { status.textContent = 'Error al guardar (sin respuesta del servidor).'; });
