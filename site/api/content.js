@@ -29,25 +29,33 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'GET') {
+    // DEBUG TEMPORAL: ?debug=1 añade información de diagnóstico sin
+    // exponer nada sensible, para saber por qué no se lee de Blob.
+    const debug = req.query && req.query.debug === '1';
+    const debugInfo = { hasToken: !!process.env.BLOB_READ_WRITE_TOKEN };
+
     try {
-      const info = await head(blobKeyFor(page)).catch(() => null);
+      const info = await head(blobKeyFor(page));
+      debugInfo.headOk = true;
+      debugInfo.headUrl = info && info.url;
+      debugInfo.uploadedAt = info && info.uploadedAt;
+
       if (info && info.url) {
-        // La URL pública del blob se sirve detrás de una CDN que la
-        // trata como inmutable; al sobrescribir el mismo pathname (con
-        // allowOverwrite) puede seguir sirviendo la versión anterior en
-        // caché durante un rato. Se rompe la caché añadiendo un parámetro
-        // único a la URL en cada lectura.
         const bustedUrl = info.url + (info.url.includes('?') ? '&' : '?') + '_v=' + (info.uploadedAt ? new Date(info.uploadedAt).getTime() : Date.now());
         const response = await fetch(bustedUrl, { cache: 'no-store' });
+        debugInfo.fetchStatus = response.status;
         const data = await response.json();
+        if (debug) { res.status(200).json({ data, debugInfo }); return; }
         res.status(200).json(data);
         return;
       }
     } catch (err) {
-      // Si Blob falla por lo que sea, caemos al contenido por defecto.
+      debugInfo.headOk = false;
+      debugInfo.error = err && err.message;
     }
 
     const fallback = readDefaultContent(page);
+    if (debug) { res.status(200).json({ data: fallback, debugInfo, usedFallback: true }); return; }
     if (!fallback) {
       res.status(404).json({ error: 'No existe contenido para esta página' });
       return;
