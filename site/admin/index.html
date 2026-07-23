@@ -307,7 +307,8 @@ function injectEditingStyles(doc) {
     '.irl-drag-handle{position:absolute; bottom:-10px; right:-10px; z-index:99999; width:22px; height:22px; border-radius:50%; background:#232323; color:#eaeaea; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:nwse-resize; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
     '.irl-move-hint{position:absolute; top:-9px; right:14px; z-index:99999; background:#232323; color:#eaeaea; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; padding:3px 7px; border-radius:5px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .15s ease;}',
     '.irl-positionable:hover .irl-move-hint{opacity:1;}',
-    '.irl-positionable{cursor:move;}'
+    '.irl-positionable{cursor:move; -webkit-user-drag:none; user-select:none;}',
+    '.irl-positionable img{-webkit-user-drag:none; user-select:none; pointer-events:none;}'
   ].join('\n');
   doc.head.appendChild(style);
 }
@@ -537,6 +538,14 @@ function onSelectionChange(doc) {
 // contenedor. La posición se guarda en left/top en % (mismas unidades
 // que ya usaba la hoja de estilos), así se mantiene fluido si cambia
 // el tamaño de ventana.
+// El logo entero (incluida la imagen) tiene que poder arrastrarse, pero
+// la imagen TAMBIÉN abre el selector de archivo al hacer clic. Para que
+// ambas cosas convivan: si el ratón se mueve más de unos pocos píxeles
+// entre el mousedown y el mouseup, se trata como arrastre (y se marca
+// el elemento con __irlJustDragged para que el clic de "cambiar imagen"
+// que llega justo después se ignore); si no se movió, es un clic normal.
+var DRAG_THRESHOLD_PX = 4;
+
 function makePositionable(doc, el) {
   el.classList.add('irl-positionable');
   var hint = doc.createElement('span');
@@ -545,13 +554,13 @@ function makePositionable(doc, el) {
   hint.textContent = 'Arrastrar para mover';
   el.appendChild(hint);
 
-  var dragging = false;
+  var tracking = false, moved = false;
   var startX = 0, startY = 0, startLeftPct = 0, startTopPct = 0, parentRect = null;
 
   el.addEventListener('mousedown', function (e) {
-    if (e.target.closest('.irl-img-wrap, .irl-bg-pill, .irl-visibility-badge, .irl-drag-handle')) return;
-    e.preventDefault();
-    dragging = true;
+    if (e.target.closest('.irl-bg-pill, .irl-visibility-badge, .irl-drag-handle')) return;
+    tracking = true;
+    moved = false;
     startX = e.clientX;
     startY = e.clientY;
     parentRect = el.offsetParent.getBoundingClientRect();
@@ -561,14 +570,25 @@ function makePositionable(doc, el) {
   });
 
   doc.addEventListener('mousemove', function (e) {
-    if (!dragging) return;
-    var dxPct = ((e.clientX - startX) / parentRect.width) * 100;
-    var dyPct = ((e.clientY - startY) / parentRect.height) * 100;
+    if (!tracking) return;
+    var dx = e.clientX - startX;
+    var dy = e.clientY - startY;
+    if (!moved && Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) return;
+    if (!moved) { moved = true; e.preventDefault(); }
+    var dxPct = (dx / parentRect.width) * 100;
+    var dyPct = (dy / parentRect.height) * 100;
     el.style.left = (startLeftPct + dxPct).toFixed(2) + '%';
     el.style.top = (startTopPct + dyPct).toFixed(2) + '%';
   });
 
-  doc.addEventListener('mouseup', function () { dragging = false; });
+  doc.addEventListener('mouseup', function () {
+    if (!tracking) return;
+    tracking = false;
+    if (moved) {
+      el.__irlJustDragged = true;
+      setTimeout(function () { el.__irlJustDragged = false; }, 0);
+    }
+  });
 }
 
 // Manija en la esquina para cambiar el tamaño (ancho) de un elemento.
@@ -646,6 +666,8 @@ function enableLiveEditing(doc) {
     wrap.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
+      var positionableAncestor = img.closest('.irl-positionable');
+      if (positionableAncestor && positionableAncestor.__irlJustDragged) return;
       var key = img.getAttribute('data-key-src');
       var input = doc.createElement('input');
       input.type = 'file';

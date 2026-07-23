@@ -56,20 +56,9 @@
     left:2%;
     top:58%;
     filter:drop-shadow(0 0 18px rgba(0,0,0,0.5));
-    animation: drift 5s ease-in-out infinite;
     z-index:5;
   }
   .tag img{width:100%;display:block;}
-  @keyframes drift{
-    0%   { transform: translate(0,0) rotate(0deg); }
-    25%  { transform: translate(4vw, -6vh) rotate(-6deg); }
-    50%  { transform: translate(1vw, -11vh) rotate(4deg); }
-    75%  { transform: translate(-3vw, -4vh) rotate(-3deg); }
-    100% { transform: translate(0,0) rotate(0deg); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .tag{animation:none;}
-  }
 
   /* ---------- NAV PANEL ---------- */
   .panel{
