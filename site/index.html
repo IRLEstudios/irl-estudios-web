@@ -3,273 +3,315 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IRL Estudios — Madrid</title>
-<meta name="description" content="IRL Estudios: espacio de grabación y escuela de sonido en Madrid. Cursos de producción musical, diseño sonoro y directo en Ableton.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@200;300;400;700&display=swap" rel="stylesheet">
+<title>Admin — IRL Estudios</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
   :root{
     --ink:#232323;
     --paper:#eaeaea;
-    --paper-dim:#dedede;
-    --line:#232323;
     --line-light:rgba(0,0,0,0.15);
-    --accent:#c8ff3d;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
+  *{box-sizing:border-box;}
   body{
-    background:#000;
+    margin:0;
+    background:#111;
     color:var(--ink);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-weight:200;
-    line-height:1.15;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
     min-height:100vh;
-    overflow-x:hidden;
   }
-
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
+  .center-wrap{
     min-height:100vh;
-    width:100%;
     display:flex;
-    align-items:flex-start;
-    justify-content:flex-end;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
   }
-  .hero-bg{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-  }
-  .hero-bg::after{content:'';}
-  .hero-scrim{
-    display:none;
-  }
-
-  .tag{
-    position:absolute;
-    width:min(320px, 30vw);
-    left:2%;
-    top:58%;
-    filter:drop-shadow(0 0 18px rgba(0,0,0,0.5));
-    animation: drift 5s ease-in-out infinite;
-    z-index:5;
-  }
-  .tag img{width:100%;display:block;}
-  @keyframes drift{
-    0%   { transform: translate(0,0) rotate(0deg); }
-    25%  { transform: translate(4vw, -6vh) rotate(-6deg); }
-    50%  { transform: translate(1vw, -11vh) rotate(4deg); }
-    75%  { transform: translate(-3vw, -4vh) rotate(-3deg); }
-    100% { transform: translate(0,0) rotate(0deg); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .tag{animation:none;}
-  }
-
-  /* ---------- NAV PANEL ---------- */
-  .panel{
-    position:relative;
-    z-index:10;
+  .box{
     background:var(--paper);
-    width:fit-content;
-    max-width:92vw;
-    margin:48px 48px 0 0;
-    padding:15.84px 14.08px;
+    border:1.6px solid var(--line-light);
     border-radius:12.8px;
-    border:1.6px solid rgba(0,0,0,0.15);
+    padding:28px;
+    width:100%;
+    max-width:340px;
   }
-  .panel-header{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    border-bottom:1px solid var(--line-light);
-    padding-bottom:14px;
-    margin-bottom:6px;
+  .box h1{font-size:18px; margin:0 0 16px;}
+  input[type=password], input[type=text], textarea{
+    width:100%;
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 12px;
+    border:1.6px solid var(--line-light);
+    border-radius:8px;
+    background:#fff;
+    color:var(--ink);
+    margin-bottom:10px;
   }
-  .brand{
-    font-family: 'Archivo', sans-serif;
-    font-weight:700;
-    font-stretch:75%;
-    font-size:clamp(48px, 7vw, 84px);
-    letter-spacing:-0.02em;
-    line-height:1;
-    white-space:nowrap;
-    transform:scaleY(1.14);
-    transform-origin:left top;
-    margin-bottom:6px;
-  }
-  .location{
-    font-size:12px;
-    font-weight:200;
-    letter-spacing:0.02em;
-    white-space:nowrap;
-    margin-top:2px;
-    align-self:flex-end;
-  }
-
-  .nav-block{
-    border-top:1px solid var(--line-light);
-    padding:10px 0;
-    position:relative;
-  }
-  .panel-header + .nav-block{border-top:none; padding-top:10px;}
-  .nav-num{
-    position:absolute;
-    right:0;
-    top:14px;
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-style:normal;
-    font-weight:200;
+  textarea{resize:vertical; min-height:70px;}
+  button{
+    font-family:inherit;
     font-size:13px;
-    color:rgba(0,0,0,0.5);
-  }
-  .nav-title{
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:15px;
-    letter-spacing:0.03em;
-    text-transform:uppercase;
     font-weight:700;
-    line-height:1.2;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:8px;
+    padding:10px 18px;
+    cursor:pointer;
+  }
+  button.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.6);
+  }
+  .error{color:#b3261e; font-size:13px; margin-bottom:10px; display:none;}
+  .app{display:none;}
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 24px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line-light);
+  }
+  .layout{display:flex; min-height:calc(100vh - 57px);}
+  .sidebar{
+    width:260px;
+    background:var(--paper);
+    border-right:1px solid var(--line-light);
+    padding:16px;
+  }
+  .sidebar button{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:transparent;
+    color:var(--ink);
+    font-weight:400;
+    border:none;
+    border-radius:6px;
+    padding:10px 12px;
     margin-bottom:4px;
   }
-  .nav-links{list-style:none;}
-  .nav-links li{margin-bottom:1px; line-height:1.2;}
-  .nav-links a{
-    color:var(--ink);
-    text-decoration:underline;
-    text-underline-offset:3px;
-    font-size:13px;
-    font-weight:200;
-    transition:opacity .15s ease, background .15s ease;
-  }
-  .nav-links a:hover{background:var(--ink);color:var(--paper);}
-  .nav-links a em{font-style:italic;}
-  .nav-links a.strong{font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:700;text-decoration:none;}
-
-  .contact-row{
-    display:flex;
-    gap:12px;
-    margin-top:18px;
-  }
-  .contact-row a{
-    flex:1;
-    text-align:center;
-    border:1.6px solid rgba(0,0,0,0.15);
-    border-radius:9.6px;
-    padding:10px 0;
-    text-decoration:none;
-    color:var(--ink);
-    font-size:13px;
-    letter-spacing:0.06em;
+  .sidebar button:hover, .sidebar button.active{background:rgba(0,0,0,0.08);}
+  .content{flex:1; padding:24px; background:#f5f5f0; overflow:auto;}
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
     text-transform:uppercase;
-    transition:background .15s ease, color .15s ease;
+    letter-spacing:0.03em;
+    margin-bottom:6px;
+    color:rgba(0,0,0,0.6);
   }
-  .contact-row a:hover{background:var(--ink);color:var(--paper);}
-
-  /* Layout: hero panel docks to the right on desktop, stacks on mobile */
-  .hero-inner{
-    position:relative;
-    z-index:10;
-    width:100%;
-    min-height:100vh;
+  .field img{
+    max-width:220px;
+    display:block;
+    border-radius:6px;
+    border:1px solid var(--line-light);
+    margin-bottom:8px;
+  }
+  .save-bar{
+    position:sticky;
+    bottom:0;
+    background:var(--paper);
+    border-top:1px solid var(--line-light);
+    padding:14px 24px;
     display:flex;
-    justify-content:flex-end;
-    align-items:flex-start;
+    align-items:center;
+    gap:12px;
   }
-
-  @media (max-width: 720px){
-    .hero{min-height:auto;}
-    .hero-inner{
-      flex-direction:column;
-      justify-content:flex-end;
-    }
-    .hero-bg{position:absolute; height:60vh; top:0;}
-    .hero-scrim{height:60vh;}
-    .panel{
-      width:100%;
-      margin-top:60vh;
-      border-radius:12.8px 12.8px 0 0;
-      padding:17.6px;
-    }
-    .tag{top:8vh; width:38vw; left:6%;}
-  }
-
-  /* focus visibility */
-  a:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+  .status{font-size:13px; color:rgba(0,0,0,0.6);}
 </style>
 </head>
 <body>
 
-<section class="hero">
-  <img class="hero-bg" src="assets/hero.jpg" alt="Sintetizador Polysix y mesa de grabación Grundig TS1000 en el Estudio A de IRL Estudios">
-  <div class="hero-scrim"></div>
-
-  <div class="tag" aria-hidden="true">
-    <img src="assets/logo-tag.png" alt="">
+<div class="center-wrap" id="loginScreen">
+  <div class="box">
+    <h1>Entrar al panel</h1>
+    <div class="error" id="loginError">Contraseña incorrecta.</div>
+    <input type="password" id="passwordInput" placeholder="Contraseña" autofocus>
+    <button id="loginButton" style="width:100%;">Entrar</button>
   </div>
+</div>
 
-  <div class="hero-inner">
-    <div class="panel">
-      <div class="panel-header">
-        <h1 class="brand">IRL Estudios</h1>
-        <span class="location">Madrid</span>
-      </div>
-
-      <div class="nav-block">
-        <div class="nav-title">Espacios</div>
-        <ul class="nav-links">
-          <li><a href="estudio-a.html">Estudio A</a></li>
-        </ul>
-        <span class="nav-num">01</span>
-      </div>
-
-      <div class="nav-block">
-        <div class="nav-title">Escuela de Sonido</div>
-        <ul class="nav-links">
-          <li><a href="produccion-musical-iniciacion.html">Producción Musical <em>Iniciación</em></a></li>
-          <li><a href="produccion-musical-avanzada.html">Producción Musical <em>Avanzada</em></a></li>
-          <li><a href="diseno-sonoro-audiovisual.html">Diseño Sonoro para audiovisual</a></li>
-          <li><a href="directo-en-ableton.html">Directo en Ableton</a></li>
-        </ul>
-        <span class="nav-num">02</span>
-        <ul class="nav-links" style="margin-top:14px;">
-          <li><a href="opiniones.html">Opiniones de alumn@s</a></li>
-          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfiU-G0X45yWvva-gT-QxxiErAM3poCA1UHHzhLqLWKQNSKrQ/viewform" target="_blank" rel="noopener" class="strong">INSCRIPCIONES</a></li>
-        </ul>
-      </div>
-
-      <div class="nav-block">
-        <div class="nav-title">Nuestros Trabajos</div>
-        <ul class="nav-links">
-          <li><a href="https://linktr.ee/IRL_WEB" target="_blank" rel="noopener">Publicidad y audiovisual</a></li>
-          <li><a href="https://tidal.com/playlist/6fd13b22-cced-4410-b34c-35e5cb484462" target="_blank" rel="noopener">Producción musical</a></li>
-        </ul>
-        <span class="nav-num">03</span>
-        <ul class="nav-links" style="margin-top:14px;">
-          <li><a href="https://radiorelativa.eu/resident/a-7" target="_blank" rel="noopener">Podcast: A-7 en Radio Relativa</a></li>
-        </ul>
-      </div>
-
-      <div class="nav-block">
-        <div class="nav-title">Equipo Humano</div>
-        <ul class="nav-links">
-          <li><a href="turian-boy.html">turian boy</a></li>
-        </ul>
-        <span class="nav-num">04</span>
-      </div>
-
-      <div class="contact-row">
-        <a href="mailto:irlestudiosmadrid@gmail.com">Mail</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">IG</a>
+<div class="app" id="app">
+  <div class="topbar">
+    <strong>IRL Estudios — Admin</strong>
+    <button class="secondary" id="logoutButton">Cerrar sesión</button>
+  </div>
+  <div class="layout">
+    <div class="sidebar" id="pageList"></div>
+    <div class="content">
+      <div id="editor"><p>Elige una página de la izquierda para empezar a editar.</p></div>
+      <div class="save-bar" id="saveBar" style="display:none;">
+        <button id="saveButton">Guardar cambios</button>
+        <span class="status" id="saveStatus"></span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
+<script>
+var PAGES = [
+  { slug: 'home', label: 'Home' },
+  { slug: 'produccion-musical-avanzada', label: 'Producción Musical Avanzada' },
+  { slug: 'produccion-musical-iniciacion', label: 'Producción Musical Iniciación' },
+  { slug: 'diseno-sonoro-audiovisual', label: 'Diseño Sonoro para audiovisual' },
+  { slug: 'directo-en-ableton', label: 'Directo en Ableton' },
+  { slug: 'opiniones', label: 'Opiniones de alumn@s' },
+  { slug: 'turian-boy', label: 'turian boy' },
+  { slug: 'estudio-a', label: 'Estudio A' }
+];
+
+var currentSlug = null;
+var currentData = null;
+
+function isImageKey(key) {
+  return /image|photo|foto/i.test(key);
+}
+function isHtmlKey(key) {
+  return /_html$/.test(key);
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderPageList();
+}
+
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+function renderPageList() {
+  var list = document.getElementById('pageList');
+  list.innerHTML = '';
+  PAGES.forEach(function (p) {
+    var btn = document.createElement('button');
+    btn.textContent = p.label;
+    btn.onclick = function () { loadPage(p.slug, btn); };
+    list.appendChild(btn);
+  });
+}
+
+function loadPage(slug, btnEl) {
+  currentSlug = slug;
+  document.querySelectorAll('.sidebar button').forEach(function (b) { b.classList.remove('active'); });
+  if (btnEl) btnEl.classList.add('active');
+
+  fetch('/api/content?page=' + slug)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      currentData = data;
+      renderEditor(data);
+      document.getElementById('saveBar').style.display = 'flex';
+    });
+}
+
+function renderEditor(data) {
+  var editor = document.getElementById('editor');
+  editor.innerHTML = '';
+
+  Object.keys(data).forEach(function (key) {
+    var field = document.createElement('div');
+    field.className = 'field';
+
+    var label = document.createElement('label');
+    label.textContent = key.replace(/_/g, ' ');
+    field.appendChild(label);
+
+    if (isImageKey(key)) {
+      var img = document.createElement('img');
+      img.src = data[key];
+      field.appendChild(img);
+
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.onchange = function () {
+        if (!fileInput.files[0]) return;
+        uploadImage(fileInput.files[0], function (url) {
+          currentData[key] = url;
+          img.src = url;
+        });
+      };
+      field.appendChild(fileInput);
+    } else {
+      var input = isHtmlKey(key) || String(data[key]).length > 80
+        ? document.createElement('textarea')
+        : document.createElement('input');
+      if (input.tagName === 'INPUT') input.type = 'text';
+      input.value = data[key];
+      input.oninput = function () { currentData[key] = input.value; };
+      field.appendChild(input);
+    }
+
+    editor.appendChild(field);
+  });
+}
+
+function uploadImage(file, onDone) {
+  var status = document.getElementById('saveStatus');
+  status.textContent = 'Subiendo imagen...';
+  fetch('/api/upload-image', {
+    method: 'POST',
+    headers: {
+      'Content-Type': file.type,
+      'X-Filename': file.name
+    },
+    body: file
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      status.textContent = 'Imagen subida.';
+      onDone(data.url);
+    })
+    .catch(function () { status.textContent = 'Error subiendo la imagen.'; });
+}
+
+document.getElementById('loginButton').onclick = function () {
+  var password = document.getElementById('passwordInput').value;
+  fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: password })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data.ok) {
+        showApp();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+};
+
+document.getElementById('logoutButton').onclick = function () {
+  fetch('/api/logout', { method: 'POST' }).then(function () { showLogin(); });
+};
+
+document.getElementById('saveButton').onclick = function () {
+  var status = document.getElementById('saveStatus');
+  status.textContent = 'Guardando...';
+  fetch('/api/content?page=' + currentSlug, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(currentData)
+  })
+    .then(function (r) { return r.json(); })
+    .then(function () { status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.'; })
+    .catch(function () { status.textContent = 'Error al guardar.'; });
+};
+
+// Al cargar: comprobar si ya hay sesión activa
+fetch('/api/session')
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    if (data.authenticated) showApp();
+    else showLogin();
+  });
+</script>
 </body>
 </html>
