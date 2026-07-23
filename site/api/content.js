@@ -32,7 +32,13 @@ module.exports = async (req, res) => {
     try {
       const info = await head(blobKeyFor(page)).catch(() => null);
       if (info && info.url) {
-        const response = await fetch(info.url);
+        // La URL pública del blob se sirve detrás de una CDN que la
+        // trata como inmutable; al sobrescribir el mismo pathname (con
+        // allowOverwrite) puede seguir sirviendo la versión anterior en
+        // caché durante un rato. Se rompe la caché añadiendo un parámetro
+        // único a la URL en cada lectura.
+        const bustedUrl = info.url + (info.url.includes('?') ? '&' : '?') + '_v=' + (info.uploadedAt ? new Date(info.uploadedAt).getTime() : Date.now());
+        const response = await fetch(bustedUrl, { cache: 'no-store' });
         const data = await response.json();
         res.status(200).json(data);
         return;
