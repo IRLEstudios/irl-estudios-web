@@ -35,7 +35,7 @@
     max-width:340px;
   }
   .box h1{font-size:18px; margin:0 0 16px;}
-  input[type=password], input[type=text], textarea{
+  input[type=password]{
     width:100%;
     font-family:inherit;
     font-size:14px;
@@ -46,7 +46,6 @@
     color:var(--ink);
     margin-bottom:10px;
   }
-  textarea{resize:vertical; min-height:70px;}
   button{
     font-family:inherit;
     font-size:13px;
@@ -63,22 +62,25 @@
     color:var(--ink);
     border:1.6px solid rgba(0,0,0,0.6);
   }
+  button:disabled{opacity:0.5; cursor:default;}
   .error{color:#b3261e; font-size:13px; margin-bottom:10px; display:none;}
-  .app{display:none;}
+  .app{display:none; height:100vh; flex-direction:column;}
   .topbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:16px 24px;
+    padding:14px 24px;
     background:var(--paper);
     border-bottom:1px solid var(--line-light);
   }
-  .layout{display:flex; min-height:calc(100vh - 57px);}
+  .layout{display:flex; flex:1; min-height:0;}
   .sidebar{
-    width:260px;
+    width:240px;
+    flex-shrink:0;
     background:var(--paper);
     border-right:1px solid var(--line-light);
     padding:16px;
+    overflow-y:auto;
   }
   .sidebar button{
     display:block;
@@ -93,27 +95,34 @@
     margin-bottom:4px;
   }
   .sidebar button:hover, .sidebar button.active{background:rgba(0,0,0,0.08);}
-  .content{flex:1; padding:24px; background:#f5f5f0; overflow:auto;}
-  .field{margin-bottom:18px;}
-  .field label{
-    display:block;
-    font-size:12px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.03em;
-    margin-bottom:6px;
+  .content{flex:1; display:flex; flex-direction:column; min-width:0; background:#000;}
+  .hint-bar{
+    padding:10px 20px;
+    font-size:11.5px;
+    line-height:1.4;
     color:rgba(0,0,0,0.6);
+    background:var(--paper);
+    border-bottom:1px solid var(--line-light);
   }
-  .field img{
-    max-width:220px;
-    display:block;
-    border-radius:6px;
-    border:1px solid var(--line-light);
-    margin-bottom:8px;
+  .placeholder{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:rgba(255,255,255,0.4);
+    font-size:14px;
+    background:#000;
+  }
+  .preview-wrap{flex:1; position:relative; min-height:0;}
+  .preview-wrap iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:none;
+    background:#000;
   }
   .save-bar{
-    position:sticky;
-    bottom:0;
     background:var(--paper);
     border-top:1px solid var(--line-light);
     padding:14px 24px;
@@ -143,9 +152,14 @@
   <div class="layout">
     <div class="sidebar" id="pageList"></div>
     <div class="content">
-      <div id="editor"><p>Elige una página de la izquierda para empezar a editar.</p></div>
+      <div class="hint-bar">Vista previa en vivo: haz clic directamente sobre cualquier texto para editarlo, o sobre una imagen para cambiarla. Así se verá en la web real.</div>
+      <div class="placeholder" id="placeholder">Elige una página de la izquierda para empezar a editar.</div>
+      <div class="preview-wrap" id="previewWrap" style="display:none;">
+        <iframe id="previewFrame"></iframe>
+      </div>
       <div class="save-bar" id="saveBar" style="display:none;">
         <button id="saveButton">Guardar cambios</button>
+        <button class="secondary" id="discardButton">Descartar cambios</button>
         <span class="status" id="saveStatus"></span>
       </div>
     </div>
@@ -165,18 +179,17 @@ var PAGES = [
 ];
 
 var currentSlug = null;
-var currentData = null;
+var currentDoc = null;
+var originalSnapshot = null;
+var activePopover = null;
 
-function isImageKey(key) {
-  return /image|photo|foto/i.test(key);
-}
-function isHtmlKey(key) {
-  return /_html$/.test(key);
+function htmlFileFor(slug) {
+  return slug === 'home' ? 'index.html' : slug + '.html';
 }
 
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+  document.getElementById('app').style.display = 'flex';
   renderPageList();
 }
 
@@ -191,70 +204,287 @@ function renderPageList() {
   PAGES.forEach(function (p) {
     var btn = document.createElement('button');
     btn.textContent = p.label;
-    btn.onclick = function () { loadPage(p.slug, btn); };
+    btn.onclick = function () { requestLoadPage(p.slug, btn); };
     list.appendChild(btn);
   });
 }
 
-function loadPage(slug, btnEl) {
-  currentSlug = slug;
-  document.querySelectorAll('.sidebar button').forEach(function (b) { b.classList.remove('active'); });
-  if (btnEl) btnEl.classList.add('active');
-
-  fetch('/api/content?page=' + slug)
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
-      currentData = data;
-      renderEditor(data);
-      document.getElementById('saveBar').style.display = 'flex';
-    });
+function hasUnsavedChanges() {
+  if (!currentDoc || !originalSnapshot) return false;
+  return JSON.stringify(collectData(currentDoc)) !== originalSnapshot;
 }
 
-function renderEditor(data) {
-  var editor = document.getElementById('editor');
-  editor.innerHTML = '';
+function requestLoadPage(slug, btnEl) {
+  if (hasUnsavedChanges() && !confirm('Tienes cambios sin guardar en esta página. ¿Seguro que quieres salir sin guardarlos?')) {
+    return;
+  }
+  loadPage(slug, btnEl);
+}
 
-  Object.keys(data).forEach(function (key) {
-    var field = document.createElement('div');
-    field.className = 'field';
+function loadPage(slug, btnEl) {
+  currentSlug = slug;
+  currentDoc = null;
+  originalSnapshot = null;
+  closePopover();
 
-    var label = document.createElement('label');
-    label.textContent = key.replace(/_/g, ' ');
-    field.appendChild(label);
+  document.querySelectorAll('.sidebar button').forEach(function (b) { b.classList.remove('active'); });
+  if (btnEl) btnEl.classList.add('active');
+  else {
+    var idx = PAGES.findIndex(function (p) { return p.slug === slug; });
+    var btns = document.querySelectorAll('.sidebar button');
+    if (btns[idx]) btns[idx].classList.add('active');
+  }
 
-    if (isImageKey(key)) {
-      var img = document.createElement('img');
-      img.src = data[key];
-      field.appendChild(img);
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('previewWrap').style.display = 'block';
+  document.getElementById('saveBar').style.display = 'flex';
+  document.getElementById('saveButton').disabled = true;
+  document.getElementById('saveStatus').textContent = 'Cargando vista previa...';
 
-      var fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-      fileInput.onchange = function () {
-        if (!fileInput.files[0]) return;
-        uploadImage(fileInput.files[0], function (url) {
-          currentData[key] = url;
+  var iframe = document.getElementById('previewFrame');
+  iframe.onload = function () { onPreviewLoaded(iframe, slug); };
+  iframe.src = '/' + htmlFileFor(slug) + '?admin=1&_=' + Date.now();
+}
+
+function onPreviewLoaded(iframe, slug) {
+  if (slug !== currentSlug) return; // el usuario ya cambió de página
+  var doc = iframe.contentDocument;
+
+  function ready() {
+    if (slug !== currentSlug) return;
+    currentDoc = doc;
+    enableLiveEditing(doc);
+    originalSnapshot = JSON.stringify(collectData(doc));
+    document.getElementById('saveButton').disabled = false;
+    document.getElementById('saveStatus').textContent = '';
+  }
+
+  if (doc.__irlContentReady) {
+    ready();
+  } else {
+    doc.addEventListener('irl:content-ready', ready, { once: true });
+    // Salvavidas por si la página no tiene data-page o el evento no llega.
+    setTimeout(function () { if (!currentDoc) ready(); }, 2500);
+  }
+}
+
+// ---------- Edición en vivo dentro del iframe ----------
+
+function injectEditingStyles(doc) {
+  if (doc.getElementById('irl-admin-style')) return;
+  var style = doc.createElement('style');
+  style.id = 'irl-admin-style';
+  style.textContent = [
+    '[contenteditable="true"].irl-editable{outline:2px dashed transparent; outline-offset:2px; cursor:text; border-radius:3px; transition:outline-color .12s ease, background-color .12s ease;}',
+    '[contenteditable="true"].irl-editable:hover{outline-color:rgba(200,255,61,0.75);}',
+    '[contenteditable="true"].irl-editable:focus{outline-color:#c8ff3d; outline-style:solid; background-color:rgba(200,255,61,0.12);}',
+    '.irl-img-wrap{position:relative !important; cursor:pointer;}',
+    '.irl-img-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); color:#fff; font-family:ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; text-align:center; opacity:0; transition:opacity .15s ease; pointer-events:none; padding:8px;}',
+    '.irl-img-wrap:hover .irl-img-overlay{opacity:1;}',
+    '.irl-href-badge{position:absolute; top:-9px; right:-9px; z-index:99999; background:#232323; color:#eaeaea; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; line-height:1; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
+    '.irl-href-popover{position:fixed; z-index:100000; background:#eaeaea; border:1.6px solid rgba(0,0,0,0.2); border-radius:8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,0.35); font-family:ui-monospace,monospace; color:#232323;}',
+    '.irl-href-popover .irl-label{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px; opacity:0.65;}',
+    '.irl-href-popover input{width:260px; max-width:60vw; font-family:inherit; font-size:12px; padding:7px 9px; border:1.6px solid rgba(0,0,0,0.2); border-radius:6px; margin-bottom:8px; display:block;}',
+    '.irl-href-popover .irl-row{display:flex; gap:6px;}',
+    '.irl-href-popover button{font-family:inherit; font-size:11px; font-weight:700; padding:7px 12px; border-radius:6px; border:none; background:#232323; color:#eaeaea; cursor:pointer;}',
+    '.irl-href-popover button.irl-cancel{background:transparent; border:1.6px solid rgba(0,0,0,0.4); color:#232323;}'
+  ].join('\n');
+  doc.head.appendChild(style);
+}
+
+function sanitizePlainText(el) {
+  // Limpia cualquier formato colado al editar, preservando el badge
+  // de "editar enlace" si el elemento también tiene data-key-href.
+  var badge = el.querySelector(':scope > .irl-href-badge');
+  var text = badge ? textWithoutBadge(el) : el.textContent;
+  el.textContent = text;
+  if (badge) el.appendChild(badge);
+}
+
+function wrapImageForEdit(doc, img) {
+  var parent = img.parentElement;
+  if (parent && parent.classList.contains('irl-img-wrap')) return parent;
+  var wrap = doc.createElement('div');
+  wrap.className = 'irl-img-wrap';
+  parent.insertBefore(wrap, img);
+  wrap.appendChild(img);
+  var overlay = doc.createElement('div');
+  overlay.className = 'irl-img-overlay';
+  overlay.textContent = 'Cambiar imagen';
+  wrap.appendChild(overlay);
+  return wrap;
+}
+
+function closePopover() {
+  if (activePopover && activePopover.parentNode) activePopover.parentNode.removeChild(activePopover);
+  activePopover = null;
+}
+
+function openHrefPopover(doc, el, badge) {
+  closePopover();
+  var rect = badge.getBoundingClientRect();
+  var pop = doc.createElement('div');
+  pop.className = 'irl-href-popover';
+
+  var label = doc.createElement('div');
+  label.className = 'irl-label';
+  label.textContent = 'Editar enlace';
+  pop.appendChild(label);
+
+  var input = doc.createElement('input');
+  input.type = 'text';
+  input.value = el.getAttribute('href') || '';
+  pop.appendChild(input);
+
+  var row = doc.createElement('div');
+  row.className = 'irl-row';
+  var okBtn = doc.createElement('button');
+  okBtn.textContent = 'Guardar enlace';
+  var cancelBtn = doc.createElement('button');
+  cancelBtn.textContent = 'Cancelar';
+  cancelBtn.className = 'irl-cancel';
+  row.appendChild(okBtn);
+  row.appendChild(cancelBtn);
+  pop.appendChild(row);
+
+  doc.body.appendChild(pop);
+
+  var top = rect.bottom + 6;
+  var left = rect.right - pop.offsetWidth;
+  if (left < 6) left = 6;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+
+  input.focus();
+  input.select();
+
+  okBtn.onclick = function () {
+    el.setAttribute('href', input.value.trim());
+    closePopover();
+  };
+  cancelBtn.onclick = closePopover;
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); okBtn.click(); }
+    if (e.key === 'Escape') { e.preventDefault(); closePopover(); }
+  };
+
+  activePopover = pop;
+}
+
+function enableLiveEditing(doc) {
+  injectEditingStyles(doc);
+
+  // Nunca navegar fuera de la página mientras editamos.
+  doc.addEventListener('click', function (e) {
+    var a = e.target.closest('a');
+    if (a) e.preventDefault();
+    if (activePopover && !activePopover.contains(e.target) && !e.target.classList.contains('irl-href-badge')) {
+      closePopover();
+    }
+  }, true);
+
+  // Textos simples (una línea, sin formato).
+  doc.querySelectorAll('[data-key]').forEach(function (el) {
+    el.setAttribute('contenteditable', 'true');
+    el.classList.add('irl-editable');
+    el.addEventListener('blur', function () { sanitizePlainText(el); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+    el.addEventListener('paste', function (e) {
+      e.preventDefault();
+      var text = (e.clipboardData || doc.defaultView.clipboardData).getData('text/plain');
+      doc.execCommand('insertText', false, text);
+    });
+  });
+
+  // Bloques con formato (negritas, listas de líneas...).
+  doc.querySelectorAll('[data-key-html]').forEach(function (el) {
+    el.setAttribute('contenteditable', 'true');
+    el.classList.add('irl-editable', 'irl-editable-html');
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        doc.execCommand('insertHTML', false, '<br>');
+      }
+    });
+  });
+
+  // Imágenes: clic para subir una nueva.
+  doc.querySelectorAll('[data-key-src]').forEach(function (img) {
+    var wrap = wrapImageForEdit(doc, img);
+    wrap.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var key = img.getAttribute('data-key-src');
+      var input = doc.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.style.display = 'none';
+      doc.body.appendChild(input);
+      input.onchange = function () {
+        if (!input.files[0]) { input.remove(); return; }
+        var status = document.getElementById('saveStatus');
+        status.textContent = 'Subiendo imagen (' + key + ')...';
+        uploadImage(input.files[0], function (url) {
           img.src = url;
+          status.textContent = 'Imagen actualizada. Recuerda guardar los cambios.';
+          input.remove();
+        }, function () {
+          status.textContent = 'Error subiendo la imagen.';
+          input.remove();
         });
       };
-      field.appendChild(fileInput);
-    } else {
-      var input = isHtmlKey(key) || String(data[key]).length > 80
-        ? document.createElement('textarea')
-        : document.createElement('input');
-      if (input.tagName === 'INPUT') input.type = 'text';
-      input.value = data[key];
-      input.oninput = function () { currentData[key] = input.value; };
-      field.appendChild(input);
-    }
+      input.click();
+    });
+  });
 
-    editor.appendChild(field);
+  // Enlaces: badge para editar el href sin salir de la vista previa.
+  doc.querySelectorAll('[data-key-href]').forEach(function (el) {
+    var computedPos = doc.defaultView.getComputedStyle(el).position;
+    if (computedPos === 'static') el.style.position = 'relative';
+    var badge = doc.createElement('span');
+    badge.className = 'irl-href-badge';
+    badge.setAttribute('contenteditable', 'false');
+    badge.textContent = '🔗';
+    badge.title = 'Editar enlace';
+    el.appendChild(badge);
+    badge.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    badge.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openHrefPopover(doc, el, badge);
+    });
   });
 }
 
-function uploadImage(file, onDone) {
-  var status = document.getElementById('saveStatus');
-  status.textContent = 'Subiendo imagen...';
+// Lee el estado actual de la vista previa (lo que se ve = lo que se guarda).
+function textWithoutBadge(el) {
+  var clone = el.cloneNode(true);
+  clone.querySelectorAll('.irl-href-badge').forEach(function (b) { b.remove(); });
+  return clone.textContent.trim();
+}
+
+function collectData(doc) {
+  var data = {};
+  doc.querySelectorAll('[data-key]').forEach(function (el) {
+    data[el.getAttribute('data-key')] = textWithoutBadge(el);
+  });
+  doc.querySelectorAll('[data-key-html]').forEach(function (el) {
+    var clone = el.cloneNode(true);
+    clone.querySelectorAll('.irl-href-badge').forEach(function (b) { b.remove(); });
+    data[el.getAttribute('data-key-html')] = clone.innerHTML.trim();
+  });
+  doc.querySelectorAll('[data-key-src]').forEach(function (el) {
+    data[el.getAttribute('data-key-src')] = el.getAttribute('src');
+  });
+  doc.querySelectorAll('[data-key-href]').forEach(function (el) {
+    data[el.getAttribute('data-key-href')] = el.getAttribute('href');
+  });
+  return data;
+}
+
+function uploadImage(file, onDone, onError) {
   fetch('/api/upload-image', {
     method: 'POST',
     headers: {
@@ -264,11 +494,8 @@ function uploadImage(file, onDone) {
     body: file
   })
     .then(function (r) { return r.json(); })
-    .then(function (data) {
-      status.textContent = 'Imagen subida.';
-      onDone(data.url);
-    })
-    .catch(function () { status.textContent = 'Error subiendo la imagen.'; });
+    .then(function (data) { onDone(data.url); })
+    .catch(function () { if (onError) onError(); });
 }
 
 document.getElementById('loginButton').onclick = function () {
@@ -293,17 +520,32 @@ document.getElementById('logoutButton').onclick = function () {
 };
 
 document.getElementById('saveButton').onclick = function () {
+  if (!currentDoc || !currentSlug) return;
   var status = document.getElementById('saveStatus');
   status.textContent = 'Guardando...';
+  var data = collectData(currentDoc);
   fetch('/api/content?page=' + currentSlug, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(currentData)
+    body: JSON.stringify(data)
   })
     .then(function (r) { return r.json(); })
-    .then(function () { status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.'; })
+    .then(function () {
+      status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.';
+      originalSnapshot = JSON.stringify(data);
+    })
     .catch(function () { status.textContent = 'Error al guardar.'; });
 };
+
+document.getElementById('discardButton').onclick = function () {
+  if (!currentSlug) return;
+  if (hasUnsavedChanges() && !confirm('¿Descartar los cambios sin guardar de esta página?')) return;
+  loadPage(currentSlug, null);
+};
+
+window.addEventListener('beforeunload', function (e) {
+  if (hasUnsavedChanges()) { e.preventDefault(); e.returnValue = ''; }
+});
 
 // Al cargar: comprobar si ya hay sesión activa
 fetch('/api/session')

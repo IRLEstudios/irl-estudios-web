@@ -6,7 +6,7 @@
   var page = document.body.getAttribute('data-page');
   if (!page) return;
 
-  fetch('/api/content?page=' + encodeURIComponent(page))
+  fetch('/api/content?page=' + encodeURIComponent(page), { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
       if (!data) return;
@@ -41,5 +41,12 @@
     })
     .catch(function () {
       // Sin conexión al backend: se queda el contenido estático del HTML.
+    })
+    .then(function () {
+      // Avisa (éxito o fallo) de que ya se terminó de intentar aplicar el
+      // contenido remoto. Lo usa el editor visual del admin para saber
+      // cuándo es seguro empezar a habilitar la edición en vivo.
+      document.__irlContentReady = true;
+      document.dispatchEvent(new CustomEvent('irl:content-ready'));
     });
 })();
