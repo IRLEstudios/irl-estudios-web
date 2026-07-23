@@ -77,12 +77,13 @@ module.exports = async (req, res) => {
     }
 
     try {
-      await put(blobKeyFor(page), JSON.stringify(body, null, 2), {
+      const blob = await put(blobKeyFor(page), JSON.stringify(body, null, 2), {
         access: 'public',
         contentType: 'application/json',
         allowOverwrite: true,
       });
-      res.status(200).json({ ok: true });
+      // DEBUG TEMPORAL: para ver exactamente qué devuelve Blob al escribir.
+      res.status(200).json({ ok: true, debugWrite: { pathname: blob.pathname, url: blob.url } });
     } catch (err) {
       res.status(500).json({
         error: 'No se pudo guardar en Vercel Blob. ¿Está creado y conectado el Blob Store del proyecto?',

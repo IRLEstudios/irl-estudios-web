@@ -854,6 +854,9 @@ document.getElementById('saveButton').onclick = function () {
     .then(function (result) {
       if (result.ok) {
         status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.';
+        if (result.body && result.body.debugWrite) {
+          status.textContent += ' [debug: ' + JSON.stringify(result.body.debugWrite) + ']';
+        }
         originalSnapshot = JSON.stringify(data);
       } else {
         var msg = (result.body && result.body.error) || 'Error al guardar.';
