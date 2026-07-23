@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>turian boy — IRL Estudios</title>
+<meta name="description" content="turian boy (Alex Vidal): compositor, productor musical, docente y artista multidisciplinar. Fundador de IRL Estudios, Madrid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:'Inter', ui-sans-serif, sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+
+  .col{
+    width:min(620px, 92vw);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    pointer-events:auto;
+  }
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:16px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:20px;
+  }
+  .panel img{
+    width:100%;
+    display:block;
+    border-radius:6px;
+    margin-bottom:16px;
+  }
+  .panel .divider{
+    border-top:1.6px solid var(--line-light);
+    margin-bottom:16px;
+  }
+
+  .name-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:16px;
+  }
+  .name-row a{color:var(--ink); display:inline-flex;}
+  .name-row svg{display:block;}
+
+  .card{
+    padding:0 4px;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  }
+
+  .card p{
+    font-style:normal;
+    font-weight:400;
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:16px;
+    max-width:70ch;
+  }
+  .card p b, .card p strong{font-weight:700;}
+
+  .card .list-line{
+    font-style:normal;
+    font-weight:400;
+    font-size:13px;
+    line-height:1.6;
+    display:block;
+  }
+  .card .list-line.link-line{
+    margin-left:20px;
+    margin-bottom:10px;
+  }
+  .card .list-line a{
+    font-weight:700;
+    color:var(--ink);
+  }
+  .card .list-block{margin-bottom:16px;}
+  .card .icon{
+    display:inline-flex;
+    vertical-align:-3px;
+    margin-right:4px;
+  }
+
+  .price{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:80%;
+    font-style:normal;
+    font-size:22px;
+    letter-spacing:-0.01em;
+    margin-top:8px;
+    margin-bottom:14px;
+  }
+  .price span{
+    font-family:'Inter', sans-serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:11px;
+    color:rgba(0,0,0,0.55);
+  }
+
+  .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .btn{
+    font-family:'Inter Tight', sans-serif;
+    font-style:normal;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.15);
+    border-radius:9.6px;
+    padding:11px 18px;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:700px){
+    .wrap{padding:16px;}
+    .card{padding:22px;}
+  }
+
+  a:focus-visible, .btn:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+<div class="wrap">
+  <div class="col">
+    <div class="panel">
+      <img src="assets/turian-boy.jpg" alt="turian boy">
+      <div class="divider"></div>
+
+      <div class="name-row">
+        turian boy
+        <a href="https://www.instagram.com/turianboy/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="mailto:elturianboy@gmail.com" aria-label="Email">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6.5l9 6 9-6"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+
+    <p>Alex Vidal - TURIAN BOY es un compositor, <b>productor musical</b>, docente y artista multidisciplinar.</p>
+
+    <p>En su música navega entre géneros musicales diversos para consolidar su visión. Desde el pop al indie o la electrónica, su estilo abraza diferentes estilos y texturas pero siempre teniendo en el centro lo orgánico.</p>
+
+    <p>Además de su trabajo como productor y compositor pop, ejerce como <b>docente</b> de Diseño Sonoro y trabaja continuamente para proyectos de publicidad como compositor, <b>diseñador sonoro</b> y productor musical.</p>
+
+    <p>Con más de 10 años de experiencia en la industria musical, ha fundado <b><a href="index.html">IRL Estudios</a></b> con la idea de tener un espacio donde dar cabida a la creación y el aprendizaje.</p>
+
+    <div class="divider" style="margin-bottom:16px;"></div>
+
+    <div class="list-block">
+      <p style="margin-bottom:8px;"><b>Trabajos</b></p>
+      <span class="list-line">- Producción y composición de música pop</span>
+      <span class="list-line link-line"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><a href="https://tidal.com/playlist/def703b0-90fd-4611-9196-e24e978cde64" target="_blank" rel="noopener">Prod by turian boy</a></span>
+
+      <span class="list-line">- Composición, diseño sonoro y productor para audiovisual (Publicidad, cortos...)</span>
+      <span class="list-line link-line"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="15" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 10.5 22 7v10l-5-3.5z"/></svg><a href="https://alexvidal4c.wixsite.com/home" target="_blank" rel="noopener">Composición y diseño sonoro para audiovisual</a></span>
+
+      <span class="list-line">- Docente Diseño Sonoro en <b>IED Madrid</b></span>
+    </div>
+
+    <div class="divider" style="margin-top:8px; margin-bottom:16px;"></div>
+
+    <p class="contact">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudio A — IRL Estudios</title>
+<meta name="description" content="Estudio A de IRL Estudios, Madrid: espacio de grabación con equipo analógico y digital, piano, guitarras y sintetizadores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-weight:300;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+
+  .col{
+    width:min(1200px, 96vw);
+    pointer-events:auto;
+  }
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:20px;
+  }
+
+  .panel-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .pill{
+    display:inline-block;
+    border:1.6px solid rgba(0,0,0,0.6);
+    border-radius:9.6px;
+    padding:8px 18px;
+    font-size:12px;
+    font-weight:300;
+  }
+
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+  }
+  .gallery img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    display:block;
+    border-radius:4px;
+  }
+
+  @media (max-width:700px){
+    .wrap{padding:14px;}
+    .panel{padding:14px;}
+    .gallery{grid-template-columns:repeat(2, 1fr);}
+  }
+
+  a:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+<div class="wrap">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="pill">Estudio A</span>
+        <a class="pill" href="https://www.canva.com/design/DAG6pmDWxkc/rGnuMHsqLRDK9aBPF_FTcQ/view?utm_content=DAG6pmDWxkc&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7bcbbc9e80" target="_blank" rel="noopener" style="text-decoration:none; color:var(--ink);">Equipo disponible</a>
+      </div>
+
+      <div class="gallery">
+        <img src="assets/estudioa-1.jpg" alt="Rack Behringer, Tascam Porta One y guitarra Fender en el Estudio A">
+        <img src="assets/estudioa-2.png" alt="Tocando el piano de cola del Estudio A, vista trasera">
+        <img src="assets/estudioa-3.png" alt="Ajustando el sintetizador Korg Polysix junto a la grabadora Grundig TS1000">
+        <img src="assets/estudioa-4.jpg" alt="Controles de la grabadora Grundig TS1000 sobre el teclado del Polysix">
+        <img src="assets/estudioa-5.png" alt="Grabando guitarra acústica en la cabina, con la Roland TR-626 y la bobina abierta">
+        <img src="assets/estudioa-6.png" alt="Guitarra acústica junto al interior del piano de cola">
+        <img src="assets/estudioa-7.jpg" alt="Caja de ritmos Roland TR-626 y pedal Big Muff">
+        <img src="assets/estudioa-8.png" alt="Vista general de la sala de control con monitores, mesa y piano al fondo">
+        <img src="assets/estudioa-9.jpg" alt="Zona de descanso del Estudio A con sofá, guitarra y mesa de centro">
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
