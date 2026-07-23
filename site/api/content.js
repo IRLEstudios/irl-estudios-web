@@ -1,7 +1,5 @@
 const { put, head } = require('@vercel/blob');
 const { requireAuth } = require('./_auth');
-const fs = require('fs');
-const path = require('path');
 
 // Nombre del "archivo" dentro de Vercel Blob para cada página.
 function blobKeyFor(page) {
@@ -11,10 +9,16 @@ function blobKeyFor(page) {
 // Contenido "de fábrica": si todavía no se ha guardado nada en Blob
 // para una página, se sirve el JSON que viene con el propio proyecto
 // (carpeta /content) como primer valor por defecto.
+// Se usa require() (en vez de fs.readFileSync) porque el empaquetador
+// de funciones de Vercel solo incluye en el bundle los archivos a los
+// que se llega por require/import estático; con fs.readFileSync sobre
+// una ruta dinámica el JSON no se empaquetaba y siempre daba 404.
 function readDefaultContent(page) {
-  const filePath = path.join(process.cwd(), 'content', `${page}.json`);
-  if (!fs.existsSync(filePath)) return null;
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  try {
+    return require(`../content/${page}.json`);
+  } catch {
+    return null;
+  }
 }
 
 module.exports = async (req, res) => {
