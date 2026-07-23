@@ -45,6 +45,18 @@
           el.style.display = 'none';
         }
       });
+
+      // Posición y tamaño de elementos que se pueden mover/redimensionar
+      // en el editor (p. ej. el logo animado de la home). El valor
+      // guardado ya incluye la unidad ("2%", "320px"...).
+      ['left', 'top', 'width'].forEach(function (prop) {
+        document.querySelectorAll('[data-key-' + prop + ']').forEach(function (el) {
+          var key = el.getAttribute('data-key-' + prop);
+          if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+            el.style[prop] = data[key];
+          }
+        });
+      });
     })
     .catch(function () {
       // Sin conexión al backend: se queda el contenido estático del HTML.

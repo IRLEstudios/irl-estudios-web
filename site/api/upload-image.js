@@ -15,13 +15,19 @@ async function handler(req, res) {
   for await (const chunk of req) chunks.push(chunk);
   const buffer = Buffer.concat(chunks);
 
-  const blob = await put(`images/${Date.now()}-${filename}`, buffer, {
-    access: 'public',
-    contentType,
-    allowOverwrite: true,
-  });
-
-  res.status(200).json({ url: blob.url });
+  try {
+    const blob = await put(`images/${Date.now()}-${filename}`, buffer, {
+      access: 'public',
+      contentType,
+      allowOverwrite: true,
+    });
+    res.status(200).json({ url: blob.url });
+  } catch (err) {
+    res.status(500).json({
+      error: 'No se pudo subir la imagen a Vercel Blob. ¿Está creado y conectado el Blob Store del proyecto?',
+      detail: err && err.message,
+    });
+  }
 }
 
 // Desactivamos el bodyParser por defecto de Vercel porque

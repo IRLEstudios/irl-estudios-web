@@ -62,13 +62,19 @@ module.exports = async (req, res) => {
       return;
     }
 
-    await put(blobKeyFor(page), JSON.stringify(body, null, 2), {
-      access: 'public',
-      contentType: 'application/json',
-      allowOverwrite: true,
-    });
-
-    res.status(200).json({ ok: true });
+    try {
+      await put(blobKeyFor(page), JSON.stringify(body, null, 2), {
+        access: 'public',
+        contentType: 'application/json',
+        allowOverwrite: true,
+      });
+      res.status(200).json({ ok: true });
+    } catch (err) {
+      res.status(500).json({
+        error: 'No se pudo guardar en Vercel Blob. ¿Está creado y conectado el Blob Store del proyecto?',
+        detail: err && err.message,
+      });
+    }
     return;
   }
 

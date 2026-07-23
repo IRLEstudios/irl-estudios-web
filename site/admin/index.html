@@ -282,8 +282,6 @@ function injectEditingStyles(doc) {
     '.irl-img-wrap{position:relative !important; cursor:pointer;}',
     '.irl-img-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); color:#fff; font-family:ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; text-align:center; opacity:0; transition:opacity .15s ease; pointer-events:none; padding:8px;}',
     '.irl-img-wrap:hover .irl-img-overlay{opacity:1;}',
-    '.irl-img-overlay-abs{z-index:1; pointer-events:auto; cursor:pointer;}',
-    '.irl-img-overlay-abs:hover{opacity:1;}',
     '.irl-href-badge{position:absolute; top:-9px; right:-9px; z-index:99999; background:#232323; color:#eaeaea; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; line-height:1; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
     '.irl-href-popover{position:fixed; z-index:100000; background:#eaeaea; border:1.6px solid rgba(0,0,0,0.2); border-radius:8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,0.35); font-family:ui-monospace,monospace; color:#232323;}',
     '.irl-href-popover .irl-label{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px; opacity:0.65;}',
@@ -299,7 +297,17 @@ function injectEditingStyles(doc) {
     '.irl-format-toolbar button:hover{background:rgba(255,255,255,0.15);}',
     '.irl-format-toolbar button.irl-active{background:#c8ff3d; color:#232323;}',
     '.irl-format-toolbar select{font-family:inherit; font-size:11px; padding:6px 4px; border-radius:5px; border:none; background:rgba(255,255,255,0.12); color:#eaeaea; cursor:pointer;}',
-    '.irl-format-toolbar .irl-sep{width:1px; height:20px; background:rgba(255,255,255,0.2); margin:0 2px;}'
+    '.irl-format-toolbar .irl-sep{width:1px; height:20px; background:rgba(255,255,255,0.2); margin:0 2px;}',
+    // Pausa cualquier animación CSS (p. ej. el logo flotante) mientras se
+    // edita: si no, sus controles se mueven todo el rato y es casi
+    // imposible hacer clic en ellos con precisión.
+    '*{animation-play-state:paused !important;}',
+    '.irl-bg-pill{position:absolute; z-index:5; bottom:16px; left:16px; display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.7); color:#fff; font-family:ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:0.02em; padding:9px 14px; border-radius:9999px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4); border:1.6px solid rgba(255,255,255,0.25);}',
+    '.irl-bg-pill:hover{background:rgba(0,0,0,0.88);}',
+    '.irl-drag-handle{position:absolute; bottom:-10px; right:-10px; z-index:99999; width:22px; height:22px; border-radius:50%; background:#232323; color:#eaeaea; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:nwse-resize; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
+    '.irl-move-hint{position:absolute; top:-9px; right:14px; z-index:99999; background:#232323; color:#eaeaea; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; padding:3px 7px; border-radius:5px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .15s ease;}',
+    '.irl-positionable:hover .irl-move-hint{opacity:1;}',
+    '.irl-positionable{cursor:move;}'
   ].join('\n');
   doc.head.appendChild(style);
 }
@@ -324,21 +332,21 @@ function isOutOfFlowPositioned(doc, el) {
 }
 
 function attachOverlayAsSibling(doc, img) {
+  // Para fondos a pantalla completa, un overlay que solo aparece al pasar
+  // el ratón por encima es fácil de no encontrar (sobre todo si el panel
+  // de navegación tapa buena parte de la imagen). En su lugar se coloca
+  // un botón pequeño y SIEMPRE VISIBLE en una esquina fija.
   var existing = img.nextElementSibling;
-  if (existing && existing.classList.contains('irl-img-overlay-abs')) return existing;
-  var overlay = doc.createElement('div');
-  overlay.className = 'irl-img-overlay irl-img-overlay-abs';
-  overlay.textContent = 'Cambiar imagen';
-  // No se fija width/height: dejar que top+right+bottom+left definan el
-  // tamaño mantiene el overlay ajustado si la ventana cambia de tamaño.
+  if (existing && existing.classList.contains('irl-bg-pill')) return existing;
+  var pill = doc.createElement('div');
+  pill.className = 'irl-bg-pill';
+  pill.textContent = '🖼️ Cambiar imagen de fondo';
+  // Se ancla dentro del mismo contenedor de posicionamiento que la
+  // imagen (position:absolute), pero sin estirarse a rellenarlo entero.
   var cs = doc.defaultView.getComputedStyle(img);
-  overlay.style.position = cs.position;
-  overlay.style.top = cs.top;
-  overlay.style.left = cs.left;
-  overlay.style.right = cs.right;
-  overlay.style.bottom = cs.bottom;
-  img.parentElement.insertBefore(overlay, img.nextSibling);
-  return overlay;
+  pill.style.position = cs.position;
+  img.parentElement.insertBefore(pill, img.nextSibling);
+  return pill;
 }
 
 function wrapImageForEdit(doc, img) {
@@ -525,6 +533,73 @@ function onSelectionChange(doc) {
   showFormatToolbar(doc, range);
 }
 
+// Arrastrar para reposicionar un elemento (p. ej. el logo) dentro de su
+// contenedor. La posición se guarda en left/top en % (mismas unidades
+// que ya usaba la hoja de estilos), así se mantiene fluido si cambia
+// el tamaño de ventana.
+function makePositionable(doc, el) {
+  el.classList.add('irl-positionable');
+  var hint = doc.createElement('span');
+  hint.className = 'irl-move-hint';
+  hint.setAttribute('contenteditable', 'false');
+  hint.textContent = 'Arrastrar para mover';
+  el.appendChild(hint);
+
+  var dragging = false;
+  var startX = 0, startY = 0, startLeftPct = 0, startTopPct = 0, parentRect = null;
+
+  el.addEventListener('mousedown', function (e) {
+    if (e.target.closest('.irl-img-wrap, .irl-bg-pill, .irl-visibility-badge, .irl-drag-handle')) return;
+    e.preventDefault();
+    dragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    parentRect = el.offsetParent.getBoundingClientRect();
+    var rect = el.getBoundingClientRect();
+    startLeftPct = ((rect.left - parentRect.left) / parentRect.width) * 100;
+    startTopPct = ((rect.top - parentRect.top) / parentRect.height) * 100;
+  });
+
+  doc.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    var dxPct = ((e.clientX - startX) / parentRect.width) * 100;
+    var dyPct = ((e.clientY - startY) / parentRect.height) * 100;
+    el.style.left = (startLeftPct + dxPct).toFixed(2) + '%';
+    el.style.top = (startTopPct + dyPct).toFixed(2) + '%';
+  });
+
+  doc.addEventListener('mouseup', function () { dragging = false; });
+}
+
+// Manija en la esquina para cambiar el tamaño (ancho) de un elemento.
+function makeResizable(doc, el) {
+  var handle = doc.createElement('span');
+  handle.className = 'irl-drag-handle';
+  handle.setAttribute('contenteditable', 'false');
+  handle.textContent = '⤡';
+  handle.title = 'Arrastrar para cambiar el tamaño';
+  el.appendChild(handle);
+
+  var resizing = false;
+  var startX = 0, startWidth = 0;
+
+  handle.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    resizing = true;
+    startX = e.clientX;
+    startWidth = el.getBoundingClientRect().width;
+  });
+
+  doc.addEventListener('mousemove', function (e) {
+    if (!resizing) return;
+    var newWidth = Math.max(40, startWidth + (e.clientX - startX));
+    el.style.width = newWidth + 'px';
+  });
+
+  doc.addEventListener('mouseup', function () { resizing = false; });
+}
+
 function enableLiveEditing(doc) {
   injectEditingStyles(doc);
 
@@ -585,8 +660,8 @@ function enableLiveEditing(doc) {
           img.src = url;
           status.textContent = 'Imagen actualizada. Recuerda guardar los cambios.';
           input.remove();
-        }, function () {
-          status.textContent = 'Error subiendo la imagen.';
+        }, function (message) {
+          status.textContent = message || 'Error subiendo la imagen.';
           input.remove();
         });
       };
@@ -631,6 +706,16 @@ function enableLiveEditing(doc) {
       el.dataset.irlHidden = (el.dataset.irlHidden === 'true') ? 'false' : 'true';
       refresh();
     });
+  });
+
+  // Elementos que se pueden arrastrar para reposicionar.
+  doc.querySelectorAll('[data-key-left]').forEach(function (el) {
+    makePositionable(doc, el);
+  });
+
+  // Elementos que se pueden redimensionar con una manija en la esquina.
+  doc.querySelectorAll('[data-key-width]').forEach(function (el) {
+    makeResizable(doc, el);
   });
 
   // Enlaces: badge para editar el href sin salir de la vista previa.
@@ -678,6 +763,15 @@ function collectData(doc) {
   doc.querySelectorAll('[data-key-visible]').forEach(function (el) {
     data[el.getAttribute('data-key-visible')] = el.dataset.irlHidden !== 'true';
   });
+  doc.querySelectorAll('[data-key-left]').forEach(function (el) {
+    data[el.getAttribute('data-key-left')] = el.style.left;
+  });
+  doc.querySelectorAll('[data-key-top]').forEach(function (el) {
+    data[el.getAttribute('data-key-top')] = el.style.top;
+  });
+  doc.querySelectorAll('[data-key-width]').forEach(function (el) {
+    data[el.getAttribute('data-key-width')] = el.style.width;
+  });
   return data;
 }
 
@@ -690,8 +784,11 @@ function uploadImage(file, onDone, onError) {
     },
     body: file
   })
-    .then(function (r) { return r.json(); })
-    .then(function (data) { onDone(data.url); })
+    .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+    .then(function (result) {
+      if (result.ok) onDone(result.data.url);
+      else if (onError) onError(result.data.error);
+    })
     .catch(function () { if (onError) onError(); });
 }
 
@@ -726,12 +823,16 @@ document.getElementById('saveButton').onclick = function () {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-    .then(function (r) { return r.json(); })
-    .then(function () {
-      status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.';
-      originalSnapshot = JSON.stringify(data);
+    .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
+    .then(function (result) {
+      if (result.ok) {
+        status.textContent = 'Guardado. Puede tardar unos segundos en verse reflejado.';
+        originalSnapshot = JSON.stringify(data);
+      } else {
+        status.textContent = (result.body && result.body.error) || 'Error al guardar.';
+      }
     })
-    .catch(function () { status.textContent = 'Error al guardar.'; });
+    .catch(function () { status.textContent = 'Error al guardar (sin respuesta del servidor).'; });
 };
 
 document.getElementById('discardButton').onclick = function () {
