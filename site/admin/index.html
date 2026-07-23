@@ -182,6 +182,7 @@ var currentSlug = null;
 var currentDoc = null;
 var originalSnapshot = null;
 var activePopover = null;
+var activeFormatToolbar = null;
 
 function htmlFileFor(slug) {
   return slug === 'home' ? 'index.html' : slug + '.html';
@@ -281,13 +282,24 @@ function injectEditingStyles(doc) {
     '.irl-img-wrap{position:relative !important; cursor:pointer;}',
     '.irl-img-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); color:#fff; font-family:ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; text-align:center; opacity:0; transition:opacity .15s ease; pointer-events:none; padding:8px;}',
     '.irl-img-wrap:hover .irl-img-overlay{opacity:1;}',
+    '.irl-img-overlay-abs{z-index:1; pointer-events:auto; cursor:pointer;}',
+    '.irl-img-overlay-abs:hover{opacity:1;}',
     '.irl-href-badge{position:absolute; top:-9px; right:-9px; z-index:99999; background:#232323; color:#eaeaea; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; line-height:1; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
     '.irl-href-popover{position:fixed; z-index:100000; background:#eaeaea; border:1.6px solid rgba(0,0,0,0.2); border-radius:8px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,0.35); font-family:ui-monospace,monospace; color:#232323;}',
     '.irl-href-popover .irl-label{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px; opacity:0.65;}',
     '.irl-href-popover input{width:260px; max-width:60vw; font-family:inherit; font-size:12px; padding:7px 9px; border:1.6px solid rgba(0,0,0,0.2); border-radius:6px; margin-bottom:8px; display:block;}',
     '.irl-href-popover .irl-row{display:flex; gap:6px;}',
     '.irl-href-popover button{font-family:inherit; font-size:11px; font-weight:700; padding:7px 12px; border-radius:6px; border:none; background:#232323; color:#eaeaea; cursor:pointer;}',
-    '.irl-href-popover button.irl-cancel{background:transparent; border:1.6px solid rgba(0,0,0,0.4); color:#232323;}'
+    '.irl-href-popover button.irl-cancel{background:transparent; border:1.6px solid rgba(0,0,0,0.4); color:#232323;}',
+    '.irl-hidden-ghost{opacity:0.3; outline:2px dashed rgba(255,60,60,0.8) !important; outline-offset:2px;}',
+    '.irl-visibility-badge{position:absolute; top:-9px; left:-9px; z-index:99999; background:#232323; color:#eaeaea; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; line-height:1; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.35);}',
+    '.irl-visibility-label{position:absolute; top:-9px; left:16px; z-index:99999; background:#b3261e; color:#fff; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; padding:3px 8px; border-radius:5px; white-space:nowrap; pointer-events:none;}',
+    '.irl-format-toolbar{position:fixed; z-index:100000; background:#232323; border-radius:8px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,0.4); font-family:ui-monospace,monospace; display:flex; align-items:center; gap:4px;}',
+    '.irl-format-toolbar button{font-family:inherit; font-size:13px; font-weight:700; padding:6px 10px; border-radius:5px; border:none; background:transparent; color:#eaeaea; cursor:pointer; line-height:1;}',
+    '.irl-format-toolbar button:hover{background:rgba(255,255,255,0.15);}',
+    '.irl-format-toolbar button.irl-active{background:#c8ff3d; color:#232323;}',
+    '.irl-format-toolbar select{font-family:inherit; font-size:11px; padding:6px 4px; border-radius:5px; border:none; background:rgba(255,255,255,0.12); color:#eaeaea; cursor:pointer;}',
+    '.irl-format-toolbar .irl-sep{width:1px; height:20px; background:rgba(255,255,255,0.2); margin:0 2px;}'
   ].join('\n');
   doc.head.appendChild(style);
 }
@@ -301,7 +313,37 @@ function sanitizePlainText(el) {
   if (badge) el.appendChild(badge);
 }
 
+// Para imágenes con position:absolute/fixed (fondos a pantalla completa),
+// envolverlas en un div rompería su posicionamiento (el div nuevo pasaría
+// a ser el "contenedor" del inset:0 y se colapsaría a 0 de alto). En vez
+// de envolver, se añade el overlay como hermano, ocupando exactamente el
+// mismo hueco (misma clase .hero-bg / mismo contexto de posicionamiento).
+function isOutOfFlowPositioned(doc, el) {
+  var pos = doc.defaultView.getComputedStyle(el).position;
+  return pos === 'absolute' || pos === 'fixed';
+}
+
+function attachOverlayAsSibling(doc, img) {
+  var existing = img.nextElementSibling;
+  if (existing && existing.classList.contains('irl-img-overlay-abs')) return existing;
+  var overlay = doc.createElement('div');
+  overlay.className = 'irl-img-overlay irl-img-overlay-abs';
+  overlay.textContent = 'Cambiar imagen';
+  // No se fija width/height: dejar que top+right+bottom+left definan el
+  // tamaño mantiene el overlay ajustado si la ventana cambia de tamaño.
+  var cs = doc.defaultView.getComputedStyle(img);
+  overlay.style.position = cs.position;
+  overlay.style.top = cs.top;
+  overlay.style.left = cs.left;
+  overlay.style.right = cs.right;
+  overlay.style.bottom = cs.bottom;
+  img.parentElement.insertBefore(overlay, img.nextSibling);
+  return overlay;
+}
+
 function wrapImageForEdit(doc, img) {
+  if (isOutOfFlowPositioned(doc, img)) return attachOverlayAsSibling(doc, img);
+
   var parent = img.parentElement;
   if (parent && parent.classList.contains('irl-img-wrap')) return parent;
   var wrap = doc.createElement('div');
@@ -371,6 +413,118 @@ function openHrefPopover(doc, el, badge) {
   activePopover = pop;
 }
 
+function closeFormatToolbar() {
+  if (activeFormatToolbar && activeFormatToolbar.parentNode) activeFormatToolbar.parentNode.removeChild(activeFormatToolbar);
+  activeFormatToolbar = null;
+}
+
+// Aplica un tamaño de letra a la selección guardada envolviéndola en un
+// <span style="font-size:...">. Se usa un Range guardado (no la selección
+// "en vivo") porque el <select> nativo roba el foco del texto editable
+// al abrirse, y para entonces la selección original ya se habría perdido.
+function applyFontSize(doc, savedRange, px) {
+  if (!savedRange) return;
+  var span = doc.createElement('span');
+  span.style.fontSize = px + 'px';
+  try {
+    savedRange.surroundContents(span);
+  } catch (e) {
+    var frag = savedRange.extractContents();
+    span.appendChild(frag);
+    savedRange.insertNode(span);
+  }
+}
+
+function showFormatToolbar(doc, range) {
+  closeFormatToolbar();
+  var rect = range.getBoundingClientRect();
+  if (!rect || (rect.width === 0 && rect.height === 0)) return;
+  var savedRange = range.cloneRange();
+
+  var bar = doc.createElement('div');
+  bar.className = 'irl-format-toolbar';
+
+  function addButton(label, title, active, onClick) {
+    var btn = doc.createElement('button');
+    btn.textContent = label;
+    btn.title = title;
+    if (active) btn.classList.add('irl-active');
+    btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick();
+      var sel = doc.getSelection();
+      if (sel && sel.rangeCount && !sel.isCollapsed) showFormatToolbar(doc, sel.getRangeAt(0));
+    });
+    bar.appendChild(btn);
+    return btn;
+  }
+
+  addButton('B', 'Negrita', doc.queryCommandState('bold'), function () { doc.execCommand('bold'); });
+  var iBtn = addButton('I', 'Cursiva', doc.queryCommandState('italic'), function () { doc.execCommand('italic'); });
+  iBtn.style.fontStyle = 'italic';
+
+  var sep1 = doc.createElement('div');
+  sep1.className = 'irl-sep';
+  bar.appendChild(sep1);
+
+  addButton('Normal', 'Quitar negrita, cursiva y tamaño', false, function () {
+    doc.execCommand('removeFormat');
+  });
+
+  var sep2 = doc.createElement('div');
+  sep2.className = 'irl-sep';
+  bar.appendChild(sep2);
+
+  var select = doc.createElement('select');
+  [
+    { label: 'Tamaño', value: '' },
+    { label: 'Pequeño', value: '12' },
+    { label: 'Normal', value: '14' },
+    { label: 'Grande', value: '18' },
+    { label: 'Muy grande', value: '24' }
+  ].forEach(function (opt) {
+    var o = doc.createElement('option');
+    o.value = opt.value;
+    o.textContent = opt.label;
+    select.appendChild(o);
+  });
+  select.addEventListener('mousedown', function (e) { e.stopPropagation(); });
+  select.addEventListener('change', function () {
+    if (select.value) applyFontSize(doc, savedRange, select.value);
+    closeFormatToolbar();
+  });
+  bar.appendChild(select);
+
+  doc.body.appendChild(bar);
+
+  var top = rect.top - bar.offsetHeight - 8;
+  if (top < 4) top = rect.bottom + 8;
+  var left = rect.left + (rect.width / 2) - (bar.offsetWidth / 2);
+  if (left < 4) left = 4;
+  bar.style.top = top + 'px';
+  bar.style.left = left + 'px';
+
+  activeFormatToolbar = bar;
+}
+
+function onSelectionChange(doc) {
+  // No cerrar la barra mientras el foco esté dentro de ella (p. ej. el
+  // desplegable de tamaño, que roba el foco del texto al abrirse).
+  if (activeFormatToolbar && activeFormatToolbar.contains(doc.activeElement)) return;
+
+  var sel = doc.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { closeFormatToolbar(); return; }
+
+  var range = sel.getRangeAt(0);
+  var node = range.commonAncestorContainer;
+  var el = node.nodeType === 3 ? node.parentElement : node;
+  if (!el || !el.closest || !el.closest('.irl-editable-html')) { closeFormatToolbar(); return; }
+
+  showFormatToolbar(doc, range);
+}
+
 function enableLiveEditing(doc) {
   injectEditingStyles(doc);
 
@@ -409,6 +563,7 @@ function enableLiveEditing(doc) {
       }
     });
   });
+  doc.addEventListener('selectionchange', function () { onSelectionChange(doc); });
 
   // Imágenes: clic para subir una nueva.
   doc.querySelectorAll('[data-key-src]').forEach(function (img) {
@@ -436,6 +591,45 @@ function enableLiveEditing(doc) {
         });
       };
       input.click();
+    });
+  });
+
+  // Elementos que se pueden mostrar/ocultar (p. ej. el logo animado).
+  doc.querySelectorAll('[data-key-visible]').forEach(function (el) {
+    var computedPos = doc.defaultView.getComputedStyle(el).position;
+    if (computedPos === 'static') el.style.position = 'relative';
+
+    // El estado real (lo que se guarda) se lleva en dataset.irlHidden;
+    // en el editor se fuerza a visible con una "sombra" para poder
+    // seguir viendo el elemento y volver a activarlo con el badge.
+    el.dataset.irlHidden = (el.style.display === 'none') ? 'true' : 'false';
+    el.style.display = '';
+
+    var badge = doc.createElement('span');
+    badge.className = 'irl-visibility-badge';
+    badge.setAttribute('contenteditable', 'false');
+    el.appendChild(badge);
+
+    var label = doc.createElement('span');
+    label.className = 'irl-visibility-label';
+    label.textContent = 'Oculto en la web';
+    el.appendChild(label);
+
+    function refresh() {
+      var hidden = el.dataset.irlHidden === 'true';
+      el.classList.toggle('irl-hidden-ghost', hidden);
+      label.style.display = hidden ? 'block' : 'none';
+      badge.textContent = hidden ? '🙈' : '👁';
+      badge.title = hidden ? 'Mostrar en la web' : 'Ocultar en la web';
+    }
+    refresh();
+
+    badge.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    badge.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      el.dataset.irlHidden = (el.dataset.irlHidden === 'true') ? 'false' : 'true';
+      refresh();
     });
   });
 
@@ -480,6 +674,9 @@ function collectData(doc) {
   });
   doc.querySelectorAll('[data-key-href]').forEach(function (el) {
     data[el.getAttribute('data-key-href')] = el.getAttribute('href');
+  });
+  doc.querySelectorAll('[data-key-visible]').forEach(function (el) {
+    data[el.getAttribute('data-key-visible')] = el.dataset.irlHidden !== 'true';
   });
   return data;
 }

@@ -6,5 +6,6 @@
   "section_3_title": "Nuestros Trabajos",
   "section_4_title": "Equipo Humano",
   "hero_image": "assets/hero.jpg",
-  "tag_image": "assets/logo-tag.png"
+  "tag_image": "assets/logo-tag.png",
+  "tag_visible": true
 }

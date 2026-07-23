@@ -38,6 +38,13 @@
           el.setAttribute('href', data[key]);
         }
       });
+
+      document.querySelectorAll('[data-key-visible]').forEach(function (el) {
+        var key = el.getAttribute('data-key-visible');
+        if (Object.prototype.hasOwnProperty.call(data, key) && data[key] === false) {
+          el.style.display = 'none';
+        }
+      });
     })
     .catch(function () {
       // Sin conexión al backend: se queda el contenido estático del HTML.
