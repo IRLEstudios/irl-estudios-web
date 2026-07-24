@@ -110,7 +110,9 @@ module.exports = async (req, res) => {
       contentType: 'application/json',
       allowOverwrite: false,
     });
-    const capiResult = await sendMetaLeadEvent(req, lead, body.test_event_code);
+    const capiResult = body.marketing_consent
+      ? await sendMetaLeadEvent(req, lead, body.test_event_code)
+      : { skipped: 'no marketing consent' };
     const response = { ok: true };
     if (body.test_event_code) response.capi_debug = capiResult;
     res.status(200).json(response);
