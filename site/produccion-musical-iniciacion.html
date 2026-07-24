@@ -110,16 +110,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-bottom:16px;
   }
 
-  .badge{
-    display:inline-block;
+  .badge-block{
     border:1.6px solid rgba(0,0,0,0.6);
     border-radius:9.6px;
-    padding:8px 18px;
+    overflow:hidden;
+    margin-bottom:16px;
     font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  }
+  .badge{
+    padding:8px 18px;
     font-style:normal;
     font-weight:400;
     font-size:12px;
-    margin-bottom:16px;
   }
   .badge b{font-weight:700;}
 
@@ -127,11 +129,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     display:grid;
     grid-template-columns:repeat(3, 1fr);
     background:#dcdcdc;
-    border:1.6px solid rgba(0,0,0,0.6);
-    border-radius:9.6px;
-    overflow:hidden;
-    margin-bottom:16px;
-    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    border-top:1.6px solid rgba(0,0,0,0.6);
   }
   .quick-facts .fact{
     padding:7px 6px;
@@ -261,20 +259,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <img data-key-src="photo_image" src="assets/produccion-iniciacion.jpg" alt="Tocando el piano Samick en el Estudio A">
       <div class="divider"></div>
 
-      <div class="badge" data-key-html="badge_html">Curso - Producción musical <b>Iniciación</b></div>
+      <div class="badge-block">
+        <div class="badge" data-key-html="badge_html">Curso - Producción musical <b>Iniciación</b></div>
 
-      <div class="quick-facts">
-        <div class="fact">
-          <div class="fact-value" data-key-html="quickfacts_price_html">500€</div>
-          <div class="fact-label">Precio</div>
-        </div>
-        <div class="fact">
-          <div class="fact-value" data-key="quickfacts_duracion">2 meses</div>
-          <div class="fact-label">Duración</div>
-        </div>
-        <div class="fact">
-          <div class="fact-value" data-key="quickfacts_formato">Presencial</div>
-          <div class="fact-label" data-key="quickfacts_plazas">Grupos de 4</div>
+        <div class="quick-facts">
+          <div class="fact">
+            <div class="fact-value" data-key-html="quickfacts_price_html">500€</div>
+            <div class="fact-label">Precio</div>
+          </div>
+          <div class="fact">
+            <div class="fact-value" data-key="quickfacts_duracion">2 meses</div>
+            <div class="fact-label">Duración</div>
+          </div>
+          <div class="fact">
+            <div class="fact-value" data-key="quickfacts_formato">Presencial</div>
+            <div class="fact-label" data-key="quickfacts_plazas">Grupos de 4</div>
+          </div>
         </div>
       </div>
 
