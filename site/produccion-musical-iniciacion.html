@@ -124,19 +124,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .badge b{font-weight:700;}
 
   .quick-facts{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:8px 14px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
     border:1.6px solid rgba(0,0,0,0.6);
     border-radius:9.6px;
-    padding:10px 18px;
-    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
-    font-size:12px;
+    overflow:hidden;
     margin-bottom:16px;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
   }
-  .quick-facts .fact-price{font-weight:700;}
-  .quick-facts .fact-sep{color:rgba(0,0,0,0.35);}
+  .quick-facts .fact{
+    padding:10px 6px;
+    text-align:center;
+    border-left:1px solid rgba(0,0,0,0.15);
+  }
+  .quick-facts .fact:first-child{border-left:none;}
+  .quick-facts .fact-value{
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:2px;
+  }
+  .quick-facts .fact-label{
+    font-size:9.5px;
+    color:rgba(0,0,0,0.55);
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
 
   .card{
     border:1.6px solid rgba(0,0,0,0.6);
@@ -251,11 +263,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="badge" data-key-html="badge_html">Curso - Producción musical <b>Iniciación</b></div>
 
       <div class="quick-facts">
-        <span class="fact-price" data-key-html="quickfacts_price_html">500€</span>
-        <span class="fact-sep">·</span>
-        <span data-key="quickfacts_duracion">8 sesiones</span>
-        <span class="fact-sep">·</span>
-        <span data-key="quickfacts_plazas">4 plazas · grupo reducido</span>
+        <div class="fact">
+          <div class="fact-value" data-key-html="quickfacts_price_html">500€</div>
+          <div class="fact-label">Precio</div>
+        </div>
+        <div class="fact">
+          <div class="fact-value" data-key="quickfacts_duracion">2 meses</div>
+          <div class="fact-label">Duración</div>
+        </div>
+        <div class="fact">
+          <div class="fact-value" data-key="quickfacts_formato">Presencial</div>
+          <div class="fact-label" data-key="quickfacts_plazas">Grupos de 4</div>
+        </div>
       </div>
 
       <div class="card">
