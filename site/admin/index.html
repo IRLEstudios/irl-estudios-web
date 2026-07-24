@@ -496,6 +496,22 @@ function applyFontSize(doc, savedRange, px) {
   }
 }
 
+// Envuelve la selección guardada en un <a href="...">. Mismo motivo que
+// applyFontSize para usar un Range guardado: prompt() roba el foco del
+// texto editable y perdería la selección "en vivo".
+function applyLink(doc, savedRange, url) {
+  if (!savedRange) return;
+  var a = doc.createElement('a');
+  a.setAttribute('href', url);
+  try {
+    savedRange.surroundContents(a);
+  } catch (e) {
+    var frag = savedRange.extractContents();
+    a.appendChild(frag);
+    savedRange.insertNode(a);
+  }
+}
+
 function showFormatToolbar(doc, range) {
   closeFormatToolbar();
   var rect = range.getBoundingClientRect();
@@ -532,6 +548,11 @@ function showFormatToolbar(doc, range) {
 
   addButton('Normal', 'Quitar negrita, cursiva y tamaño', false, function () {
     doc.execCommand('removeFormat');
+  });
+
+  addButton('🔗', 'Insertar enlace', false, function () {
+    var url = prompt('URL del enlace (p. ej. turian-boy.html):', 'https://');
+    if (url) applyLink(doc, savedRange, url);
   });
 
   var sep2 = doc.createElement('div');
