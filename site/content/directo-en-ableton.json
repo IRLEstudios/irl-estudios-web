@@ -8,7 +8,7 @@
   "temario_html": "<p style=\"margin-bottom:4px;\"><b>Temario:</b></p>\n      <span class=\"list-line\">- Elección de hardware de sonido y tipos: tarjeta de sonido, entradas salidas y ruteos para hacer eficiente el trabajo en directo.</span>\n      <span class=\"list-line\">- Traducción al directo de nuestro proyecto en Ableton, organización y trabajo en el DAW.</span>\n      <span class=\"list-line\">- Control de DAW en directo: controladores MIDI, mapeo de parámetros, automatizaciones, dummy clips…</span>\n      <span class=\"list-line\">- Optimización de CPU para el directo.</span>\n      <span class=\"list-line\">- Creación de racks y presets.</span>",
   "metodologia_html": "<p style=\"margin-bottom:4px;\"><b>Metodología:</b></p>\n      <span class=\"list-line\">- 4 clases de 2 horas.</span>\n      <span class=\"list-line\">- 1 clase por semana.</span>\n      <span class=\"list-line\">- Jueves por la tarde.</span>\n      <span class=\"list-line\">- Grupos reducidos de 4 personas para facilitar la comunicación y el aprendizaje.</span>",
   "teacher_html": "Impartido por <b>TURIAN BOY</b>, productor musical, compositor, diseñador sonoro y docente en nuestro <a href=\"estudio-a.html\">Estudio A</a>.",
-  "price": "250€",
+  "price_html": "250€",
   "cta_primary_label": "Inscripciones Oct/Nov 2026",
   "cta_primary_href": "inscripcion.html?curso=Directo%20en%20Ableton",
   "cta_secondary_label": "Dossier cursos",

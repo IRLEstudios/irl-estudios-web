@@ -3,6 +3,18 @@
 // Si la llamada falla (por ejemplo, en local sin backend), la página
 // se queda tal cual con el texto que ya tiene escrito en el HTML.
 (function () {
+  // Fundido suave para todas las imágenes de la página: evitan el
+  // "pop-in" brusco al terminar de cargar (independiente de si la
+  // página tiene o no contenido editable).
+  var fadeStyle = document.createElement('style');
+  fadeStyle.textContent = 'img:not(.irl-img-loaded){opacity:0;} img.irl-img-loaded{opacity:1; transition:opacity .35s ease;}';
+  document.head.appendChild(fadeStyle);
+  document.querySelectorAll('img').forEach(function (img) {
+    function markLoaded() { img.classList.add('irl-img-loaded'); }
+    if (img.complete && img.naturalWidth > 0) markLoaded();
+    else img.addEventListener('load', markLoaded, { once: true });
+  });
+
   var page = document.body.getAttribute('data-page');
   if (!page) return;
 
@@ -62,6 +74,14 @@
       // Sin conexión al backend: se queda el contenido estático del HTML.
     })
     .then(function () {
+      // Los elementos reposicionables (p. ej. el logo) empiezan ocultos
+      // por CSS para no "saltar" desde su posición por defecto hasta la
+      // guardada; se revelan aquí, ya con la posición correcta aplicada
+      // (o, si el fetch falló, con la posición por defecto del HTML).
+      document.querySelectorAll('[data-key-left]').forEach(function (el) {
+        el.style.opacity = '1';
+      });
+
       // Avisa (éxito o fallo) de que ya se terminó de intentar aplicar el
       // contenido remoto. Lo usa el editor visual del admin para saber
       // cuándo es seguro empezar a habilitar la edición en vivo.

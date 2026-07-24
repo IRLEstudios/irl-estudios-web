@@ -57,6 +57,10 @@
     top:58%;
     filter:drop-shadow(0 0 18px rgba(0,0,0,0.5));
     z-index:5;
+    /* Empieza oculto para no "saltar" desde esta posición por defecto
+       hasta la guardada; content-loader.js lo revela ya posicionado. */
+    opacity:0;
+    transition:opacity .25s ease;
   }
   .tag img{width:100%;display:block;}
 

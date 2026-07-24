@@ -8,7 +8,7 @@
   "temario_html": "<p style=\"margin-bottom:4px;\"><b>Temario:</b></p>\n      <span class=\"list-line\">- El diseño sonoro y sus aplicaciones.</span>\n      <span class=\"list-line\">- Organización y flujo de trabajo en el DAW (programa de edición).</span>\n      <span class=\"list-line\">- Aprendizaje práctico en Ableton.</span>\n      <span class=\"list-line\">- Samples y bancos de samples: uso, nomenclaturas y búsqueda.</span>\n      <span class=\"list-line\">- Audio Branding.</span>\n      <span class=\"list-line\">- Edición de sonido: cortes, ecualización, warping, automatizaciones...</span>\n      <span class=\"list-line\">- Efectos de sonido: delay, reverb, chorus, phaser, distorsión...</span>\n      <span class=\"list-line\">- Mezcla y mastering.</span>",
   "metodologia_html": "<p style=\"margin-bottom:4px;\"><b>Metodología:</b></p>\n      <span class=\"list-line\">- 8 sesiones de 2 horas. (1 sesión por semana)</span>\n      <span class=\"list-line\">- Horarios adaptables al grupo. (Tardes entresemana o sábado por la mañana)</span>\n      <span class=\"list-line\">- Grupos reducidos de 4 personas para facilitar la comunicación y el aprendizaje.</span>",
   "teacher_html": "Impartido por <b>TURIAN BOY</b>, diseñador sonoro, docente, compositor y productor musical en nuestro <a href=\"estudio-a.html\">Estudio A</a>.",
-  "price": "500€",
+  "price_html": "500€",
   "cta_primary_label": "Inscripciones Oct/Nov 2026",
   "cta_primary_href": "inscripcion.html?curso=Dise%C3%B1o%20Sonoro%20para%20audiovisual",
   "cta_secondary_label": "Dossier cursos",

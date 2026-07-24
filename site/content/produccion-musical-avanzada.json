@@ -7,7 +7,7 @@
   "temario_html": "<p style=\"margin-bottom:4px;\"><b>Temario:</b></p>\n      <span class=\"list-line\">- Producción y composición avanzada.</span>\n      <span class=\"list-line\">- Sound selection.</span>\n      <span class=\"list-line\">- Procesamiento de sonido avanzado: procesamientos paralelos, multibanda, mid side...</span>\n      <span class=\"list-line\">- Efectos de sonido avanzados: cadena de efectos, saturación/excitación, clipper, limitadores...</span>\n      <span class=\"list-line\">- Mezcla: equilibrio frecuencial, espacialidad, transientes, fase…</span>\n      <span class=\"list-line\">- Mastering básico: medidores, clipping, limitación y excitación.</span>",
   "metodologia_html": "<p style=\"margin-bottom:4px;\"><b>Metodología:</b></p>\n      <span class=\"list-line\">- 8 sesiones de 2 horas. (1 sesión por semana)</span>\n      <span class=\"list-line\">- Horarios adaptables al grupo. (Tardes entresemana o sábado por la mañana)</span>\n      <span class=\"list-line\">- Grupos reducidos de 4 personas para facilitar la comunicación y el aprendizaje.</span>",
   "teacher_html": "Impartido por <b>TURIAN BOY</b>, productor musical, compositor, diseñador sonoro y docente en nuestro <a href=\"estudio-a.html\">Estudio A</a>.",
-  "price": "500€",
+  "price_html": "500€",
   "cta_primary_label": "Inscripciones Oct/Nov 2026",
   "cta_primary_href": "inscripcion.html?curso=Producci%C3%B3n%20musical%20Avanzada%20-%20Iniciaci%C3%B3n%20a%20la%20mezcla",
   "cta_secondary_label": "Dossier cursos",
