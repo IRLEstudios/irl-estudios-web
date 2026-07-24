@@ -1,6 +1,9 @@
 {
   "photo_image": "assets/produccion-iniciacion.jpg",
   "badge_html": "Curso - Producción musical <b>Iniciación</b>",
+  "quickfacts_price_html": "500€",
+  "quickfacts_duracion": "8 sesiones",
+  "quickfacts_plazas": "4 plazas · grupo reducido",
   "lede_1_html": "Aprende a producir desde cero todos los estilos musicales.",
   "lede_2_html": "El curso va dirigido a personas que quieran introducirse en la <b>producción musical y la composición</b> en géneros como el pop, indie, reggaeton o electrónica.",
   "requirement_html": "<b>Para todos los niveles iniciales.</b><br>\n    Enseñanzas prácticas y adaptadas al trabajo profesional desde el primer día, aprende creando y genera un lenguaje propio con tu música.",
