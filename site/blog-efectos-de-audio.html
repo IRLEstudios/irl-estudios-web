@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Consentimiento de cookies (Google Consent Mode v2) -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied'
+});
+try {
+  if (localStorage.getItem('irl_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch (e) {}
+</script>
+<!-- Fin consentimiento de cookies -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVMVVMH4');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Efectos de audio: qué son y cómo usarlos — Blog IRL Estudios</title>
+<meta name="description" content="Guía cercana a los efectos de audio: paneo, EQ, reverb, delay, compresión, distorsión, chorus, phaser y flanger — y cómo aplicarlos por inserto o por envío.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-weight:300;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+  .col{width:min(760px, 94vw); pointer-events:auto;}
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:14px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:28px 30px;
+  }
+
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    margin-bottom:8px;
+  }
+
+  .meta{
+    font-size:11.5px;
+    color:rgba(0,0,0,0.55);
+    margin-bottom:20px;
+  }
+
+  .divider{border-top:1px solid var(--line-light); margin:20px 0;}
+
+  .article p{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:16px;
+    max-width:72ch;
+  }
+  .article p b, .article p strong{font-weight:700;}
+  .article a{color:var(--ink);}
+
+  .article h2{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    margin-top:32px;
+    margin-bottom:12px;
+  }
+  .article h2:first-child{margin-top:0;}
+
+  .article h3{
+    font-size:14.5px;
+    font-weight:700;
+    margin-top:18px;
+    margin-bottom:8px;
+  }
+
+  .article img{
+    max-width:100%;
+    display:block;
+    border-radius:8px;
+    border:1px solid var(--line-light);
+    margin:14px 0 18px;
+  }
+  .article .img-caption{
+    font-size:11px;
+    color:rgba(0,0,0,0.5);
+    margin-top:-12px;
+    margin-bottom:18px;
+    font-style:italic;
+  }
+
+  .cta-box{
+    background:rgba(0,0,0,0.04);
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:24px;
+  }
+  .cta-box p{margin-bottom:12px;}
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px;}
+  .btn{
+    font-family:'Inter Tight', sans-serif;
+    font-style:normal;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.15);
+    border-radius:9.6px;
+    padding:11px 18px;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+    margin-top:20px;
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:600px){
+    .panel{padding:20px;}
+  }
+</style>
+</head>
+<body data-page="blog-efectos-de-audio">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMVVMH4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+
+<div class="wrap">
+  <div class="col">
+    <a class="back" href="blog.html">← Blog</a>
+
+    <div class="panel">
+      <h1 data-key="title">Efectos de audio: qué son y cómo usarlos bien</h1>
+      <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+
+      <div class="article" data-key-html="body_html">
+
+        <p>Un efecto de audio es cualquier proceso que transforma una señal de sonido: la mueve en el espacio, le da forma en frecuencias, la comprime, la ensucia o la duplica. No añaden magia de la nada — trabajan con lo que ya está grabado para darle carácter, espacio y personalidad. Saber qué hace cada uno (y cuándo usarlo) es una de esas cosas que cambian por completo cómo suenan tus mezclas.</p>
+
+        <p>Aquí van los efectos más importantes que vas a encontrarte trabajando en Ableton, organizados por familias, y al final las dos formas distintas de aplicarlos en tu proyecto.</p>
+
+        <h2>Efectos espectrales</h2>
+        <p>Trabajan directamente sobre el contenido en frecuencias o en la posición estéreo de un sonido, sin tocar el tiempo ni la dinámica.</p>
+
+        <h3>Paneo</h3>
+        <p>El paneo distribuye una señal en el campo estéreo, entre el altavoz izquierdo y el derecho. En el centro es habitual dejar los elementos de frecuencias más graves (bajo, bombo) y los elementos principales (voz). El resto de instrumentos se reparten hacia los lados — y conviene mantener el equilibrio: si mandas algo ligeramente a la derecha, busca algo de frecuencia parecida para el lado contrario, así la mezcla no se siente coja.</p>
+
+        <img src="assets/blog/efectos-paneo.jpg" alt="Diagrama comparando el campo mono y el campo estéreo con la posición de escucha">
+        <p class="img-caption">Mono vs. estéreo: en mono todo llega desde un único punto; en estéreo puedes repartir los sonidos entre izquierda y derecha.</p>
+
+        <h3>Ecualización (EQ)</h3>
+        <p>La EQ recorta o amplifica frecuencias concretas del espectro. Piénsala como escultura: no añade frecuencias nuevas, da forma a las que ya existen en tu sonido. Es una herramienta clave para hacer sitio a cada elemento de la mezcla (que el bajo y el bombo no se pisen, por ejemplo), para limpiar ruido indeseado, y para realzar lo que sí quieres que se note.</p>
+
+        <h2>Efectos de tiempo</h2>
+        <p>Estos trabajan repitiendo o retrasando la señal original en el tiempo, creando sensación de espacio o de eco.</p>
+
+        <h3>Reverb</h3>
+        <p>Cuando un sonido ocurre, pasan dos cosas: el sonido directo llega a tus oídos, y a la vez un montón de reflexiones rebotan por las superficies de alrededor antes de llegar también. La reverb es justamente eso — un montón de ecos ocurriendo casi a la vez, que percibimos como un único efecto continuo. Se usa sobre todo para dar espacio, plenitud y profundidad: hace que un sonido suene más grande o más "colocado" dentro de una habitación imaginaria.</p>
+
+        <h3>Delay o echo</h3>
+        <p>El delay graba la señal y la repite después de un tiempo determinado — desde milisegundos hasta compases enteros sincronizados con el tempo de la canción (1/4, 1/8...). Es, de hecho, el origen técnico de otros efectos como el chorus o la propia reverb. Se usa tanto de forma creativa (repeticiones rítmicas evidentes) como para ampliar o dar profundidad a una señal de forma más sutil.</p>
+
+        <h2>Efectos dinámicos</h2>
+        <p>Actúan sobre el volumen de la señal según el momento, no sobre su contenido en frecuencias.</p>
+
+        <h3>Compresión</h3>
+        <p>La compresión reduce el rango dinámico de una señal — la diferencia entre sus partes más fuertes y las más suaves. Al comprimir, las partes flojas se amplifican relativamente y las fuertes se atenúan. Bien usada, da pegada y precisión, permite subir el volumen medio general, y es un elemento básico en prácticamente cualquier mezcla con instrumentos grabados.</p>
+
+        <h3>Distorsión</h3>
+        <p>La distorsión fuerza al sonido a "recortarse" (hacer clip) y comprimirse de forma agresiva, lo que añade contenido armónico nuevo y color a la señal. Cada tipo de circuito produce un sabor distinto. Se usa mucho en guitarras eléctricas y, cada vez más, en sintetizadores — añade fuerza, presencia y complejidad, aunque conviene dosificarla para no perder claridad en la mezcla.</p>
+
+        <h2>Efectos de modulación</h2>
+        <p>Se basan en duplicar la señal y mover ligeramente esa copia (en tono o en tiempo) frente a la original.</p>
+
+        <h3>Chorus</h3>
+        <p>El chorus aparece cuando sonidos casi idénticos, con variaciones muy leves de tono y de tiempo, se superponen y se escuchan como una única voz más rica. Técnicamente, el procesador crea copias de la señal original y les aplica pequeños delays y modulaciones de tono. Es un efecto muy asociado a la estética de los 80.</p>
+
+        <h3>Phaser y flanger</h3>
+        <p>El <b>phaser</b> dobla la señal y le aplica un cambio de fase a la copia. El <b>flanger</b> hace algo parecido pero duplicando la onda y aplicando a la copia un retraso menor de 5 milisegundos — el resultado es ese característico sonido metalizado y oscilante en frecuencias medias-altas. Ambos son habituales en guitarras y sintetizadores, y dan ese carácter acuoso o psicodélico tan reconocible en discos de funk y rock desde los 70.</p>
+
+        <img src="assets/blog/efectos-phaser-flanger.png" alt="Dispositivo Phaser-Flanger de Ableton con sus controles de Rate, Amount, Feedback y Dry/Wet">
+        <p class="img-caption">El dispositivo Phaser-Flanger de Ableton, con las tres variantes (Phaser, Flanger, Doubler) en un mismo plugin.</p>
+
+        <h2>Dos maneras de aplicar los efectos</h2>
+        <p>Más allá de qué efecto elijas, hay una decisión igual de importante: cómo lo colocas en tu sesión. Hay dos formas, y cada una tiene su momento.</p>
+
+        <h3>Inserto</h3>
+        <p>Un inserto aplica el efecto directamente y <b>en serie</b> sobre una pista, modificando el sonido base. El balance entre la señal original y la procesada se controla con el propio dry/wet del efecto. Úsalo cuando el efecto deba ser parte intrínseca del sonido de esa pista, alterando su timbre o su dinámica de fondo — por ejemplo EQ, compresión, chorus o distorsión.</p>
+
+        <h3>Envío (send)</h3>
+        <p>Un envío manda una copia de la señal a un canal auxiliar aparte, donde se aplica el efecto solo a esa copia — la señal original queda intacta. El balance se controla con el volumen de esa pista de efecto. Es la forma natural de trabajar cuando quieres aplicar un mismo efecto (como una reverb) a varias pistas a la vez, o cuando el efecto debe sonar mezclado en paralelo con el original, como suele pasar con reverbs, delays o compresión paralela.</p>
+
+        <img src="assets/blog/efectos-inserto-envio.png" alt="Diagrama comparando el flujo de señal en inserto (en serie) y en envío (en paralelo, con la señal limpia original)">
+        <p class="img-caption">Arriba, inserto: la señal pasa por el efecto en serie. Abajo, envío: una copia va al efecto mientras la señal original ("Clean - Original") sigue su camino intacta.</p>
+
+        <div class="cta-box">
+          <p>Todo esto lo trabajamos con calma y en la práctica, sobre proyectos reales, en la Escuela de Sonido de IRL Estudios.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="produccion-musical-iniciacion.html">Producción Musical Iniciación</a>
+            <a class="btn" href="diseno-sonoro-audiovisual.html">Diseño Sonoro para audiovisual</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="assets/content-loader.js"></script>
+</html>
