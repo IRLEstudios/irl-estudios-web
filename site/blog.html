@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Consentimiento de cookies (Google Consent Mode v2) -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied'
+});
+try {
+  if (localStorage.getItem('irl_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch (e) {}
+</script>
+<!-- Fin consentimiento de cookies -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVMVVMH4');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — IRL Estudios</title>
+<meta name="description" content="Artículos sobre producción musical, diseño sonoro y directo en Ableton, por turian boy — IRL Estudios, Madrid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:'Inter', ui-sans-serif, sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+
+  .col{
+    width:min(620px, 92vw);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    pointer-events:auto;
+  }
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:16px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:20px;
+  }
+  .panel .divider{
+    border-top:1.6px solid var(--line-light);
+    margin-bottom:16px;
+  }
+
+  .badge-block{
+    border:1.6px solid rgba(0,0,0,0.6);
+    border-radius:9.6px;
+    overflow:hidden;
+    margin-bottom:16px;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  }
+  .badge{
+    padding:8px 18px;
+    font-style:normal;
+    font-weight:400;
+    font-size:12px;
+  }
+  .badge b{font-weight:700;}
+
+  .card{
+    border:1.6px solid rgba(0,0,0,0.6);
+    border-radius:12.8px;
+    padding:20px 24px;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  }
+
+  .card p{
+    font-style:normal;
+    font-weight:400;
+    font-size:12.5px;
+    line-height:1.6;
+    margin-bottom:16px;
+    max-width:70ch;
+  }
+  .card p b, .card p strong{font-weight:700;}
+  .card a{color:var(--ink);}
+
+  .post-list{list-style:none;}
+  .post-item{
+    border-top:1px solid rgba(0,0,0,0.15);
+    padding:16px 0;
+  }
+  .post-item:first-child{border-top:none; padding-top:0;}
+  .post-item a{
+    font-weight:700;
+    font-size:13.5px;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    color:var(--ink);
+    display:block;
+    margin-bottom:4px;
+  }
+  .post-item .post-excerpt{
+    font-size:12px;
+    color:rgba(0,0,0,0.6);
+  }
+
+  .empty-note{
+    font-size:12.5px;
+    color:rgba(0,0,0,0.6);
+    font-style:italic;
+  }
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+    margin-top:16px;
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:700px){
+    .wrap{padding:16px;}
+    .card{padding:22px;}
+  }
+
+  a:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+</style>
+</head>
+<body data-page="blog">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMVVMH4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+<div class="wrap">
+  <div class="col">
+    <a class="back" href="index.html">← IRL Estudios</a>
+
+    <div class="badge-block">
+      <div class="badge" data-key-html="badge_html">Blog de <b>IRL Estudios</b></div>
+    </div>
+
+    <div class="card">
+
+      <p data-key-html="intro_html">Artículos sobre producción musical, diseño sonoro y directo en Ableton, escritos por <b>turian boy</b> a partir de lo que enseñamos en el estudio.</p>
+
+      <ul class="post-list" id="postList" data-key-html="post_list_html">
+        <li class="empty-note">Muy pronto los primeros artículos por aquí.</li>
+      </ul>
+
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="assets/content-loader.js"></script>
+</html>

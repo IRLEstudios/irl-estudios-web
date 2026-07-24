@@ -36,5 +36,7 @@
   "contact_mail_label": "Mail",
   "contact_mail_href": "mailto:irlestudiosmadrid@gmail.com",
   "contact_ig_label": "IG",
-  "contact_ig_href": "https://instagram.com"
+  "contact_ig_href": "https://instagram.com",
+  "contact_blog_label": "Blog",
+  "contact_blog_href": "blog.html"
 }
