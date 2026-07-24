@@ -44,19 +44,29 @@
 
   function showCookieBanner() {
     if (document.getElementById('irl-cookie-banner')) return;
+
+    // Alinea el hueco derecho del banner con el margen que usa el panel
+    // principal de cada página (28px en escritorio, 16px en móvil, igual
+    // que .wrap), para que "Rechazar" termine justo donde termina el panel.
+    var bannerStyle = document.createElement('style');
+    bannerStyle.textContent =
+      '#irl-cookie-banner{padding:16px 28px;}' +
+      '@media (max-width:700px){#irl-cookie-banner{padding:16px;}}';
+    document.head.appendChild(bannerStyle);
+
     var banner = document.createElement('div');
     banner.id = 'irl-cookie-banner';
     banner.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;' +
       'background:transparent;color:#fff;' +
-      'padding:16px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;' +
+      'display:flex;flex-wrap:wrap;gap:14px;align-items:center;' +
       'justify-content:space-between;font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;' +
       'font-size:12.5px;line-height:1.5;text-shadow:0 1px 4px rgba(0,0,0,0.6);' +
       'overflow-x:auto;';
     banner.innerHTML =
       '<span style="white-space:nowrap;">Usamos cookies para saber cómo nos encontráis y mejorar la web.</span>' +
       '<span style="display:flex;gap:16px;align-items:center;flex-shrink:0;">' +
-        '<button id="irl-cookie-reject" style="font-family:inherit;font-size:10px;font-weight:400;letter-spacing:0.03em;text-transform:uppercase;background:transparent;color:#fff;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-shadow:inherit;">Rechazar</button>' +
         '<button id="irl-cookie-accept" style="font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#fff;color:#232323;border:none;border-radius:9.6px;padding:9px 16px;cursor:pointer;text-shadow:none;">Aceptar</button>' +
+        '<button id="irl-cookie-reject" style="font-family:inherit;font-size:10px;font-weight:400;letter-spacing:0.03em;text-transform:uppercase;background:transparent;color:#fff;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-shadow:inherit;">Rechazar</button>' +
       '</span>';
     document.body.appendChild(banner);
 
