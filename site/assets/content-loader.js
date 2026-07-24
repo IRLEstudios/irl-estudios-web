@@ -9,11 +9,14 @@
   var fadeStyle = document.createElement('style');
   fadeStyle.textContent = 'img:not(.irl-img-loaded){opacity:0;} img.irl-img-loaded{opacity:1; transition:opacity .35s ease;}';
   document.head.appendChild(fadeStyle);
-  document.querySelectorAll('img').forEach(function (img) {
-    function markLoaded() { img.classList.add('irl-img-loaded'); }
-    if (img.complete && img.naturalWidth > 0) markLoaded();
-    else img.addEventListener('load', markLoaded, { once: true });
-  });
+  function fadeInImages(root) {
+    root.querySelectorAll('img').forEach(function (img) {
+      function markLoaded() { img.classList.add('irl-img-loaded'); }
+      if (img.complete && img.naturalWidth > 0) markLoaded();
+      else img.addEventListener('load', markLoaded, { once: true });
+    });
+  }
+  fadeInImages(document);
 
   var page = document.body.getAttribute('data-page');
 
@@ -204,6 +207,11 @@
         var key = el.getAttribute('data-key-html');
         if (Object.prototype.hasOwnProperty.call(data, key)) {
           el.innerHTML = data[key];
+          // Las imágenes que vengan dentro de este bloque son nuevas para
+          // el DOM: sin esto se quedarían con opacity:0 para siempre, ya
+          // que el fundido inicial solo se aplicó a las imágenes que
+          // existían en el HTML estático antes de este reemplazo.
+          fadeInImages(el);
         }
       });
 

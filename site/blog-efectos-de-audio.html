@@ -156,7 +156,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-top:24px;
   }
   .cta-box p{margin-bottom:12px;}
-  .cta-row{display:flex; flex-wrap:wrap; gap:12px;}
+  .cta-row{display:flex; flex-wrap:nowrap; gap:8px;}
+  .cta-row .btn{flex:1; font-size:9px; padding:10px 6px; white-space:nowrap;}
+  @media (max-width:520px){
+    .cta-row{flex-wrap:wrap;}
+    .cta-row .btn{flex:1 1 auto; white-space:normal;}
+  }
   .btn{
     font-family:'Inter Tight', sans-serif;
     font-style:normal;
@@ -174,6 +179,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .btn:hover{background:var(--ink);color:var(--paper);}
   .btn.primary{background:var(--ink);color:var(--paper);}
+
+  .flow-diagram{display:flex; flex-direction:column; gap:14px; margin:16px 0 20px;}
+  .flow-card{
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:18px 20px;
+    background:rgba(0,0,0,0.03);
+  }
+  .flow-card .flow-title{
+    font-weight:700;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    margin-bottom:12px;
+  }
+  .flow-chain{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+  }
+  .flow-node{
+    padding:9px 14px;
+    border:1px solid rgba(0,0,0,0.25);
+    border-radius:7px;
+    background:#fff;
+  }
+  .flow-node.effect{
+    font-weight:700;
+    background:var(--ink);
+    color:var(--paper);
+    border-color:var(--ink);
+  }
+  .flow-arrow{font-size:16px; color:rgba(0,0,0,0.4);}
+  .flow-note{
+    font-size:12px;
+    color:rgba(0,0,0,0.6);
+    margin-top:12px;
+  }
 
   .contact{
     font-size:11px;
@@ -242,8 +287,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Compresión</h3>
         <p>La compresión reduce el rango dinámico de una señal — la diferencia entre sus partes más fuertes y las más suaves. Al comprimir, las partes flojas se amplifican relativamente y las fuertes se atenúan. Bien usada, da pegada y precisión, permite subir el volumen medio general, y es un elemento básico en prácticamente cualquier mezcla con instrumentos grabados.</p>
 
+        <img src="assets/blog/efectos-compresion.png" alt="Forma de onda sin comprimir y comprimida, con la línea de threshold marcada">
+        <p class="img-caption">La señal sin comprimir (arriba) tiene picos muy por encima del threshold; una vez comprimida (abajo), esos picos se atenúan y el conjunto queda más uniforme.</p>
+
         <h3>Distorsión</h3>
         <p>La distorsión fuerza al sonido a "recortarse" (hacer clip) y comprimirse de forma agresiva, lo que añade contenido armónico nuevo y color a la señal. Cada tipo de circuito produce un sabor distinto. Se usa mucho en guitarras eléctricas y, cada vez más, en sintetizadores — añade fuerza, presencia y complejidad, aunque conviene dosificarla para no perder claridad en la mezcla.</p>
+
+        <img src="assets/blog/efectos-distorsion.png" alt="Gráfico de voltaje frente a tiempo comparando una onda senoidal limpia con su versión recortada (clip)">
+        <p class="img-caption">La onda original (roja) se recorta al forzarla más allá de su límite, generando la forma cuadrada (azul) característica del clipping.</p>
 
         <h2>Efectos de modulación</h2>
         <p>Se basan en duplicar la señal y mover ligeramente esa copia (en tono o en tiempo) frente a la original.</p>
@@ -254,9 +305,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Phaser y flanger</h3>
         <p>El <b>phaser</b> dobla la señal y le aplica un cambio de fase a la copia. El <b>flanger</b> hace algo parecido pero duplicando la onda y aplicando a la copia un retraso menor de 5 milisegundos — el resultado es ese característico sonido metalizado y oscilante en frecuencias medias-altas. Ambos son habituales en guitarras y sintetizadores, y dan ese carácter acuoso o psicodélico tan reconocible en discos de funk y rock desde los 70.</p>
 
-        <img src="assets/blog/efectos-phaser-flanger.png" alt="Dispositivo Phaser-Flanger de Ableton con sus controles de Rate, Amount, Feedback y Dry/Wet">
-        <p class="img-caption">El dispositivo Phaser-Flanger de Ableton, con las tres variantes (Phaser, Flanger, Doubler) en un mismo plugin.</p>
-
         <h2>Dos maneras de aplicar los efectos</h2>
         <p>Más allá de qué efecto elijas, hay una decisión igual de importante: cómo lo colocas en tu sesión. Hay dos formas, y cada una tiene su momento.</p>
 
@@ -266,15 +314,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Envío (send)</h3>
         <p>Un envío manda una copia de la señal a un canal auxiliar aparte, donde se aplica el efecto solo a esa copia — la señal original queda intacta. El balance se controla con el volumen de esa pista de efecto. Es la forma natural de trabajar cuando quieres aplicar un mismo efecto (como una reverb) a varias pistas a la vez, o cuando el efecto debe sonar mezclado en paralelo con el original, como suele pasar con reverbs, delays o compresión paralela.</p>
 
-        <img src="assets/blog/efectos-inserto-envio.png" alt="Diagrama comparando el flujo de señal en inserto (en serie) y en envío (en paralelo, con la señal limpia original)">
-        <p class="img-caption">Arriba, inserto: la señal pasa por el efecto en serie. Abajo, envío: una copia va al efecto mientras la señal original ("Clean - Original") sigue su camino intacta.</p>
+        <div class="flow-diagram">
+          <div class="flow-card">
+            <div class="flow-title">Inserto — en serie</div>
+            <div class="flow-chain">
+              <span class="flow-node">Pista</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node effect">Efecto (EQ, comp...)</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node">Salida</span>
+            </div>
+          </div>
+          <div class="flow-card">
+            <div class="flow-title">Envío — en paralelo</div>
+            <div class="flow-chain">
+              <span class="flow-node">Pista</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node effect">Efecto (reverb, delay...)</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-node">Salida</span>
+            </div>
+            <p class="flow-note">La señal original viaja en paralelo, sin pasar por el efecto, y se mezcla con la copia procesada justo en la salida.</p>
+          </div>
+        </div>
+
+        <h3>Dentro de Ableton: dos formas de envío</h3>
+        <p><b>Canales de retorno:</b> procesamiento en paralelo en un canal dedicado, al que puedes mandar todas las pistas de tu proyecto que quieras que compartan ese mismo efecto — muy típico para una única reverb que usan varias pistas a la vez.</p>
+        <p><b>Audio effect rack:</b> procesamiento en paralelo montado dentro de la propia pista de instrumento. En este caso el efecto solo podrá usarse en esa pista concreta.</p>
 
         <div class="cta-box">
           <p>Todo esto lo trabajamos con calma y en la práctica, sobre proyectos reales, en la Escuela de Sonido de IRL Estudios.</p>
           <div class="cta-row">
             <a class="btn primary" href="produccion-musical-iniciacion.html">Producción Musical Iniciación</a>
             <a class="btn" href="produccion-musical-avanzada.html">Producción Musical Avanzada</a>
-            <a class="btn" href="diseno-sonoro-audiovisual.html">Diseño Sonoro para audiovisual</a>
+            <a class="btn" href="diseno-sonoro-audiovisual.html">Diseño Sonoro Audiovisual</a>
           </div>
         </div>
 
