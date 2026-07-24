@@ -228,6 +228,11 @@
             </div>
           </div>
 
+          <div class="field" id="direccionFiscalField" style="display:none;">
+            <label for="direccionFiscal" data-key="label_direccion_fiscal">Dirección fiscal *</label>
+            <input type="text" id="direccionFiscal" name="direccionFiscal">
+          </div>
+
           <div class="field">
             <label for="comentarios" data-key="label_comentarios">¿Algo más que quieras añadir?</label>
             <textarea id="comentarios" name="comentarios"></textarea>
@@ -255,6 +260,20 @@
     });
   }
 
+  var direccionFiscalField = document.getElementById('direccionFiscalField');
+  var direccionFiscalInput = document.getElementById('direccionFiscal');
+  function updateDireccionFiscalVisibility() {
+    var checked = document.querySelector('input[name=autonomo]:checked');
+    var show = !!checked && checked.value === 'Si';
+    direccionFiscalField.style.display = show ? 'block' : 'none';
+    direccionFiscalInput.required = show;
+    if (!show) direccionFiscalInput.value = '';
+  }
+  document.querySelectorAll('input[name=autonomo]').forEach(function (r) {
+    r.addEventListener('change', updateDireccionFiscalVisibility);
+  });
+  updateDireccionFiscalVisibility();
+
   document.getElementById('leadForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var form = e.target;
@@ -271,12 +290,20 @@
       return;
     }
 
+    if (autonomoChecked.value === 'Si' && !direccionFiscalInput.value.trim()) {
+      errorMsg.textContent = 'Por favor, indica tu dirección fiscal.';
+      errorMsg.style.display = 'block';
+      direccionFiscalInput.focus();
+      return;
+    }
+
     var payload = {
       email: form.email.value,
       curso: cursoChecked.value,
       nombre: form.nombre.value,
       dni: form.dni.value,
       autonomo: autonomoChecked.value,
+      direccion_fiscal: direccionFiscalInput.value,
       comentarios: form.comentarios.value,
       origen: document.referrer || 'directo'
     };

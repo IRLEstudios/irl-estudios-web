@@ -12,6 +12,7 @@
   "info_box_html": "<p><b>Pagos y plazos</b></p>\n            <p>Los pagos se pueden realizar en dos modalidades:</p>\n            <ul>\n              <li>Pago único al inicio de curso.</li>\n              <li>Pago del 50% al inicio de curso y pago del 50% a mitad de curso.</li>\n            </ul>\n            <p>Los pagos se realizarán a través de transferencia o bizum. Una vez realizada la inscripción recibirás la factura para poder hacer el pago.</p>\n            <p><b>Precios de los cursos:</b></p>\n            <ul>\n              <li>Producción Musical Inicial (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Producción Musical Avanzada (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Diseño Sonoro (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Directo en Ableton (4 sesiones): 250€ + IVA = 302,5€</li>\n            </ul>",
   "label_autonomo": "¿Eres autónom@? *",
   "hint_autonomo": "Importante a tener en cuenta a la hora de hacer la factura",
+  "label_direccion_fiscal": "Dirección fiscal *",
   "label_comentarios": "¿Algo más que quieras añadir?",
   "submit_label": "Enviar inscripción",
   "success_title": "¡Nos vemos en el estudio!",

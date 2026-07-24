@@ -30,12 +30,19 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const esAutonomo = String(body.autonomo).trim().toLowerCase() === 'si';
+  if (esAutonomo && (!body.direccion_fiscal || String(body.direccion_fiscal).trim() === '')) {
+    res.status(400).json({ error: 'Falta la dirección fiscal' });
+    return;
+  }
+
   const lead = {
     email: String(body.email).trim(),
     curso: String(body.curso).trim(),
     nombre: String(body.nombre).trim(),
     dni: String(body.dni).trim(),
     autonomo: String(body.autonomo).trim(),
+    direccion_fiscal: esAutonomo ? String(body.direccion_fiscal).trim() : '',
     comentarios: body.comentarios ? String(body.comentarios).trim() : '',
     origen: body.origen ? String(body.origen).trim() : '',
     fecha: new Date().toISOString(),
@@ -44,11 +51,17 @@ module.exports = async (req, res) => {
   const safeEmail = lead.email.replace(/[^a-zA-Z0-9]/g, '_');
   const key = `leads/${Date.now()}-${safeEmail}.json`;
 
-  await put(key, JSON.stringify(lead, null, 2), {
-    access: 'public',
-    contentType: 'application/json',
-    allowOverwrite: false,
-  });
-
-  res.status(200).json({ ok: true });
+  try {
+    await put(key, JSON.stringify(lead, null, 2), {
+      access: 'public',
+      contentType: 'application/json',
+      allowOverwrite: false,
+    });
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    res.status(500).json({
+      error: 'No se pudo guardar la inscripción.',
+      detail: err && err.message,
+    });
+  }
 };
