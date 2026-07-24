@@ -95,6 +95,72 @@
   };
   if (page && CURSO_PAGE_NAMES[page]) {
     window.dataLayer.push({ event: 'ver_curso', curso_nombre: CURSO_PAGE_NAMES[page] });
+    insertSoftLeadForm(CURSO_PAGE_NAMES[page]);
+  }
+
+  // Formulario de captación de lead suave (nombre + email + WhatsApp),
+  // insertado justo antes del CTA de inscripción en cada página de curso.
+  // Se queda con el contacto de quien no está listo para inscribirse ya.
+  function insertSoftLeadForm(cursoNombre) {
+    var ctaRow = document.querySelector('.cta-row');
+    if (!ctaRow || document.getElementById('irl-soft-lead')) return;
+
+    var inputStyle = 'font-family:inherit;font-size:12.5px;padding:8px 10px;' +
+      'border:1.6px solid rgba(0,0,0,0.15);border-radius:7px;background:#fff;color:inherit;';
+
+    var wrap = document.createElement('div');
+    wrap.id = 'irl-soft-lead';
+    wrap.style.cssText = 'border:1.6px solid rgba(0,0,0,0.6);border-radius:12.8px;' +
+      'padding:16px 18px;margin-bottom:16px;font-family:inherit;';
+    wrap.innerHTML =
+      '<p style="font-weight:700;font-size:12.5px;margin-bottom:4px;">¿Aún no lo tienes claro?</p>' +
+      '<p style="font-size:11.5px;color:rgba(0,0,0,0.6);margin-bottom:12px;">Déjanos tu contacto y te avisamos antes de que se llenen las plazas, sin compromiso.</p>' +
+      '<form id="irl-soft-lead-form" style="display:flex;flex-direction:column;gap:8px;">' +
+        '<input type="text" name="nombre" placeholder="Nombre" required style="' + inputStyle + '">' +
+        '<input type="email" name="email" placeholder="Email" required style="' + inputStyle + '">' +
+        '<input type="tel" name="whatsapp" placeholder="WhatsApp (opcional)" style="' + inputStyle + '">' +
+        '<span class="irl-soft-lead-error" style="color:#b3261e;font-size:11px;display:none;"></span>' +
+        '<button type="submit" style="font-family:inherit;font-weight:700;font-size:10.5px;letter-spacing:0.04em;' +
+          'text-transform:uppercase;background:transparent;color:inherit;border:1.6px solid rgba(0,0,0,0.3);' +
+          'border-radius:9.6px;padding:10px 16px;cursor:pointer;">Quiero que me avisen</button>' +
+      '</form>';
+    ctaRow.parentNode.insertBefore(wrap, ctaRow);
+
+    wrap.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var form = e.target;
+      var errorEl = wrap.querySelector('.irl-soft-lead-error');
+      errorEl.style.display = 'none';
+      var btn = form.querySelector('button');
+      var originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      fetch('/api/soft-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: form.nombre.value,
+          email: form.email.value,
+          whatsapp: form.whatsapp.value,
+          curso: cursoNombre,
+          origen: location.href,
+        }),
+      })
+        .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+        .then(function (result) {
+          if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al enviar');
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'lead_suave_completado', curso_nombre: cursoNombre });
+          wrap.innerHTML = '<p style="font-weight:700;font-size:12.5px;">¡Gracias! Te avisaremos antes de que se llenen las plazas.</p>';
+        })
+        .catch(function () {
+          errorEl.textContent = 'No se pudo enviar. Inténtalo de nuevo.';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = originalText;
+        });
+    });
   }
 
   document.addEventListener('click', function (e) {

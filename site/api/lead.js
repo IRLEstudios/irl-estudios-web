@@ -90,6 +90,7 @@ module.exports = async (req, res) => {
   }
 
   const lead = {
+    tipo: 'lead_completo',
     email: String(body.email).trim(),
     curso: String(body.curso).trim(),
     nombre: String(body.nombre).trim(),
