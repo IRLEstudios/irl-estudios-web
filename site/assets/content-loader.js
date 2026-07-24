@@ -113,8 +113,8 @@
     wrap.style.cssText = 'margin-top:14px;padding-top:14px;margin-bottom:24px;' +
       'border-top:1px solid rgba(0,0,0,0.15);font-family:inherit;';
     wrap.innerHTML =
-      '<p data-key="soft_lead_heading" style="font-size:12.5px;font-weight:700;margin-bottom:4px;">¿No lo tienes claro todavía?</p>' +
-      '<p data-key="soft_lead_text" style="font-size:12.5px;color:rgba(0,0,0,0.6);margin-bottom:10px;">Déjanos tu nombre y email para avisarte antes de que se llenen las plazas y enviarte nuestra newsletter con tips de producción y novedades.</p>' +
+      '<p data-key-html="soft_lead_heading" style="font-size:12.5px;font-weight:700;margin-bottom:4px;">¿No lo tienes claro todavía?</p>' +
+      '<p data-key-html="soft_lead_text" style="font-size:12.5px;color:rgba(0,0,0,0.6);margin-bottom:10px;">Déjanos tu nombre y email para avisarte antes de que no queden plazas y enviarte nuestra newsletter con tips de producción y novedades.</p>' +
       '<form id="irl-soft-lead-form" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
         '<input type="text" name="nombre" placeholder="Nombre" required style="' + inputStyle + '">' +
         '<input type="email" name="email" placeholder="Email" required style="' + inputStyle + '">' +
