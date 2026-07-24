@@ -32,6 +32,14 @@
       });
     }
     try { localStorage.setItem('irl_consent', state); } catch (e) {}
+    if (granted) {
+      // Disparador explícito y propio (no dependemos del bloqueo por
+      // consentimiento interno de GTM para etiquetas no nativas de Google,
+      // que no es fiable en HTML personalizado como el píxel de Meta):
+      // la etiqueta del píxel solo está enganchada a este evento.
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'marketing_consent_granted' });
+    }
   }
 
   function showCookieBanner() {
@@ -62,12 +70,16 @@
   }
 
   try {
-    if (!localStorage.getItem('irl_consent')) {
+    var storedConsent = localStorage.getItem('irl_consent');
+    if (!storedConsent) {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', showCookieBanner);
       } else {
         showCookieBanner();
       }
+    } else if (storedConsent === 'granted') {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'marketing_consent_granted' });
     }
   } catch (e) {}
 
