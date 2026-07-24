@@ -98,10 +98,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-bottom:8px;
   }
 
+  .meta-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+  }
   .meta{
     font-size:11.5px;
     color:rgba(0,0,0,0.55);
-    margin-bottom:20px;
+  }
+  .level-badge{
+    display:inline-block;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
   }
 
   .divider{border-top:1px solid var(--line-light); margin:20px 0;}
@@ -134,7 +152,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   .article img{
-    max-width:100%;
+    width:100%;
     display:block;
     border-radius:8px;
     border:1px solid var(--line-light);
@@ -180,46 +198,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .btn:hover{background:var(--ink);color:var(--paper);}
   .btn.primary{background:var(--ink);color:var(--paper);}
 
-  .flow-diagram{display:flex; flex-direction:column; gap:14px; margin:16px 0 20px;}
-  .flow-card{
-    border:1px solid var(--line-light);
-    border-radius:8px;
-    padding:18px 20px;
-    background:rgba(0,0,0,0.03);
-  }
-  .flow-card .flow-title{
-    font-weight:700;
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    margin-bottom:12px;
-  }
-  .flow-chain{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:10px;
-    font-size:14px;
-  }
-  .flow-node{
-    padding:9px 14px;
-    border:1px solid rgba(0,0,0,0.25);
-    border-radius:7px;
-    background:#fff;
-  }
-  .flow-node.effect{
-    font-weight:700;
-    background:var(--ink);
-    color:var(--paper);
-    border-color:var(--ink);
-  }
-  .flow-arrow{font-size:16px; color:rgba(0,0,0,0.4);}
-  .flow-note{
-    font-size:12px;
-    color:rgba(0,0,0,0.6);
-    margin-top:12px;
-  }
-
   .contact{
     font-size:11px;
     font-style:normal;
@@ -252,7 +230,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="panel">
       <h1 data-key="title">Efectos de audio: qué son y cómo usarlos bien</h1>
-      <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+      <div class="meta-row">
+        <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+        <span class="level-badge" data-key="level">Nivel Inicial</span>
+      </div>
 
       <div class="article" data-key-html="body_html">
 
@@ -314,29 +295,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h3>Envío (send)</h3>
         <p>Un envío manda una copia de la señal a un canal auxiliar aparte, donde se aplica el efecto solo a esa copia — la señal original queda intacta. El balance se controla con el volumen de esa pista de efecto. Es la forma natural de trabajar cuando quieres aplicar un mismo efecto (como una reverb) a varias pistas a la vez, o cuando el efecto debe sonar mezclado en paralelo con el original, como suele pasar con reverbs, delays o compresión paralela.</p>
 
-        <div class="flow-diagram">
-          <div class="flow-card">
-            <div class="flow-title">Inserto — en serie</div>
-            <div class="flow-chain">
-              <span class="flow-node">Pista</span>
-              <span class="flow-arrow">→</span>
-              <span class="flow-node effect">Efecto (EQ, comp...)</span>
-              <span class="flow-arrow">→</span>
-              <span class="flow-node">Salida</span>
-            </div>
-          </div>
-          <div class="flow-card">
-            <div class="flow-title">Envío — en paralelo</div>
-            <div class="flow-chain">
-              <span class="flow-node">Pista</span>
-              <span class="flow-arrow">→</span>
-              <span class="flow-node effect">Efecto (reverb, delay...)</span>
-              <span class="flow-arrow">→</span>
-              <span class="flow-node">Salida</span>
-            </div>
-            <p class="flow-note">La señal original viaja en paralelo, sin pasar por el efecto, y se mezcla con la copia procesada justo en la salida.</p>
-          </div>
-        </div>
+        <img src="assets/blog/efectos-inserto-envio.jpg" alt="Diagrama comparando el flujo de señal en inserto (en serie) y en envío (en paralelo, con la señal limpia original)">
+        <p class="img-caption">Arriba, inserto: la señal pasa por el efecto en serie. Abajo, envío: una copia va al efecto mientras la señal original ("Clean - Original") sigue su camino intacta.</p>
 
         <h3>Dentro de Ableton: dos formas de envío</h3>
         <p><b>Canales de retorno:</b> procesamiento en paralelo en un canal dedicado, al que puedes mandar todas las pistas de tu proyecto que quieras que compartan ese mismo efecto — muy típico para una única reverb que usan varias pistas a la vez.</p>

@@ -113,6 +113,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     padding:18px 0;
   }
   .post-item:first-child{border-top:none; padding-top:0;}
+  .post-item-head{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:6px;
+  }
   .post-item a{
     font-family:'Archivo', sans-serif;
     font-weight:700;
@@ -122,19 +129,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     text-decoration:underline;
     text-underline-offset:3px;
     color:var(--ink);
-    display:block;
-    margin-bottom:6px;
   }
   .post-item .post-excerpt{
     font-size:13px;
     color:rgba(0,0,0,0.6);
   }
-
-  .empty-note{
-    font-size:13px;
-    color:rgba(0,0,0,0.6);
-    font-style:italic;
+  .level-badge{
+    display:inline-block;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
   }
+
 
   .contact{
     font-size:11px;
@@ -172,8 +184,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="divider"></div>
 
-      <ul class="post-list" data-key-html="post_list_html">
-        <li class="empty-note">Muy pronto los primeros artículos por aquí.</li>
+      <ul class="post-list">
+        <li class="post-item" data-key-visible="post_1_visible">
+          <div class="post-item-head">
+            <a data-key="post_1_title" data-key-href="post_1_href" href="blog-efectos-de-audio.html">Efectos de audio: qué son y cómo usarlos bien</a>
+            <span class="level-badge" data-key="post_1_level">Nivel Inicial</span>
+          </div>
+          <span class="post-excerpt" data-key-html="post_1_excerpt_html">Paneo, EQ, reverb, delay, compresión, distorsión, chorus, phaser y flanger — y cómo aplicarlos por inserto o por envío.</span>
+        </li>
+        <li class="post-item" data-key-visible="post_2_visible">
+          <div class="post-item-head">
+            <a data-key="post_2_title" data-key-href="post_2_href" href="#">Próximo artículo</a>
+            <span class="level-badge" data-key="post_2_level">Nivel Inicial</span>
+          </div>
+          <span class="post-excerpt" data-key-html="post_2_excerpt_html">Resumen del artículo.</span>
+        </li>
+        <li class="post-item" data-key-visible="post_3_visible">
+          <div class="post-item-head">
+            <a data-key="post_3_title" data-key-href="post_3_href" href="#">Próximo artículo</a>
+            <span class="level-badge" data-key="post_3_level">Nivel Inicial</span>
+          </div>
+          <span class="post-excerpt" data-key-html="post_3_excerpt_html">Resumen del artículo.</span>
+        </li>
+        <li class="post-item" data-key-visible="post_4_visible">
+          <div class="post-item-head">
+            <a data-key="post_4_title" data-key-href="post_4_href" href="#">Próximo artículo</a>
+            <span class="level-badge" data-key="post_4_level">Nivel Inicial</span>
+          </div>
+          <span class="post-excerpt" data-key-html="post_4_excerpt_html">Resumen del artículo.</span>
+        </li>
       </ul>
 
       <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
