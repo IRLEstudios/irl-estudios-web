@@ -105,24 +105,29 @@
     var ctaRow = document.querySelector('.cta-row');
     if (!ctaRow || document.getElementById('irl-soft-lead')) return;
 
-    var inputStyle = 'font-family:inherit;font-size:11.5px;padding:6px 9px;' +
+    var inputStyle = 'font-family:inherit;font-size:12.5px;padding:6px 9px;' +
       'border:1.3px solid rgba(0,0,0,0.15);border-radius:6px;background:#fff;color:inherit;flex:1;min-width:110px;';
 
     var wrap = document.createElement('div');
     wrap.id = 'irl-soft-lead';
-    wrap.style.cssText = 'margin-top:14px;padding-top:14px;' +
+    wrap.style.cssText = 'margin-top:14px;padding-top:14px;margin-bottom:24px;' +
       'border-top:1px solid rgba(0,0,0,0.15);font-family:inherit;';
     wrap.innerHTML =
-      '<p style="font-size:11px;color:rgba(0,0,0,0.6);margin-bottom:8px;">¿No lo tienes claro todavía? Déjanos tu nombre y email: te avisamos antes de que se llenen las plazas y te apuntamos a nuestra newsletter con tips de producción y novedades.</p>' +
+      '<p data-key="soft_lead_heading" style="font-size:12.5px;font-weight:700;margin-bottom:4px;">¿No lo tienes claro todavía?</p>' +
+      '<p data-key="soft_lead_text" style="font-size:12.5px;color:rgba(0,0,0,0.6);margin-bottom:10px;">Déjanos tu nombre y email para avisarte antes de que se llenen las plazas y enviarte nuestra newsletter con tips de producción y novedades.</p>' +
       '<form id="irl-soft-lead-form" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
         '<input type="text" name="nombre" placeholder="Nombre" required style="' + inputStyle + '">' +
         '<input type="email" name="email" placeholder="Email" required style="' + inputStyle + '">' +
-        '<button type="submit" style="font-family:inherit;font-weight:700;font-size:10px;letter-spacing:0.04em;' +
+        '<button type="submit" data-key="soft_lead_button_label" style="font-family:inherit;font-weight:700;font-size:10px;letter-spacing:0.04em;' +
           'text-transform:uppercase;background:transparent;color:inherit;border:1.3px solid rgba(0,0,0,0.3);' +
           'border-radius:7px;padding:7px 12px;cursor:pointer;flex-shrink:0;">Avisadme</button>' +
       '</form>' +
       '<span class="irl-soft-lead-error" style="color:#b3261e;font-size:11px;display:none;margin-top:6px;"></span>';
     ctaRow.parentNode.insertBefore(wrap, ctaRow.nextSibling);
+
+    // Los data-key insertados dinámicamente llegan a tiempo para el fetch
+    // de /api/content que se lanza más abajo en este mismo script, así que
+    // el editor de /admin puede editar este texto igual que el resto.
 
     wrap.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
