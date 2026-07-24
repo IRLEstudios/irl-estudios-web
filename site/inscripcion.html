@@ -336,6 +336,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (!result.ok) {
           throw new Error(result.data.error || 'Error al enviar');
         }
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'formulario_completado', curso_nombre: payload.curso });
         document.getElementById('formView').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
       })

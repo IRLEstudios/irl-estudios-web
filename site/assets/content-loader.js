@@ -16,6 +16,31 @@
   });
 
   var page = document.body.getAttribute('data-page');
+
+  // Eventos de conversión enviados al dataLayer de GTM.
+  window.dataLayer = window.dataLayer || [];
+
+  var CURSO_PAGE_NAMES = {
+    'produccion-musical-avanzada': 'Producción Musical Avanzada',
+    'produccion-musical-iniciacion': 'Producción Musical Iniciación',
+    'diseno-sonoro-audiovisual': 'Diseño Sonoro para audiovisual',
+    'directo-en-ableton': 'Directo en Ableton',
+  };
+  if (page && CURSO_PAGE_NAMES[page]) {
+    window.dataLayer.push({ event: 'ver_curso', curso_nombre: CURSO_PAGE_NAMES[page] });
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href*="inscripcion.html"]');
+    if (link) {
+      window.dataLayer.push({
+        event: 'click_inscripciones',
+        link_text: link.textContent.trim(),
+        origen_pagina: page || '',
+      });
+    }
+  });
+
   if (!page) return;
 
   fetch('/api/content?page=' + encodeURIComponent(page), { cache: 'no-store' })
