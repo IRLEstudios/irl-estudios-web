@@ -47,15 +47,15 @@
     var banner = document.createElement('div');
     banner.id = 'irl-cookie-banner';
     banner.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;' +
-      'background:#eaeaea;color:#232323;border-top:1.6px solid rgba(0,0,0,0.15);' +
+      'background:transparent;color:#fff;' +
       'padding:16px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;' +
       'justify-content:space-between;font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;' +
-      'font-size:12.5px;line-height:1.5;';
+      'font-size:12.5px;line-height:1.5;text-shadow:0 1px 4px rgba(0,0,0,0.6);';
     banner.innerHTML =
       '<span style="max-width:640px;">Usamos cookies de analítica y publicidad para entender cómo nos encontráis y mejorar la web. Puedes aceptarlas o rechazarlas.</span>' +
-      '<span style="display:flex;gap:10px;flex-shrink:0;">' +
-        '<button id="irl-cookie-reject" style="font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:transparent;color:#232323;border:1.6px solid rgba(0,0,0,0.3);border-radius:9.6px;padding:9px 16px;cursor:pointer;">Rechazar</button>' +
-        '<button id="irl-cookie-accept" style="font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#232323;color:#eaeaea;border:none;border-radius:9.6px;padding:9px 16px;cursor:pointer;">Aceptar</button>' +
+      '<span style="display:flex;gap:16px;align-items:center;flex-shrink:0;">' +
+        '<button id="irl-cookie-reject" style="font-family:inherit;font-size:10px;font-weight:400;letter-spacing:0.03em;text-transform:uppercase;background:transparent;color:#fff;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-shadow:inherit;">Rechazar</button>' +
+        '<button id="irl-cookie-accept" style="font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#fff;color:#232323;border:none;border-radius:9.6px;padding:9px 16px;cursor:pointer;text-shadow:none;">Aceptar</button>' +
       '</span>';
     document.body.appendChild(banner);
 
