@@ -110,7 +110,7 @@
 
     var wrap = document.createElement('div');
     wrap.id = 'irl-soft-lead';
-    wrap.style.cssText = 'margin-top:14px;padding-top:14px;margin-bottom:24px;' +
+    wrap.style.cssText = 'margin-top:28px;padding-top:24px;margin-bottom:24px;' +
       'border-top:1px solid rgba(0,0,0,0.15);font-family:inherit;';
     wrap.innerHTML =
       '<p data-key-html="soft_lead_heading" style="font-size:12.5px;font-weight:700;margin-bottom:4px;">¿No lo tienes claro todavía?</p>' +

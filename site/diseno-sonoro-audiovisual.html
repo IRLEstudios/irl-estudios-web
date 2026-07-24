@@ -110,18 +110,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-bottom:16px;
   }
 
-  .badge{
-    display:inline-block;
+  .badge-block{
     border:1.6px solid rgba(0,0,0,0.6);
     border-radius:9.6px;
-    padding:8px 18px;
+    overflow:hidden;
+    margin-bottom:16px;
     font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  }
+  .badge{
+    padding:8px 18px;
     font-style:normal;
     font-weight:400;
     font-size:12px;
-    margin-bottom:16px;
   }
   .badge b{font-weight:700;}
+
+  .quick-facts{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    background:#dcdcdc;
+    border-top:1.6px solid rgba(0,0,0,0.6);
+  }
+  .quick-facts .fact{
+    padding:7px 6px;
+    text-align:center;
+    border-left:1px solid rgba(0,0,0,0.15);
+  }
+  .quick-facts .fact:first-child{border-left:none;}
+  .quick-facts .fact-value{
+    font-weight:700;
+    font-size:12px;
+    margin-bottom:1px;
+  }
+  .quick-facts .fact-label{
+    font-size:8.5px;
+    color:rgba(0,0,0,0.55);
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
 
   .card{
     border:1.6px solid rgba(0,0,0,0.6);
@@ -139,6 +165,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     max-width:70ch;
   }
   .card p b, .card p strong{font-weight:700;}
+  .card a{color:var(--ink);}
 
   .card .list-line{
     font-style:normal;
@@ -165,6 +192,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     font-weight:400;
     font-size:11px;
     color:rgba(0,0,0,0.55);
+  }
+
+  .note-price{
+    font-style:normal;
+    font-weight:400;
+    font-size:11px;
+    color:rgba(0,0,0,0.6);
+    max-width:60ch;
+    margin-bottom:14px;
   }
 
   .cta-row{
@@ -224,7 +260,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <img data-key-src="photo_image" src="assets/diseno-sonoro.jpg" alt="Editando diseño sonoro en Ableton junto al mecanismo de un piano en el Estudio A">
       <div class="divider"></div>
 
-      <div class="badge" data-key-html="badge_html">Curso - Diseño Sonoro <b>para audiovisual</b></div>
+      <div class="badge-block">
+        <div class="badge" data-key-html="badge_html">Curso - Diseño Sonoro <b>para audiovisual</b></div>
+
+        <div class="quick-facts">
+          <div class="fact">
+            <div class="fact-value" data-key-html="quickfacts_price_html">500€</div>
+            <div class="fact-label">Precio</div>
+          </div>
+          <div class="fact">
+            <div class="fact-value" data-key="quickfacts_duracion">2 meses</div>
+            <div class="fact-label">Duración</div>
+          </div>
+          <div class="fact">
+            <div class="fact-value" data-key="quickfacts_formato">Presencial</div>
+            <div class="fact-label" data-key="quickfacts_plazas">Grupos de 4</div>
+          </div>
+        </div>
+      </div>
 
       <div class="card">
 
@@ -256,9 +309,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="list-line">- Grupos reducidos de 4 personas para facilitar la comunicación y el aprendizaje.</span>
     </div>
 
-    <p data-key-html="teacher_html">Impartido por <b>TURIAN BOY</b>, diseñador sonoro, docente, compositor y productor musical en nuestro <a href="estudio-a.html">Estudio A</a>.</p>
+    <p data-key-html="teacher_html">Impartido por <b><a href="turian-boy.html">TURIAN BOY</a></b>, diseñador sonoro, docente, compositor y productor musical en nuestro <a href="estudio-a.html">Estudio A</a>.</p>
 
     <div class="price"><span data-key-html="price_html">500€</span></div>
+    <p class="note-price" data-key-html="note_price_html">Incluye las 8 sesiones de aprendizaje en el estudio, acceso al aula virtual y dossier de apuntes para cada materia.</p>
 
     <div class="cta-row">
       <a class="btn primary" data-key="cta_primary_label" data-key-href="cta_primary_href" href="inscripcion.html?curso=Dise%C3%B1o%20Sonoro%20para%20audiovisual">Inscripciones Oct/Nov 2026</a>
