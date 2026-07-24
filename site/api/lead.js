@@ -18,7 +18,7 @@ function getCookie(cookieHeader, name) {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
-async function sendMetaLeadEvent(req, lead) {
+async function sendMetaLeadEvent(req, lead, testEventCode) {
   const token = process.env.META_CAPI_TOKEN;
   if (!token) return;
 
@@ -42,6 +42,7 @@ async function sendMetaLeadEvent(req, lead) {
     }],
     access_token: token,
   };
+  if (testEventCode) payload.test_event_code = testEventCode;
 
   try {
     await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events`, {
@@ -105,7 +106,7 @@ module.exports = async (req, res) => {
       contentType: 'application/json',
       allowOverwrite: false,
     });
-    await sendMetaLeadEvent(req, lead);
+    await sendMetaLeadEvent(req, lead, body.test_event_code);
     res.status(200).json({ ok: true });
   } catch (err) {
     res.status(500).json({
