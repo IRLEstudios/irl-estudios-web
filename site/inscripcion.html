@@ -154,7 +154,7 @@
   }
 </style>
 </head>
-<body>
+<body data-page="inscripcion">
 
 <a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
   <img class="hero-bg" src="assets/hero.jpg" alt="">
@@ -166,10 +166,10 @@
 
     <div class="panel">
       <div id="formView">
-        <h1>Inscripción Escuela de Sonido IRL</h1>
-        <p class="meta">Fecha de los cursos: <b>octubre - noviembre</b></p>
-        <p class="meta">Localización: IRL Estudios, Villaverde Alto, Madrid</p>
-        <a class="dossier-link" href="https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda" target="_blank" rel="noopener">Dossier cursos</a>
+        <h1 data-key="title">Inscripción Escuela de Sonido IRL</h1>
+        <p class="meta" data-key-html="fecha_html">Fecha de los cursos: <b>octubre - noviembre</b></p>
+        <p class="meta" data-key="localizacion">Localización: IRL Estudios, Villaverde Alto, Madrid</p>
+        <a class="dossier-link" data-key="dossier_label" data-key-href="dossier_href" href="https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda" target="_blank" rel="noopener">Dossier cursos</a>
 
         <div class="divider"></div>
 
@@ -177,13 +177,13 @@
           <div class="error-msg" id="errorMsg"></div>
 
           <div class="field">
-            <label for="email">Email *</label>
+            <label for="email" data-key="label_email">Email *</label>
             <input type="email" id="email" name="email" required>
           </div>
 
           <div class="field">
-            <label>¿A qué curso quieres inscribirte? *</label>
-            <span class="hint">Tienes toda la info de los cursos en el Dossier de arriba</span>
+            <label data-key="label_curso">¿A qué curso quieres inscribirte? *</label>
+            <span class="hint" data-key="hint_curso">Tienes toda la info de los cursos en el Dossier de arriba</span>
             <div class="radio-group">
               <label><input type="radio" name="curso" value="Producción musical Inicial" required> Producción musical Inicial</label>
               <label><input type="radio" name="curso" value="Producción musical Avanzada - Iniciación a la mezcla"> Producción musical Avanzada - Iniciación a la mezcla</label>
@@ -193,16 +193,16 @@
           </div>
 
           <div class="field">
-            <label for="nombre">Nombre completo *</label>
+            <label for="nombre" data-key="label_nombre">Nombre completo *</label>
             <input type="text" id="nombre" name="nombre" required>
           </div>
 
           <div class="field">
-            <label for="dni">DNI/NIE *</label>
+            <label for="dni" data-key="label_dni">DNI/NIE *</label>
             <input type="text" id="dni" name="dni" required>
           </div>
 
-          <div class="info-box">
+          <div class="info-box" data-key-html="info_box_html">
             <p><b>Pagos y plazos</b></p>
             <p>Los pagos se pueden realizar en dos modalidades:</p>
             <ul>
@@ -220,8 +220,8 @@
           </div>
 
           <div class="field">
-            <label>¿Eres autónom@? *</label>
-            <span class="hint">Importante a tener en cuenta a la hora de hacer la factura</span>
+            <label data-key="label_autonomo">¿Eres autónom@? *</label>
+            <span class="hint" data-key="hint_autonomo">Importante a tener en cuenta a la hora de hacer la factura</span>
             <div class="radio-group">
               <label><input type="radio" name="autonomo" value="Si" required> Sí</label>
               <label><input type="radio" name="autonomo" value="No"> No</label>
@@ -229,17 +229,17 @@
           </div>
 
           <div class="field">
-            <label for="comentarios">¿Algo más que quieras añadir?</label>
+            <label for="comentarios" data-key="label_comentarios">¿Algo más que quieras añadir?</label>
             <textarea id="comentarios" name="comentarios"></textarea>
           </div>
 
-          <button type="submit" class="submit-btn" id="submitBtn">Enviar inscripción</button>
+          <button type="submit" class="submit-btn" id="submitBtn" data-key="submit_label">Enviar inscripción</button>
         </form>
       </div>
 
       <div class="success-box" id="successBox">
-        <h2>¡Nos vemos en el estudio!</h2>
-        <p>Hemos recibido tu inscripción. Te contactaremos en breve a través del email que nos has dado con los siguientes pasos.</p>
+        <h2 data-key="success_title">¡Nos vemos en el estudio!</h2>
+        <p data-key="success_text">Hemos recibido tu inscripción. Te contactaremos en breve a través del email que nos has dado con los siguientes pasos.</p>
       </div>
     </div>
   </div>
@@ -281,6 +281,7 @@
       origen: document.referrer || 'directo'
     };
 
+    var originalLabel = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando...';
 
@@ -301,9 +302,10 @@
         errorMsg.textContent = 'No se pudo enviar el formulario. Inténtalo de nuevo o escríbenos a irlestudiosmadrid@gmail.com.';
         errorMsg.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar inscripción';
+        submitBtn.textContent = originalLabel;
       });
   });
 </script>
+<script src="assets/content-loader.js"></script>
 </body>
 </html>

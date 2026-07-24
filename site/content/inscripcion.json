@@ -1,0 +1,19 @@
+{
+  "title": "Inscripción Escuela de Sonido IRL",
+  "fecha_html": "Fecha de los cursos: <b>octubre - noviembre</b>",
+  "localizacion": "Localización: IRL Estudios, Villaverde Alto, Madrid",
+  "dossier_label": "Dossier cursos",
+  "dossier_href": "https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda",
+  "label_email": "Email *",
+  "label_curso": "¿A qué curso quieres inscribirte? *",
+  "hint_curso": "Tienes toda la info de los cursos en el Dossier de arriba",
+  "label_nombre": "Nombre completo *",
+  "label_dni": "DNI/NIE *",
+  "info_box_html": "<p><b>Pagos y plazos</b></p>\n            <p>Los pagos se pueden realizar en dos modalidades:</p>\n            <ul>\n              <li>Pago único al inicio de curso.</li>\n              <li>Pago del 50% al inicio de curso y pago del 50% a mitad de curso.</li>\n            </ul>\n            <p>Los pagos se realizarán a través de transferencia o bizum. Una vez realizada la inscripción recibirás la factura para poder hacer el pago.</p>\n            <p><b>Precios de los cursos:</b></p>\n            <ul>\n              <li>Producción Musical Inicial (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Producción Musical Avanzada (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Diseño Sonoro (8 sesiones): 500€ + IVA = 605€</li>\n              <li>Directo en Ableton (4 sesiones): 250€ + IVA = 302,5€</li>\n            </ul>",
+  "label_autonomo": "¿Eres autónom@? *",
+  "hint_autonomo": "Importante a tener en cuenta a la hora de hacer la factura",
+  "label_comentarios": "¿Algo más que quieras añadir?",
+  "submit_label": "Enviar inscripción",
+  "success_title": "¡Nos vemos en el estudio!",
+  "success_text": "Hemos recibido tu inscripción. Te contactaremos en breve a través del email que nos has dado con los siguientes pasos."
+}
