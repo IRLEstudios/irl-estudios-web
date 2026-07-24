@@ -20,7 +20,7 @@ function getCookie(cookieHeader, name) {
 
 async function sendMetaLeadEvent(req, lead, testEventCode) {
   const token = process.env.META_CAPI_TOKEN;
-  if (!token) return;
+  if (!token) return { skipped: 'no META_CAPI_TOKEN configured' };
 
   const cookieHeader = req.headers.cookie;
   const userData = {
@@ -45,13 +45,17 @@ async function sendMetaLeadEvent(req, lead, testEventCode) {
   if (testEventCode) payload.test_event_code = testEventCode;
 
   try {
-    await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events`, {
+    const r = await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
+    const responseBody = await r.json().catch(() => null);
+    if (!r.ok) console.error('Meta CAPI error response:', JSON.stringify(responseBody));
+    return { status: r.status, body: responseBody };
   } catch (err) {
     console.error('Meta CAPI error:', err && err.message);
+    return { error: err && err.message };
   }
 }
 
@@ -106,8 +110,10 @@ module.exports = async (req, res) => {
       contentType: 'application/json',
       allowOverwrite: false,
     });
-    await sendMetaLeadEvent(req, lead, body.test_event_code);
-    res.status(200).json({ ok: true });
+    const capiResult = await sendMetaLeadEvent(req, lead, body.test_event_code);
+    const response = { ok: true };
+    if (body.test_event_code) response.capi_debug = capiResult;
+    res.status(200).json(response);
   } catch (err) {
     res.status(500).json({
       error: 'No se pudo guardar la inscripción.',
