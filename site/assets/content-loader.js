@@ -98,33 +98,31 @@
     insertSoftLeadForm(CURSO_PAGE_NAMES[page]);
   }
 
-  // Formulario de captación de lead suave (nombre + email + WhatsApp),
-  // insertado justo antes del CTA de inscripción en cada página de curso.
-  // Se queda con el contacto de quien no está listo para inscribirse ya.
+  // Formulario de captación de lead suave (nombre + email), insertado
+  // debajo del CTA de inscripción en cada página de curso, con menos
+  // peso visual para no competir con la inscripción real.
   function insertSoftLeadForm(cursoNombre) {
     var ctaRow = document.querySelector('.cta-row');
     if (!ctaRow || document.getElementById('irl-soft-lead')) return;
 
-    var inputStyle = 'font-family:inherit;font-size:12.5px;padding:8px 10px;' +
-      'border:1.6px solid rgba(0,0,0,0.15);border-radius:7px;background:#fff;color:inherit;';
+    var inputStyle = 'font-family:inherit;font-size:11.5px;padding:6px 9px;' +
+      'border:1.3px solid rgba(0,0,0,0.15);border-radius:6px;background:#fff;color:inherit;flex:1;min-width:110px;';
 
     var wrap = document.createElement('div');
     wrap.id = 'irl-soft-lead';
-    wrap.style.cssText = 'border:1.6px solid rgba(0,0,0,0.6);border-radius:12.8px;' +
-      'padding:16px 18px;margin-bottom:16px;font-family:inherit;';
+    wrap.style.cssText = 'margin-top:14px;padding-top:14px;' +
+      'border-top:1px solid rgba(0,0,0,0.15);font-family:inherit;';
     wrap.innerHTML =
-      '<p style="font-weight:700;font-size:12.5px;margin-bottom:4px;">¿Aún no lo tienes claro?</p>' +
-      '<p style="font-size:11.5px;color:rgba(0,0,0,0.6);margin-bottom:12px;">Déjanos tu contacto y te avisamos antes de que se llenen las plazas, sin compromiso.</p>' +
-      '<form id="irl-soft-lead-form" style="display:flex;flex-direction:column;gap:8px;">' +
+      '<p style="font-size:11px;color:rgba(0,0,0,0.6);margin-bottom:8px;">¿No lo tienes claro todavía? Déjanos tu nombre y email: te avisamos antes de que se llenen las plazas y te apuntamos a nuestra newsletter con tips de producción y novedades.</p>' +
+      '<form id="irl-soft-lead-form" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
         '<input type="text" name="nombre" placeholder="Nombre" required style="' + inputStyle + '">' +
         '<input type="email" name="email" placeholder="Email" required style="' + inputStyle + '">' +
-        '<input type="tel" name="whatsapp" placeholder="WhatsApp (opcional)" style="' + inputStyle + '">' +
-        '<span class="irl-soft-lead-error" style="color:#b3261e;font-size:11px;display:none;"></span>' +
-        '<button type="submit" style="font-family:inherit;font-weight:700;font-size:10.5px;letter-spacing:0.04em;' +
-          'text-transform:uppercase;background:transparent;color:inherit;border:1.6px solid rgba(0,0,0,0.3);' +
-          'border-radius:9.6px;padding:10px 16px;cursor:pointer;">Quiero que me avisen</button>' +
-      '</form>';
-    ctaRow.parentNode.insertBefore(wrap, ctaRow);
+        '<button type="submit" style="font-family:inherit;font-weight:700;font-size:10px;letter-spacing:0.04em;' +
+          'text-transform:uppercase;background:transparent;color:inherit;border:1.3px solid rgba(0,0,0,0.3);' +
+          'border-radius:7px;padding:7px 12px;cursor:pointer;flex-shrink:0;">Avisadme</button>' +
+      '</form>' +
+      '<span class="irl-soft-lead-error" style="color:#b3261e;font-size:11px;display:none;margin-top:6px;"></span>';
+    ctaRow.parentNode.insertBefore(wrap, ctaRow.nextSibling);
 
     wrap.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -142,7 +140,6 @@
         body: JSON.stringify({
           nombre: form.nombre.value,
           email: form.email.value,
-          whatsapp: form.whatsapp.value,
           curso: cursoNombre,
           origen: location.href,
         }),
@@ -152,7 +149,7 @@
           if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al enviar');
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({ event: 'lead_suave_completado', curso_nombre: cursoNombre });
-          wrap.innerHTML = '<p style="font-weight:700;font-size:12.5px;">¡Gracias! Te avisaremos antes de que se llenen las plazas.</p>';
+          wrap.innerHTML = '<p style="font-size:11px;color:rgba(0,0,0,0.6);">¡Gracias! Te avisaremos antes de que se llenen las plazas.</p>';
         })
         .catch(function () {
           errorEl.textContent = 'No se pudo enviar. Inténtalo de nuevo.';

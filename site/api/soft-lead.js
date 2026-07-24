@@ -33,7 +33,6 @@ module.exports = async (req, res) => {
     tipo: 'lead_suave',
     nombre: String(body.nombre).trim(),
     email: String(body.email).trim(),
-    whatsapp: body.whatsapp ? String(body.whatsapp).trim() : '',
     curso: String(body.curso).trim(),
     origen: body.origen ? String(body.origen).trim() : '',
     fecha: new Date().toISOString(),
