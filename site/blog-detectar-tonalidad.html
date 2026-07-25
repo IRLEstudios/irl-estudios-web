@@ -279,6 +279,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <p>Este es el método que uso yo mismo y que enseño en la escuela: no hace falta partitura, ni saber solfeo de antemano, ni tener el oído entrenado durante años. Solo hace falta entender un patrón muy concreto y aplicarlo siempre igual.</p>
 
+        <div class="magnet-box" id="lead-magnet">
+          <h3>Llévate la guía en PDF de esta técnica</h3>
+          <p>Déjanos tu nombre y email y te desbloqueamos al momento el PDF con todo el método, para que lo guardes y lo repases cuando quieras.</p>
+          <form class="magnet-form" id="magnet-form">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit">Quiero la guía</button>
+          </form>
+          <span class="magnet-error"></span>
+        </div>
+
         <h2>La base: la escala mayor</h2>
         <p>Todo el método se apoya en un único patrón, el de la escala mayor, formada por esta secuencia de intervalos:</p>
         <p style="font-weight:700;">Tono – Tono – Semitono – Tono – Tono – Tono – Semitono</p>
@@ -303,18 +314,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ol>
 
         <h2>Ejemplo práctico</h2>
-        <p>Lo mejor para que esto termine de encajar es verlo aplicado sobre una canción real, nota a nota. Grabé un vídeo corto haciendo justo eso — lo tienes más abajo, junto con la guía en PDF, para que lo guardes y lo repases todas las veces que necesites.</p>
+        <p>Lo mejor para que esto termine de encajar es verlo aplicado sobre una canción real, nota a nota. Grabé un vídeo corto haciendo justo eso:</p>
 
-        <div class="magnet-box" id="lead-magnet">
-          <h3>Llévate la guía en PDF + el vídeo con el ejemplo práctico</h3>
-          <p>Déjanos tu nombre y email y te desbloqueamos al momento el PDF de esta técnica y el vídeo donde la aplico sobre una canción real.</p>
-          <form class="magnet-form" id="magnet-form">
-            <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <button type="submit">Quiero la guía</button>
-          </form>
-          <span class="magnet-error"></span>
-        </div>
+        <video controls preload="metadata" poster="assets/blog/tonalidad-video-poster.jpg" style="width:100%;display:block;border-radius:8px;border:1px solid var(--line-light);margin:14px 0 18px;background:#000;">
+          <source src="https://www.dropbox.com/scl/fi/vs8iz9h0l09myjzr22lp5/ComoDetectarTonalidad.mp4?rlkey=3wb5o63upsxh1pd5tvt7mi0ac&raw=1" type="video/mp4">
+          Tu navegador no soporta vídeo incrustado. <a href="https://www.dropbox.com/scl/fi/vs8iz9h0l09myjzr22lp5/ComoDetectarTonalidad.mp4?rlkey=3wb5o63upsxh1pd5tvt7mi0ac&st=n4qf1ouc&dl=0" target="_blank" rel="noopener">Ver el vídeo en Dropbox</a>.
+        </video>
 
         <p>Con esto ya tienes un método fijo y repetible: nada de "tener buen oído" — solo el patrón T-T-S-T-T-T-S aplicado siempre de la misma forma. Practícalo con un par de canciones que te gusten y en poco tiempo lo harás casi de forma automática.</p>
 
@@ -339,7 +344,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 (function () {
   var PDF_URL = 'assets/blog/guia-detectar-tonalidad.pdf';
-  var VIDEO_URL = 'https://www.dropbox.com/scl/fi/vs8iz9h0l09myjzr22lp5/ComoDetectarTonalidad.mp4?rlkey=3wb5o63upsxh1pd5tvt7mi0ac&st=n4qf1ouc&dl=0';
 
   var box = document.getElementById('lead-magnet');
   var form = document.getElementById('magnet-form');
@@ -371,12 +375,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         window.dataLayer.push({ event: 'iman_pdf_completado', iman: 'Detectar Tonalidad' });
 
         box.innerHTML =
-          '<h3>¡Gracias! Aquí tienes tu material</h3>' +
+          '<h3>¡Gracias! Aquí tienes tu guía</h3>' +
           '<div class="magnet-success">' +
-            '<p>Guárdatelo para repasarlo cuando quieras.</p>' +
+            '<p>Guárdatela para repasarla cuando quieras.</p>' +
             '<div class="cta-row">' +
               '<a class="btn primary" href="' + PDF_URL + '" target="_blank" rel="noopener">Descargar PDF</a>' +
-              '<a class="btn" href="' + VIDEO_URL + '" target="_blank" rel="noopener">Ver el vídeo</a>' +
             '</div>' +
           '</div>';
       })
