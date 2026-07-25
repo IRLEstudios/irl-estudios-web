@@ -31,7 +31,7 @@ async function sendConfirmationEmail(lead) {
     `Una vez cerremos los grupos te comunicaremos el horario que tendrá tu curso (siguiendo tus preferencias y ajustando lo que haga falta) y te daremos acceso al aula virtual de tu grupo.\n\n` +
     `Además te enviaremos la factura del curso y el pago podrás hacerlo mediante transferencia, bizum o pasarela de pago.\n\n` +
     `Muchas gracias,\n` +
-    `cualquier duda seguimos en contacto a través de irlestudiosmadrid@gmail.com\n\n` +
+    `Cualquier duda puedes responder a este mail.\n\n` +
     `Alex`;
 
   const bodyFont = "font-family:-apple-system,Helvetica,Arial,sans-serif;";
@@ -61,7 +61,7 @@ async function sendConfirmationEmail(lead) {
 
     `<div style="border-top:1px solid rgba(0,0,0,0.15);margin:0 0 20px;"></div>` +
 
-    `<p style="margin:0;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Muchas gracias,<br>cualquier duda seguimos en contacto a través de <a href="mailto:irlestudiosmadrid@gmail.com" style="color:#232323;">irlestudiosmadrid@gmail.com</a></p>` +
+    `<p style="margin:0;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Muchas gracias,<br>Cualquier duda puedes responder a este mail.</p>` +
     `<p style="margin:14px 0 0;${bodyFont}font-size:15px;color:#232323;">Alex</p>` +
     `</td></tr>` +
 
