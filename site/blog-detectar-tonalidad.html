@@ -345,12 +345,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function () {
   var PDF_URL = 'assets/blog/guia-detectar-tonalidad.pdf';
 
-  var box = document.getElementById('lead-magnet');
-  var form = document.getElementById('magnet-form');
-  if (!box || !form) return;
-
-  form.addEventListener('submit', function (e) {
+  // Delegado en document en vez de en el <form> directamente: content-loader.js
+  // sustituye el HTML de este bloque (data-key-html) al llegar el contenido
+  // guardado, lo que destruiría un listener atado al nodo del formulario original.
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || form.id !== 'magnet-form') return;
     e.preventDefault();
+
+    var box = document.getElementById('lead-magnet');
     var errorEl = box.querySelector('.magnet-error');
     errorEl.style.display = 'none';
     var btn = form.querySelector('button');
