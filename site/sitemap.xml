@@ -72,4 +72,16 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://irlestudios.com/blog-sound-selection.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://irlestudios.com/blog-warping-ableton.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Consentimiento de cookies (Google Consent Mode v2) -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied'
+});
+try {
+  if (localStorage.getItem('irl_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch (e) {}
+</script>
+<!-- Fin consentimiento de cookies -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVMVVMH4');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound selection: cómo elegir el sonido correcto — Blog IRL</title>
+<meta name="description" content="Qué es el sound selection, en qué fijarte al elegir un sonido, y cómo usar el espacio frecuencial y estéreo para que tu canción suene sólida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Sound selection: cómo elegir el sonido correcto para tu canción",
+  "description": "Qué es el sound selection, en qué fijarte al elegir un sonido, y cómo usar el espacio frecuencial y estéreo para que tu canción suene sólida.",
+  "image": "https://irlestudios.com/assets/hero.jpg",
+  "datePublished": "2026-07-25",
+  "url": "https://irlestudios.com/blog-sound-selection.html",
+  "inLanguage": "es",
+  "author": { "@type": "Person", "name": "turian boy", "url": "https://irlestudios.com/turian-boy.html" },
+  "publisher": { "@type": "Organization", "name": "IRL Estudios", "url": "https://irlestudios.com/" }
+}
+</script>
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-weight:300;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+  .col{width:min(760px, 94vw); pointer-events:auto;}
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:14px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:28px 30px;
+  }
+
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    margin-bottom:8px;
+  }
+
+  .meta-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .meta{
+    font-size:11.5px;
+    color:rgba(0,0,0,0.55);
+  }
+  .level-badge{
+    display:inline-block;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
+  }
+
+  .divider{border-top:1px solid var(--line-light); margin:20px 0;}
+
+  .article p{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:16px;
+  }
+  .article p b, .article p strong{font-weight:700;}
+  .article a{color:var(--ink);}
+
+  .article h2{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    margin-top:32px;
+    margin-bottom:12px;
+  }
+  .article h2:first-child{margin-top:0;}
+
+  .article h3{
+    font-size:14.5px;
+    font-weight:700;
+    margin-top:18px;
+    margin-bottom:8px;
+  }
+
+  .article ul{ margin:0 0 16px 20px; }
+  .article li{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:8px;
+  }
+
+  .checklist{
+    background:rgba(0,0,0,0.04);
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:16px 18px;
+    margin:0 0 18px;
+  }
+  .checklist p{margin-bottom:0;}
+  .checklist ul{margin:10px 0 0 20px;}
+  .checklist li{margin-bottom:8px;}
+  .checklist li:last-child{margin-bottom:0;}
+
+  .cta-box{
+    background:rgba(0,0,0,0.04);
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:24px;
+  }
+  .cta-box p{margin-bottom:12px;}
+  .cta-row{display:flex; flex-wrap:nowrap; gap:8px;}
+  .cta-row .btn{flex:1; font-size:9px; padding:10px 6px; white-space:nowrap;}
+  @media (max-width:520px){
+    .cta-row{flex-wrap:wrap;}
+    .cta-row .btn{flex:1 1 auto; white-space:normal;}
+  }
+  .btn{
+    font-family:'Inter Tight', sans-serif;
+    font-style:normal;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.15);
+    border-radius:9.6px;
+    padding:11px 18px;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+    margin-top:20px;
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:600px){
+    .panel{padding:20px;}
+  }
+</style>
+</head>
+<body data-page="blog-sound-selection">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMVVMH4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+
+<div class="wrap">
+  <div class="col">
+    <a class="back" href="blog.html">← Blog</a>
+
+    <div class="panel">
+      <h1 data-key="title">Sound selection: cómo elegir el sonido correcto para tu canción</h1>
+      <div class="meta-row">
+        <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+        <span class="level-badge" data-key="level">Nivel Avanzado</span>
+      </div>
+
+      <div class="article" data-key-html="body_html">
+
+        <p>El sound selection es el proceso artístico y técnico de elegir, dentro de la producción musical, los samples, instrumentos, efectos o sintetizadores que mejor encajan en el tono, la atmósfera y el propósito de una canción. Es probablemente la parte más importante para conseguir un buen sonido final — y también la más diferencial a la hora de darle personalidad a un tema.</p>
+
+        <p>La elección de un sonido se apoya siempre en dos grandes categorías: por un lado su <b>personalidad o carácter</b> — lo que representa artísticamente lo que buscamos — y por otro su <b>valor técnico</b>, es decir, si ese sonido está bien estructurado y "suena bien" en general y dentro de tu canción.</p>
+
+        <h2>Espacio frecuencial y amplitud estéreo</h2>
+        <p>Cuanto más rellenas el espacio frecuencial de una canción, más sólido y lleno suena el resultado, y más sensación de volumen consigues. Pero ojo: llenar frecuencialmente <b>no</b> es lo mismo que meter muchos elementos. Significa colocar justo los elementos necesarios para ocupar todo el rango de frecuencias, dejando a cada uno su propio espacio.</p>
+
+        <p>De hecho, cuantos menos elementos uses, más espacio tendrá cada uno para brillar y ocupar su posición. Las canciones con más sonoridad y sensación de volumen suelen ser precisamente las que tienen menos elementos sonando a la vez, no más.</p>
+
+        <p>Lo mismo pasa con la amplitud estéreo: antes de elegir sonidos conviene decidir si buscas una canción muy abierta, con mucha amplitud, o algo que funcione mejor en mono.</p>
+
+        <h2>¿Cómo sé si es el sonido "correcto"?</h2>
+        <p>La forma más fiable es usar <b>referencias</b>: canciones ya publicadas por artistas que se acerquen al sonido final que buscas. Es importante que esas referencias encajen con tu tipología de instrumentos, tu género y tu carácter — comparar peras con manzanas no sirve de mucho.</p>
+
+        <p>Además de las referencias, hay una serie de medidores que ayudan a objetivar la decisión:</p>
+        <ul>
+          <li><b>Espacio estéreo:</b> cuánta información hay en los laterales (sides) y cuánta en el centro (mono).</li>
+          <li><b>Fase:</b> si la fase de tus sonidos, o de la canción entera, está bien alineada.</li>
+          <li><b>Espectro frecuencial:</b> qué frecuencias está ocupando la canción y a qué niveles.</li>
+          <li><b>LUFS (picos y dinámica):</b> a qué volumen, con qué picos y con cuánta dinámica está sonando el tema.</li>
+        </ul>
+
+        <h2>Qué tener en cuenta al elegir un sonido</h2>
+        <div class="checklist">
+          <p>Cuatro preguntas rápidas para cada sonido que metas en tu sesión:</p>
+          <ul>
+            <li><b>Tono:</b> ¿el tono, tanto musical como frecuencial, está acorde con tu canción?</li>
+            <li><b>Duración:</b> ¿deja espacio a otros sonidos, o se lo come todo?</li>
+            <li><b>Adecuación:</b> ¿entra dentro de la paleta de sonidos de tu canción?</li>
+            <li><b>Nivel de sonoridad:</b> ¿suena claro y alto en comparación con el resto, al mismo nivel?</li>
+          </ul>
+        </div>
+
+        <h2>Workflow: creación vs. acabado</h2>
+        <p>Suele ser buena idea separar la fase de creación de la fase de acabado/mezcla — es beneficioso para el propio proceso creativo, evita que te frenes a pulir algo que igual ni siquiera se queda en la canción.</p>
+
+        <p>Un par de claves más para la selección de sonidos:</p>
+        <ul>
+          <li>Si un sonido de un banco (ya procesado) necesita muchísimo trabajo para encajar en tu canción — EQ muy agresiva, mucha compresión, etc. — probablemente no sea el sonido que buscas. No sobreproceses si no tienes un propósito claro para hacerlo.</li>
+          <li>Trabaja con MIDI en los sonidos clave de la batería: te permite cambiar de sample sin perder el patrón que ya funciona.</li>
+          <li>Guarda las pistas MIDI de líneas de bajo, acordes principales y cualquier línea que consideres importante — te va a ahorrar mucho tiempo más adelante.</li>
+        </ul>
+
+        <div class="cta-box">
+          <p>El sound selection es uno de los pilares que trabajamos en profundidad en la Escuela de Sonido de IRL Estudios.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="produccion-musical-avanzada.html">Producción Musical Avanzada</a>
+            <a class="btn" href="produccion-musical-iniciacion.html">Producción Musical Iniciación</a>
+            <a class="btn" href="diseno-sonoro-audiovisual.html">Diseño Sonoro Audiovisual</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="assets/content-loader.js"></script>
+</html>
