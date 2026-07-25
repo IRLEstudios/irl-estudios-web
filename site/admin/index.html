@@ -165,6 +165,19 @@
   }
   table.leads-table tr:hover td{background:rgba(0,0,0,0.03);}
   .leads-empty, .leads-error{padding:24px; font-size:13px; color:rgba(255,255,255,0.5);}
+  .leads-delete-btn{
+    font-family:inherit;
+    font-size:10.5px;
+    font-weight:700;
+    background:transparent;
+    color:#b3261e;
+    border:1.3px solid rgba(179,38,30,0.4);
+    border-radius:6px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .leads-delete-btn:hover{background:rgba(179,38,30,0.08);}
+  .leads-delete-btn:disabled{opacity:0.5; cursor:default;}
 </style>
 </head>
 <body>
@@ -1014,6 +1027,7 @@ function renderLeadsTable(leads) {
     th.textContent = col.label;
     headRow.appendChild(th);
   });
+  headRow.appendChild(document.createElement('th'));
   thead.appendChild(headRow);
   table.appendChild(thead);
 
@@ -1031,12 +1045,47 @@ function renderLeadsTable(leads) {
       td.title = value;
       tr.appendChild(td);
     });
+
+    var actionTd = document.createElement('td');
+    var delBtn = document.createElement('button');
+    delBtn.className = 'leads-delete-btn';
+    delBtn.textContent = 'Borrar';
+    delBtn.onclick = function () { deleteLead(lead, delBtn); };
+    actionTd.appendChild(delBtn);
+    tr.appendChild(actionTd);
+
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
 
   wrap.innerHTML = '';
   wrap.appendChild(table);
+}
+
+function deleteLead(lead, btn) {
+  var label = lead.nombre || lead.email || 'este lead';
+  if (!confirm('¿Borrar el lead de "' + label + '"? Esta acción no se puede deshacer.')) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Borrando...';
+
+  fetch('/api/leads', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: lead._blobUrl }),
+  })
+    .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+    .then(function (result) {
+      if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al borrar');
+      currentLeads = currentLeads.filter(function (l) { return l._blobUrl !== lead._blobUrl; });
+      document.getElementById('leadsStatus').textContent = currentLeads.length + ' inscripcion' + (currentLeads.length === 1 ? '' : 'es');
+      renderLeadsTable(currentLeads);
+    })
+    .catch(function () {
+      alert('No se pudo borrar el lead. Inténtalo de nuevo.');
+      btn.disabled = false;
+      btn.textContent = 'Borrar';
+    });
 }
 
 function csvEscape(value) {
