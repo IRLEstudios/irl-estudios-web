@@ -167,7 +167,11 @@
           if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al enviar');
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({ event: 'lead_suave_completado', curso_nombre: cursoNombre });
-          wrap.innerHTML = '<p style="font-size:11px;color:rgba(0,0,0,0.6);">¡Gracias! Te avisaremos antes de que se llenen las plazas.</p>';
+          wrap.innerHTML =
+            '<p style="font-size:11px;color:rgba(0,0,0,0.6);margin-bottom:8px;">¡Gracias! Te avisaremos antes de que se llenen las plazas. Mientras tanto, aquí tienes un adelanto:</p>' +
+            '<a href="assets/blog/guia-detectar-tonalidad.pdf" target="_blank" rel="noopener" style="display:inline-block;font-family:inherit;font-weight:700;font-size:10px;letter-spacing:0.04em;' +
+              'text-transform:uppercase;background:transparent;color:inherit;border:1.3px solid rgba(0,0,0,0.3);' +
+              'border-radius:7px;padding:7px 12px;text-decoration:none;">Descargar guía en PDF</a>';
         })
         .catch(function () {
           errorEl.textContent = 'No se pudo enviar. Inténtalo de nuevo.';
