@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Consentimiento de cookies (Google Consent Mode v2) -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied'
+});
+try {
+  if (localStorage.getItem('irl_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch (e) {}
+</script>
+<!-- Fin consentimiento de cookies -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVMVVMH4');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cómo detectar la tonalidad de una canción — Blog IRL Estudios</title>
+<meta name="description" content="Un método propio, paso a paso, para averiguar de oído en qué tonalidad está cualquier canción — sin partitura y sin oído absoluto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-weight:300;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+  .col{width:min(760px, 94vw); pointer-events:auto;}
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:14px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:28px 30px;
+  }
+
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    margin-bottom:8px;
+  }
+
+  .meta-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .meta{
+    font-size:11.5px;
+    color:rgba(0,0,0,0.55);
+  }
+  .level-badge{
+    display:inline-block;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
+  }
+
+  .divider{border-top:1px solid var(--line-light); margin:20px 0;}
+
+  .article p{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:16px;
+    max-width:72ch;
+  }
+  .article p b, .article p strong{font-weight:700;}
+  .article a{color:var(--ink);}
+
+  .article h2{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    margin-top:32px;
+    margin-bottom:12px;
+  }
+  .article h2:first-child{margin-top:0;}
+
+  .article h3{
+    font-size:14.5px;
+    font-weight:700;
+    margin-top:18px;
+    margin-bottom:8px;
+  }
+
+  .article ol, .article ul{
+    margin:0 0 16px 20px;
+  }
+  .article li{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:10px;
+    max-width:70ch;
+  }
+
+  .article img{
+    width:100%;
+    display:block;
+    border-radius:8px;
+    border:1px solid var(--line-light);
+    margin:14px 0 18px;
+    background:#fff;
+  }
+  .article .img-caption{
+    font-size:11px;
+    color:rgba(0,0,0,0.5);
+    margin-top:-12px;
+    margin-bottom:18px;
+    font-style:italic;
+  }
+
+  .cta-box{
+    background:rgba(0,0,0,0.04);
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:24px;
+  }
+  .cta-box p{margin-bottom:12px;}
+  .cta-row{display:flex; flex-wrap:nowrap; gap:8px;}
+  .cta-row .btn{flex:1; font-size:9px; padding:10px 6px; white-space:nowrap;}
+  @media (max-width:520px){
+    .cta-row{flex-wrap:wrap;}
+    .cta-row .btn{flex:1 1 auto; white-space:normal;}
+  }
+  .btn{
+    font-family:'Inter Tight', sans-serif;
+    font-style:normal;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.15);
+    border-radius:9.6px;
+    padding:11px 18px;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+
+  /* Imán de interés: PDF + vídeo a cambio de email */
+  .magnet-box{
+    background:#fff;
+    border:1.6px solid var(--line-light);
+    border-radius:10px;
+    padding:20px 20px;
+    margin:24px 0;
+  }
+  .magnet-box h3{margin-top:0;}
+  .magnet-box p{font-size:12.5px;color:rgba(0,0,0,0.65);margin-bottom:14px;}
+  .magnet-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .magnet-form input{
+    font-family:inherit;font-size:12.5px;padding:9px 11px;
+    border:1.3px solid rgba(0,0,0,0.18);border-radius:7px;
+    background:#fff;color:inherit;flex:1;min-width:140px;
+  }
+  .magnet-form button{
+    font-family:'Inter Tight', sans-serif;font-weight:700;font-size:10.5px;
+    letter-spacing:0.04em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);border:none;
+    border-radius:9px;padding:11px 16px;cursor:pointer;flex-shrink:0;
+  }
+  .magnet-form button:disabled{opacity:0.6;cursor:default;}
+  .magnet-error{color:#b3261e;font-size:11.5px;display:none;margin-top:8px;}
+  .magnet-success p{font-size:12.5px;color:rgba(0,0,0,0.7);margin-bottom:10px;}
+  .magnet-success .cta-row{display:flex;flex-wrap:wrap;gap:8px;}
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+    margin-top:20px;
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:600px){
+    .panel{padding:20px;}
+  }
+</style>
+</head>
+<body data-page="blog-detectar-tonalidad">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMVVMH4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+
+<div class="wrap">
+  <div class="col">
+    <a class="back" href="blog.html">← Blog</a>
+
+    <div class="panel">
+      <h1 data-key="title">Cómo detectar la tonalidad de una canción</h1>
+      <div class="meta-row">
+        <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+        <span class="level-badge" data-key="level">Nivel Inicial</span>
+      </div>
+
+      <div class="article" data-key-html="body_html">
+
+        <p>Saber en qué tonalidad está una canción es una de esas habilidades que parecen cosa de "oído absoluto" pero que en realidad son puro método. Te hace falta para tocar por encima de una canción, para buscar samples o loops que encajen entre sí, para transportar una idea a otra tonalidad, o simplemente para entender mejor lo que estás escuchando.</p>
+
+        <p>Este es el método que uso yo mismo y que enseño en la escuela: no hace falta partitura, ni saber solfeo de antemano, ni tener el oído entrenado durante años. Solo hace falta entender un patrón muy concreto y aplicarlo siempre igual.</p>
+
+        <h2>La base: la escala mayor</h2>
+        <p>Todo el método se apoya en un único patrón, el de la escala mayor, formada por esta secuencia de intervalos:</p>
+        <p style="font-weight:700;">Tono – Tono – Semitono – Tono – Tono – Tono – Semitono</p>
+        <p>Este patrón se repite igual empieces desde la nota que empieces. Si te lo aprendes de memoria, puedes reconstruir cualquier escala mayor a partir de una sola nota — que es exactamente lo que vamos a usar para detectar la tonalidad de una canción.</p>
+
+        <img src="assets/blog/tonalidad-escala-tono-semitono.png" alt="Pentagrama con las notas Do Re Mi Fa Sol La Si Do y debajo la secuencia de intervalos Tono-Tono-Semitono-Tono-Tono-Tono-Semitono">
+        <p class="img-caption">La escala de Do mayor y su patrón de intervalos: T–T–S–T–T–T–S.</p>
+
+        <img src="assets/blog/tonalidad-teclado-piano.png" alt="Teclado de piano con las teclas de Do a Do marcadas y numeradas, con los intervalos de tono y semitono señalados en rojo">
+        <p class="img-caption">El mismo patrón visto en el teclado: fíjate en los dos semitonos, entre Mi–Fa y entre Si–Do (justo donde no hay tecla negra en medio).</p>
+
+        <h2>El método, paso a paso</h2>
+
+        <ol>
+          <li><b>Reproduce la canción</b> de la que quieres saber la tonalidad.</li>
+          <li><b>Toca por encima</b>, con un piano o cualquier instrumento, hasta encontrar qué notas "quedan bien" con lo que estás escuchando.</li>
+          <li><b>Reúne unas 8 notas seguidas</b> que encajen — con eso ya tienes, sin saberlo todavía, una escala completa de la canción.</li>
+          <li><b>Busca los semitonos.</b> De esas notas que quedan bien, identifica cuáles tienen un intervalo de semitono con la nota anterior (en el teclado, esas parejas sin tecla negra entre medias).</li>
+          <li><b>Con esas 2 notas candidatas</b>, ya sabes que una de las dos es la tónica — y por tanto la tonalidad mayor de la canción es una de esas dos.</li>
+          <li><b>Comprueba cuál encaja</b> con el patrón T-T-S-T-T-T-S empezando desde ella. Truco rápido: la 4ª nota de la escala debe estar a un semitono de la 3ª.</li>
+          <li><b>La que cumple el patrón es la tónica</b> — y ya puedes decir con seguridad que esa canción está en X mayor.</li>
+        </ol>
+
+        <h2>Ejemplo práctico</h2>
+        <p>Lo mejor para que esto termine de encajar es verlo aplicado sobre una canción real, nota a nota. Grabé un vídeo corto haciendo justo eso — lo tienes más abajo, junto con la guía en PDF, para que lo guardes y lo repases todas las veces que necesites.</p>
+
+        <div class="magnet-box" id="lead-magnet">
+          <h3>Llévate la guía en PDF + el vídeo con el ejemplo práctico</h3>
+          <p>Déjanos tu nombre y email y te desbloqueamos al momento el PDF de esta técnica y el vídeo donde la aplico sobre una canción real.</p>
+          <form class="magnet-form" id="magnet-form">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit">Quiero la guía</button>
+          </form>
+          <span class="magnet-error"></span>
+        </div>
+
+        <p>Con esto ya tienes un método fijo y repetible: nada de "tener buen oído" — solo el patrón T-T-S-T-T-T-S aplicado siempre de la misma forma. Practícalo con un par de canciones que te gusten y en poco tiempo lo harás casi de forma automática.</p>
+
+        <div class="cta-box">
+          <p>Esto y mucho más lo trabajamos con calma y en la práctica en la Escuela de Sonido de IRL Estudios.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="produccion-musical-iniciacion.html">Producción Musical Iniciación</a>
+            <a class="btn" href="produccion-musical-avanzada.html">Producción Musical Avanzada</a>
+            <a class="btn" href="directo-en-ableton.html">Directo en Ableton</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="assets/content-loader.js"></script>
+<script>
+(function () {
+  var PDF_URL = 'assets/blog/guia-detectar-tonalidad.pdf';
+  var VIDEO_URL = 'https://www.dropbox.com/scl/fi/vs8iz9h0l09myjzr22lp5/ComoDetectarTonalidad.mp4?rlkey=3wb5o63upsxh1pd5tvt7mi0ac&st=n4qf1ouc&dl=0';
+
+  var box = document.getElementById('lead-magnet');
+  var form = document.getElementById('magnet-form');
+  if (!box || !form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var errorEl = box.querySelector('.magnet-error');
+    errorEl.style.display = 'none';
+    var btn = form.querySelector('button');
+    var originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    fetch('/api/soft-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: form.nombre.value,
+        email: form.email.value,
+        curso: 'Imán PDF - Detectar Tonalidad',
+        origen: location.href,
+      }),
+    })
+      .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (result) {
+        if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al enviar');
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'iman_pdf_completado', iman: 'Detectar Tonalidad' });
+
+        box.innerHTML =
+          '<h3>¡Gracias! Aquí tienes tu material</h3>' +
+          '<div class="magnet-success">' +
+            '<p>Guárdatelo para repasarlo cuando quieras.</p>' +
+            '<div class="cta-row">' +
+              '<a class="btn primary" href="' + PDF_URL + '" target="_blank" rel="noopener">Descargar PDF</a>' +
+              '<a class="btn" href="' + VIDEO_URL + '" target="_blank" rel="noopener">Ver el vídeo</a>' +
+            '</div>' +
+          '</div>';
+      })
+      .catch(function () {
+        errorEl.textContent = 'No se pudo enviar. Inténtalo de nuevo.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = originalText;
+      });
+  });
+})();
+</script>
+</html>
