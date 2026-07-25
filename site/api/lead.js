@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const REQUIRED_FIELDS = ['email', 'curso', 'horario', 'nombre', 'dni', 'autonomo'];
 const META_PIXEL_ID = '1683598329599658';
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'IRL Estudios <inscripciones@irlestudios.com>';
+const RESEND_REPLY_TO = process.env.RESEND_REPLY_TO || 'irlestudiosmadrid@gmail.com';
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -83,6 +84,7 @@ async function sendConfirmationEmail(lead) {
       body: JSON.stringify({
         from: RESEND_FROM_EMAIL,
         to: [lead.email],
+        reply_to: RESEND_REPLY_TO,
         subject: 'Inscripción confirmada — IRL Estudios',
         html,
         text,
