@@ -1,7 +1,7 @@
 const { put } = require('@vercel/blob');
 const crypto = require('crypto');
 
-const REQUIRED_FIELDS = ['email', 'curso', 'nombre', 'dni', 'autonomo'];
+const REQUIRED_FIELDS = ['email', 'curso', 'horario', 'nombre', 'dni', 'autonomo'];
 const META_PIXEL_ID = '1683598329599658';
 
 function isValidEmail(value) {
@@ -93,6 +93,7 @@ module.exports = async (req, res) => {
     tipo: 'lead_completo',
     email: String(body.email).trim(),
     curso: String(body.curso).trim(),
+    horario: String(body.horario).trim(),
     nombre: String(body.nombre).trim(),
     dni: String(body.dni).trim(),
     autonomo: String(body.autonomo).trim(),
