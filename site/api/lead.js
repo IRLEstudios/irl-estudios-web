@@ -33,15 +33,45 @@ async function sendConfirmationEmail(lead) {
     `cualquier duda seguimos en contacto a través de irlestudiosmadrid@gmail.com\n\n` +
     `Alex`;
 
+  const bodyFont = "font-family:-apple-system,Helvetica,Arial,sans-serif;";
+  const monoFont = "font-family:ui-monospace,'SF Mono','JetBrains Mono',Menlo,monospace;";
+
   const html =
-    `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#232323;">` +
-    `<p>Hola ${nombre},</p>` +
-    `<p>La inscripción está completada, ¡nos vemos pronto en el curso <b>${curso}</b>!</p>` +
-    `<p>Una vez cerremos los grupos te comunicaremos el horario que tendrá tu curso (siguiendo tus preferencias y ajustando lo que haga falta) y te daremos acceso al aula virtual de tu grupo.</p>` +
-    `<p>Además te enviaremos la factura del curso y el pago podrás hacerlo mediante transferencia, bizum o pasarela de pago.</p>` +
-    `<p>Muchas gracias,<br>cualquier duda seguimos en contacto a través de <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>` +
-    `<p>Alex</p>` +
-    `</div>`;
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#000;padding:32px 16px;">` +
+    `<tr><td align="center">` +
+    `<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">` +
+
+    // Logo sobre fondo negro, como en la web.
+    `<tr><td align="center" style="padding-bottom:22px;">` +
+    `<img src="https://irlestudios.com/assets/logo-tag.png" alt="IRL Estudios" width="140" style="display:block;width:140px;">` +
+    `</td></tr>` +
+
+    // Tarjeta clara, estilo ".panel" de la web.
+    `<tr><td style="background:#eaeaea;border-radius:14px;padding:32px 30px;">` +
+    `<p style="margin:0 0 18px;${bodyFont}font-weight:700;font-size:22px;letter-spacing:-0.01em;color:#232323;">¡Inscripción confirmada!</p>` +
+
+    `<p style="margin:0 0 16px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Hola ${nombre},</p>` +
+    `<p style="margin:0 0 16px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">La inscripción está completada, ¡nos vemos pronto en el curso` +
+    ` <span style="display:inline-block;background:rgba(0,0,0,0.6);color:#eaeaea;${monoFont}font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;border-radius:6px;padding:4px 9px;">${curso}</span>!</p>` +
+
+    `<p style="margin:0 0 16px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Una vez cerremos los grupos te comunicaremos el horario que tendrá tu curso (siguiendo tus preferencias y ajustando lo que haga falta) y te daremos acceso al aula virtual de tu grupo.</p>` +
+
+    `<p style="margin:0 0 20px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Además te enviaremos la factura del curso y el pago podrás hacerlo mediante transferencia, bizum o pasarela de pago.</p>` +
+
+    `<div style="border-top:1px solid rgba(0,0,0,0.15);margin:0 0 20px;"></div>` +
+
+    `<p style="margin:0;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Muchas gracias,<br>cualquier duda seguimos en contacto a través de <a href="mailto:irlestudiosmadrid@gmail.com" style="color:#232323;">irlestudiosmadrid@gmail.com</a></p>` +
+    `<p style="margin:14px 0 0;${bodyFont}font-size:15px;color:#232323;">Alex</p>` +
+    `</td></tr>` +
+
+    // Pie, sobre fondo negro.
+    `<tr><td align="center" style="padding-top:22px;">` +
+    `<p style="margin:0;${monoFont}font-size:11px;color:rgba(255,255,255,0.4);">IRL Estudios · Calle Lenguas 14, 28021 Madrid</p>` +
+    `</td></tr>` +
+
+    `</table>` +
+    `</td></tr>` +
+    `</table>`;
 
   try {
     const r = await fetch('https://api.resend.com/emails', {
