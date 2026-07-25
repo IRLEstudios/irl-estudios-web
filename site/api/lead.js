@@ -3,9 +3,68 @@ const crypto = require('crypto');
 
 const REQUIRED_FIELDS = ['email', 'curso', 'horario', 'nombre', 'dni', 'autonomo'];
 const META_PIXEL_ID = '1683598329599658';
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'IRL Estudios <inscripciones@irlestudios.com>';
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+async function sendConfirmationEmail(lead) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return { skipped: 'no RESEND_API_KEY configured' };
+
+  const nombre = escapeHtml(lead.nombre);
+  const curso = escapeHtml(lead.curso);
+
+  const text =
+    `Hola ${lead.nombre},\n\n` +
+    `La inscripción está completada, ¡nos vemos pronto en el curso ${lead.curso}!\n\n` +
+    `Una vez cerremos los grupos te comunicaremos el horario que tendrá tu curso (siguiendo tus preferencias y ajustando lo que haga falta) y te daremos acceso al aula virtual de tu grupo.\n\n` +
+    `Además te enviaremos la factura del curso y el pago podrás hacerlo mediante transferencia, bizum o pasarela de pago.\n\n` +
+    `Muchas gracias,\n` +
+    `cualquier duda seguimos en contacto a través de irlestudiosmadrid@gmail.com\n\n` +
+    `Alex`;
+
+  const html =
+    `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#232323;">` +
+    `<p>Hola ${nombre},</p>` +
+    `<p>La inscripción está completada, ¡nos vemos pronto en el curso <b>${curso}</b>!</p>` +
+    `<p>Una vez cerremos los grupos te comunicaremos el horario que tendrá tu curso (siguiendo tus preferencias y ajustando lo que haga falta) y te daremos acceso al aula virtual de tu grupo.</p>` +
+    `<p>Además te enviaremos la factura del curso y el pago podrás hacerlo mediante transferencia, bizum o pasarela de pago.</p>` +
+    `<p>Muchas gracias,<br>cualquier duda seguimos en contacto a través de <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>` +
+    `<p>Alex</p>` +
+    `</div>`;
+
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: RESEND_FROM_EMAIL,
+        to: [lead.email],
+        subject: 'Inscripción confirmada — IRL Estudios',
+        html,
+        text,
+      }),
+    });
+    const responseBody = await r.json().catch(() => null);
+    if (!r.ok) console.error('Resend error response:', JSON.stringify(responseBody));
+    return { status: r.status, body: responseBody };
+  } catch (err) {
+    console.error('Resend error:', err && err.message);
+    return { error: err && err.message };
+  }
 }
 
 function sha256(value) {
@@ -115,8 +174,12 @@ module.exports = async (req, res) => {
     const capiResult = body.marketing_consent
       ? await sendMetaLeadEvent(req, lead, body.test_event_code)
       : { skipped: 'no marketing consent' };
+    const emailResult = await sendConfirmationEmail(lead);
     const response = { ok: true };
-    if (body.test_event_code) response.capi_debug = capiResult;
+    if (body.test_event_code) {
+      response.capi_debug = capiResult;
+      response.email_debug = emailResult;
+    }
     res.status(200).json(response);
   } catch (err) {
     res.status(500).json({
