@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Consentimiento de cookies (Google Consent Mode v2) -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied'
+});
+try {
+  if (localStorage.getItem('irl_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch (e) {}
+</script>
+<!-- Fin consentimiento de cookies -->
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PVMVVMH4');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciación al Mix &amp; Mastering — Blog IRL</title>
+<meta name="description" content="Mezcla estática y dinámica, tipos de EQ, compresión y reverb, y cómo combinar limitador y clipper en mastering para ganar volumen sin perder pegada.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="IRL Estudios">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://irlestudios.com/blog-mix-mastering.html">
+<meta property="og:title" content="Iniciación al Mix &amp; Mastering — Blog IRL">
+<meta property="og:description" content="Mezcla estática y dinámica, tipos de EQ, compresión y reverb, y cómo combinar limitador y clipper en mastering para ganar volumen sin perder pegada.">
+<meta property="og:image" content="https://irlestudios.com/assets/blog/mix-mastering-limiter.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Iniciación al Mix &amp; Mastering — Blog IRL">
+<meta name="twitter:description" content="Mezcla estática y dinámica, tipos de EQ, compresión y reverb, y cómo combinar limitador y clipper en mastering para ganar volumen sin perder pegada.">
+<meta name="twitter:image" content="https://irlestudios.com/assets/blog/mix-mastering-limiter.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Iniciación al Mix & Mastering",
+  "description": "Mezcla estática y dinámica, tipos de EQ, compresión y reverb, y cómo combinar limitador y clipper en mastering para ganar volumen sin perder pegada.",
+  "image": "https://irlestudios.com/assets/blog/mix-mastering-limiter.png",
+  "datePublished": "2026-07-26",
+  "url": "https://irlestudios.com/blog-mix-mastering.html",
+  "inLanguage": "es",
+  "author": { "@type": "Person", "name": "turian boy", "url": "https://irlestudios.com/turian-boy.html" },
+  "publisher": { "@type": "Organization", "name": "IRL Estudios", "url": "https://irlestudios.com/" }
+}
+</script>
+<style>
+  :root{
+    --ink:#232323;
+    --paper:#eaeaea;
+    --line-light:rgba(0,0,0,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#000;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-weight:300;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .hero-bg{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:28px;
+    pointer-events:none;
+  }
+  .col{width:min(760px, 94vw); pointer-events:auto;}
+
+  .back{
+    display:inline-block;
+    font-family:'Inter Tight', sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:14px;
+  }
+  .back:hover{opacity:0.7;}
+
+  .panel{
+    background:var(--paper);
+    border:1.6px solid var(--line-light);
+    border-radius:12.8px;
+    padding:28px 30px;
+  }
+
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    margin-bottom:8px;
+  }
+
+  .meta-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .meta{
+    font-size:11.5px;
+    color:rgba(0,0,0,0.55);
+  }
+  .level-badge{
+    display:inline-block;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
+  }
+  .category-badge{
+    display:inline-block;
+    background:transparent;
+    color:var(--ink);
+    font-family:ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:4px 10px;
+    border-radius:6px;
+    border:1.3px solid rgba(0,0,0,0.35);
+  }
+
+  .divider{border-top:1px solid var(--line-light); margin:20px 0;}
+
+  .article p{
+    font-size:13.5px;
+    line-height:1.7;
+    margin-bottom:16px;
+  }
+  .article p b, .article p strong{font-weight:700;}
+  .article a{color:var(--ink);}
+
+  .article h2{
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-stretch:75%;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    margin-top:32px;
+    margin-bottom:12px;
+  }
+  .article h2:first-child{margin-top:0;}
+
+  .article h3{
+    font-size:14.5px;
+    font-weight:700;
+    margin-top:18px;
+    margin-bottom:8px;
+  }
+
+  .article .list-block{margin-bottom:16px;}
+  .article .list-line{
+    font-size:13.5px;
+    line-height:1.7;
+    display:block;
+  }
+
+  .article img{
+    width:100%;
+    display:block;
+    border-radius:8px;
+    border:1px solid var(--line-light);
+    margin:14px 0 18px;
+    background:#fff;
+  }
+  .article .img-caption{
+    font-size:11px;
+    color:rgba(0,0,0,0.5);
+    margin-top:-12px;
+    margin-bottom:18px;
+    font-style:italic;
+  }
+
+  .cta-box{
+    background:rgba(0,0,0,0.04);
+    border:1px solid var(--line-light);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:24px;
+  }
+  .cta-box p{margin-bottom:12px;}
+  .cta-row{display:flex; flex-wrap:nowrap; gap:8px;}
+  .cta-row .btn{flex:1; font-size:9px; padding:10px 6px; white-space:nowrap;}
+  @media (max-width:520px){
+    .cta-row{flex-wrap:wrap;}
+    .cta-row .btn{flex:1 1 auto; white-space:normal;}
+  }
+  .btn{
+    font-family:'Inter Tight', sans-serif;
+    font-style:normal;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    border:1.6px solid rgba(0,0,0,0.15);
+    border-radius:9.6px;
+    padding:11px 18px;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.primary{background:var(--ink);color:var(--paper);}
+
+  .contact{
+    font-size:11px;
+    font-style:normal;
+    font-weight:400;
+    color:rgba(0,0,0,0.6);
+    margin-top:20px;
+  }
+  .contact a{color:var(--ink);}
+
+  @media (max-width:600px){
+    .panel{padding:20px;}
+  }
+</style>
+</head>
+<body data-page="blog-mix-mastering">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMVVMH4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
+  <img class="hero-bg" src="assets/hero.jpg" alt="">
+</a>
+
+<div class="wrap">
+  <div class="col">
+    <a class="back" href="blog.html">← Blog</a>
+
+    <div class="panel">
+      <h1 data-key="title">Iniciación al Mix & Mastering</h1>
+      <div class="meta-row">
+        <p class="meta" data-key="meta">Por turian boy · Escuela de Sonido IRL Estudios</p>
+        <span class="level-badge" data-key="level">Nivel Avanzado</span>
+        <span class="category-badge" data-key="category">Producción Musical</span>
+      </div>
+
+      <div class="article" data-key-html="body_html">
+
+        <p>La mezcla (mixing) es el proceso de combinar todas las pistas de una canción y equilibrar su volumen, frecuencias y posición espacial para conseguir coherencia sonora. Buscamos que cada pieza encaje en el puzzle general: muchas veces hay que decidir qué instrumento tiene más importancia y debe ocupar ciertos espacios (frecuencia, campo estéreo, volumen) por delante de otros.</p>
+
+        <h2>Mezcla estática y mezcla dinámica</h2>
+        <p><b>Mezcla estática:</b> el primer acercamiento al sonido de la canción, a través de niveles de volumen, ganancia y paneo. Es un paso que se suele infravalorar — sobreprocesar nos hace olvidar que muchas veces la solución es tan sencilla como subir el volumen para realzar una pista, bajarlo para evitar enmascaramientos, o panear para buscarle sitio a un sonido.</p>
+        <p><b>Mezcla dinámica:</b> aquí ya entran los efectos de audio (EQ, saturación, compresión...). Se trabaja de menos a más, ajustando lo que ya teníamos definido en la mezcla estática.</p>
+
+        <h2>Ecualización</h2>
+        <p>Buscamos un equilibrio frecuencial correcto en cada pista o grupo, individualmente y en conjunto con el resto de la mezcla. Hay tres tipos:</p>
+        <div class="list-block">
+          <span class="list-line">- <b>Estática:</b> se aplica y se queda fija durante todo el tiempo (o el que decidamos). Sirve para dar forma a un sonido, quitar frecuencias molestas y realzar otras.</span>
+          <span class="list-line">- <b>Dinámica:</b> la reducción o el aumento de dB no se mantiene fijo, sino que reacciona a la ganancia de esas frecuencias en la propia pista. Sirve para modelar el sonido sin perder esas frecuencias todo el rato — por ejemplo, para quitar el "harshness" de una "S" en una voz.</span>
+          <span class="list-line">- <b>Side-chain:</b> una EQ dinámica pero afectada por otra pista o grupo, que hace que reaccione según la intensidad de ese otro sonido en esa zona de frecuencia. Se usa para hacer convivir dos pistas cuyas frecuencias chocan, dando espacio a una por delante de la otra.</span>
+        </div>
+        <p>Los tres tipos se pueden aplicar en distintas zonas del campo estéreo (Stereo, L, R, Mid o Side).</p>
+
+        <h2>Saturación y compresión</h2>
+        <p>La <b>saturación</b> funciona como un recurso de EQ aditiva: mientras la ecualización sube los dB de las frecuencias seleccionadas, la saturación además genera armónicos nuevos en esas frecuencias, enriqueciendo el sonido. También puede aplicarse en distintas zonas del campo estéreo.</p>
+        <p>La <b>compresión</b> se usa siempre que sea necesaria — cuidado con comprimir por comprimir. Suele ser clave en instrumentos grabados (voz, batería, guitarra, bajo...) para modelar el sonido con equilibrio.</p>
+
+        <h3>Otras herramientas de la mezcla dinámica</h3>
+        <p><b>Transient shaper:</b> procesador de dinámica que altera la envolvente de volumen de un sonido, en concreto su ataque y su decay — permite enfatizar o desenfatizar transitorios, y relajar o aumentar el release.</p>
+        <p><b>Reverb:</b> las reverbs cortas ayudan a situar los sonidos en el espacio, y además pueden servir casi como una EQ, dando cuerpo, apertura estéreo o profundidad.</p>
+        <p><b>Sidechain:</b> para compaginar sonidos que ocupan el mismo espacio de frecuencia — el clásico bombo/bajo o voz/sintetizador.</p>
+
+        <h2>Mastering</h2>
+        <p>El mastering es el paso final tras la mezcla: cogemos la canción ya mezclada (con todos sus elementos relacionándose correctamente entre sí) y la llevamos un paso más allá, para que suene dentro de los estándares de la industria en volumen y equilibrio frecuencial. Buscamos <b>consistencia</b> (en la canción y, si es un álbum, entre todas las canciones) y <b>sonoridad</b> (loudness): elevar el volumen de la mezcla al estándar comercial exigido por la industria, trabajando limitación, clipping, EQ, compresión y saturación.</p>
+
+        <h2>Limiting</h2>
+        <p>Un limitador es un compresor con un ratio muy alto que establece un tope de volumen insuperable. Su función principal es evitar la distorsión digital y aumentar el volumen percibido sin sobrepasar el máximo permitido. Sus parámetros clave:</p>
+        <div class="list-block">
+          <span class="list-line">- <b>Threshold:</b> el nivel en dB a partir del cual el limitador empieza a actuar.</span>
+          <span class="list-line">- <b>Attack / Release:</b> la rapidez con la que reacciona a los picos, y el tiempo que tarda el sonido en volver a su estado normal.</span>
+          <span class="list-line">- <b>Ceiling (techo):</b> el punto máximo absoluto de volumen que saldrá del limitador. No hay un estándar fijo, pero se suele rondar -0.3 dB.</span>
+          <span class="list-line">- <b>True Peak:</b> el nivel máximo de picos que no superará el limitador.</span>
+        </div>
+
+        <img src="assets/blog/mix-mastering-limiter.png" alt="Interfaz del limitador FabFilter Pro-L2 con los controles de gain, style, lookahead, attack, release y channel linking">
+        <p class="img-caption">FabFilter Pro-L2, uno de los limitadores más usados en mastering.</p>
+
+        <p><b>Tip:</b> la escucha delta te deja oír solo la parte del audio que el limitador está afectando — si con delta activado escuchas la canción entera (o su parte armónica), es que te estás pasando de limitación. El unity gain, por su parte, ajusta automáticamente el nivel de salida al inverso de la ganancia añadida, para poder escuchar la limitación real sin el "engaño" de la subida de volumen.</p>
+
+        <h2>Clipping</h2>
+        <p>Un clipper recorta instantáneamente los picos de una señal que superan un umbral — a diferencia del limitador, que comprime la onda, el clipper la corta de golpe. Esto añade distorsión armónica y genera más volumen percibido. Hay dos tipos:</p>
+        <div class="list-block">
+          <span class="list-line">- <b>Soft clipping:</b> suaviza y redondea los picos para un recorte más musical y natural. Ideal para añadir calidez y cohesión.</span>
+          <span class="list-line">- <b>Hard clipping:</b> corta la onda de forma radical en el límite. Genera armónicos más evidentes, pero es muy eficaz para ganar headroom real, ya que elimina los picos por completo y deja que el limitador trabaje con mucha menos carga.</span>
+        </div>
+
+        <img src="assets/blog/mix-mastering-clipper.png" alt="Interfaz del clipper StandardCLIP de SIR Audio Tools mostrando la curva de clip y los controles de gain, ceiling y oversampling">
+        <p class="img-caption">StandardCLIP, con la curva de clipping bien visible: todo lo que pasa del umbral se recorta.</p>
+
+        <h3>¿Por qué usar clipping en vez de solo limitar?</h3>
+        <p>Cuando le pides a un limitador que reduzca 6 dB, "aplasta" la onda con su attack y release, lo que puede generar bombeo o pérdida de pegada. El clipping, en cambio, recorta los picos más altos de forma instantánea, sin tiempos de recuperación: al eliminar esos picos milimétricos, ganas headroom para subir el volumen general sin que el limitador final tenga que trabajar tanto.</p>
+        <p>La mejor solución suele ser combinar ambos. Una cadena de mastering habitual sería:</p>
+        <div class="list-block">
+          <span class="list-line">1. <b>EQ / Compresión:</b> preparas la mezcla y moldeas el equilibrio frecuencial.</span>
+          <span class="list-line">2. <b>Clipper:</b> te encargas de los picos más altos de tu mezcla.</span>
+          <span class="list-line">3. <b>Limitador:</b> terminas de limitar para llegar al target de LUFS que buscas.</span>
+        </div>
+
+        <div class="cta-box">
+          <p>Mezcla y mastering es una de las partes centrales del curso de Producción Musical Avanzada de IRL Estudios.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="produccion-musical-avanzada.html">Producción Musical Avanzada</a>
+            <a class="btn" href="produccion-musical-iniciacion.html">Producción Musical Iniciación</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="assets/content-loader.js"></script>
+</html>

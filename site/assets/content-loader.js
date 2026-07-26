@@ -18,6 +18,26 @@
   }
   fadeInImages(document);
 
+  // Acordeón de preguntas frecuentes (delegado en document, no en cada
+  // elemento, porque content-loader.js reemplaza el innerHTML del bloque
+  // faq_html en cuanto llega el contenido de Blob y destruiría cualquier
+  // listener atado directamente a los botones originales).
+  document.addEventListener('click', function (e) {
+    var mainToggle = e.target.closest('.faq-main-toggle');
+    if (mainToggle) {
+      var wrap = mainToggle.closest('.faq-wrap');
+      var isOpen = wrap.classList.toggle('open');
+      mainToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      return;
+    }
+    var itemToggle = e.target.closest('.faq-item-toggle');
+    if (itemToggle) {
+      var item = itemToggle.closest('.faq-item');
+      var isItemOpen = item.classList.toggle('open');
+      itemToggle.setAttribute('aria-expanded', isItemOpen ? 'true' : 'false');
+    }
+  });
+
   var page = document.body.getAttribute('data-page');
 
   // Banner de consentimiento de cookies (Google Consent Mode v2).

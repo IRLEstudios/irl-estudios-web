@@ -322,6 +322,7 @@ function onPreviewLoaded(iframe, slug) {
     if (slug !== currentSlug) return;
     currentDoc = doc;
     enableLiveEditing(doc);
+    if (slug === 'blog') enableBlogReorder(doc);
     originalSnapshot = JSON.stringify(collectData(doc));
     document.getElementById('saveButton').disabled = false;
     document.getElementById('saveStatus').textContent = '';
@@ -375,7 +376,11 @@ function injectEditingStyles(doc) {
     '.irl-move-hint{position:absolute; top:-9px; right:14px; z-index:99999; background:#232323; color:#eaeaea; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; padding:3px 7px; border-radius:5px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .15s ease;}',
     '.irl-positionable:hover .irl-move-hint{opacity:1;}',
     '.irl-positionable{cursor:move; -webkit-user-drag:none; user-select:none;}',
-    '.irl-positionable img{-webkit-user-drag:none; user-select:none; pointer-events:none;}'
+    '.irl-positionable img{-webkit-user-drag:none; user-select:none; pointer-events:none;}',
+    '.irl-reorder-btns{display:inline-flex; gap:2px; margin-left:auto;}',
+    '.irl-reorder-btn{font-family:inherit; font-size:10px; line-height:1; width:20px; height:20px; border-radius:5px; border:1.3px solid rgba(0,0,0,0.25); background:#fff; color:#232323; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;}',
+    '.irl-reorder-btn:hover{background:rgba(0,0,0,0.08);}',
+    '.irl-reorder-btn:disabled{opacity:0.3; cursor:default;}'
   ].join('\n');
   doc.head.appendChild(style);
 }
@@ -844,6 +849,116 @@ function enableLiveEditing(doc) {
       e.stopPropagation();
       openHrefPopover(doc, el, badge);
     });
+  });
+}
+
+// Reordenar entradas del blog: en vez de mover los nodos del DOM (lo que
+// no serviría de nada, porque el HTML público siempre pinta post_1,
+// post_2... en ese orden fijo, y solo su contenido viene de Blob), se
+// intercambia el CONTENIDO entre dos .post-item adyacentes. Así el slot
+// post_1 pasa a llevar lo que antes era post_2 y viceversa, y con eso
+// basta para que el orden visible cambie al guardar.
+function enableBlogReorder(doc) {
+  var items = doc.querySelectorAll('.post-item');
+  items.forEach(function (li) {
+    var head = li.querySelector('.post-item-head');
+    if (!head || head.querySelector('.irl-reorder-btns')) return;
+
+    var box = doc.createElement('span');
+    box.className = 'irl-reorder-btns';
+    box.setAttribute('contenteditable', 'false');
+
+    var up = doc.createElement('button');
+    up.type = 'button';
+    up.className = 'irl-reorder-btn';
+    up.textContent = '▲';
+    up.title = 'Subir esta entrada';
+    up.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    up.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var prev = li.previousElementSibling;
+      if (prev && prev.classList.contains('post-item')) swapPostItems(prev, li);
+    });
+
+    var down = doc.createElement('button');
+    down.type = 'button';
+    down.className = 'irl-reorder-btn';
+    down.textContent = '▼';
+    down.title = 'Bajar esta entrada';
+    down.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    down.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var next = li.nextElementSibling;
+      if (next && next.classList.contains('post-item')) swapPostItems(li, next);
+    });
+
+    box.appendChild(up);
+    box.appendChild(down);
+    head.appendChild(box);
+  });
+}
+
+function swapPostItems(a, b) {
+  function swapText(sel) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var t = elA.textContent;
+    elA.textContent = elB.textContent;
+    elB.textContent = t;
+  }
+  // El título es a la vez [data-key] y [data-key-href]: lleva pegado el
+  // badge 🔗 de "editar enlace" como hijo suyo. Un textContent = ... a
+  // pelo destruiría ese badge (y su listener). Se extrae el texto limpio
+  // con textWithoutBadge (igual que hace sanitizePlainText) y se
+  // reinserta el mismo nodo de badge tras el swap.
+  function swapTitleText(sel) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var badgeA = elA.querySelector(':scope > .irl-href-badge');
+    var badgeB = elB.querySelector(':scope > .irl-href-badge');
+    var textA = textWithoutBadge(elA);
+    var textB = textWithoutBadge(elB);
+    elA.textContent = textB;
+    elB.textContent = textA;
+    if (badgeA) elA.appendChild(badgeA);
+    if (badgeB) elB.appendChild(badgeB);
+  }
+  function swapAttr(sel, attr) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var v = elA.getAttribute(attr) || '';
+    elA.setAttribute(attr, elB.getAttribute(attr) || '');
+    elB.setAttribute(attr, v);
+  }
+  function swapHTML(sel) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var h = elA.innerHTML;
+    elA.innerHTML = elB.innerHTML;
+    elB.innerHTML = h;
+  }
+
+  swapTitleText('a[data-key]');
+  swapAttr('a[data-key-href]', 'href');
+  swapText('.level-badge');
+  swapText('.category-badge');
+  swapHTML('.post-excerpt');
+
+  var hiddenA = a.dataset.irlHidden;
+  a.dataset.irlHidden = b.dataset.irlHidden;
+  b.dataset.irlHidden = hiddenA;
+  [a, b].forEach(function (li) {
+    var hidden = li.dataset.irlHidden === 'true';
+    li.classList.toggle('irl-hidden-ghost', hidden);
+    var label = li.querySelector('.irl-visibility-label');
+    var badge = li.querySelector('.irl-visibility-badge');
+    if (label) label.style.display = hidden ? 'block' : 'none';
+    if (badge) {
+      badge.textContent = hidden ? '🙈' : '👁';
+      badge.title = hidden ? 'Mostrar en la web' : 'Ocultar en la web';
+    }
   });
 }
 

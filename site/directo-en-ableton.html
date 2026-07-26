@@ -36,6 +36,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Directo en Ableton — IRL Estudios</title>
 <meta name="description" content="Curso de Directo en Ableton en IRL Estudios, Madrid: lleva tu proyecto musical al directo con hardware y controladores MIDI. Impartido por turian boy.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="IRL Estudios">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://irlestudios.com/directo-en-ableton.html">
+<meta property="og:title" content="Directo en Ableton — IRL Estudios">
+<meta property="og:description" content="Curso de Directo en Ableton en IRL Estudios, Madrid: lleva tu proyecto musical al directo con hardware y controladores MIDI. Impartido por turian boy.">
+<meta property="og:image" content="https://irlestudios.com/assets/directo-ableton.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Directo en Ableton — IRL Estudios">
+<meta name="twitter:description" content="Curso de Directo en Ableton en IRL Estudios, Madrid: lleva tu proyecto musical al directo con hardware y controladores MIDI. Impartido por turian boy.">
+<meta name="twitter:image" content="https://irlestudios.com/assets/directo-ableton.jpg">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -77,6 +89,62 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     },
     "url": "https://irlestudios.com/inscripcion.html?curso=Directo%20en%20Ableton"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Necesito experiencia previa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, es necesario tener nivel inicial en Ableton Live."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Tengo que llevar Ableton Live ya instalado?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, el estudio no proporciona el DAW: cada alumno debe traer su propia licencia de Ableton Live instalada en su portátil."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué equipo tengo que llevar a clase?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Se recomienda traer tu propio portátil y unos auriculares."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos alumnos hay por grupo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Máximo 4 alumnos por grupo, para poder dar atención personalizada a cada uno."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo puedo pagar el curso?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Por transferencia, Bizum o pasarela de pago; te enviamos la factura correspondiente."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pasa si falto a una sesión?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Las sesiones no se recuperan, ya que trabajamos en grupos reducidos de 4 personas y cada una de las 4 clases avanza en conjunto con el resto del grupo."
+      }
+    }
+  ]
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,6 +344,56 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   a:focus-visible, .btn:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+
+  .faq-wrap{
+    border:1.6px solid rgba(0,0,0,0.6);
+    border-radius:12.8px;
+    padding:14px 18px;
+    margin-bottom:16px;
+  }
+  .faq-main-toggle{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    color:inherit;
+    text-align:left;
+    cursor:pointer;
+    padding:0;
+  }
+  .faq-wrap .faq-main-body{display:none; margin-top:14px;}
+  .faq-wrap.open .faq-main-body{display:block;}
+  .faq-item{border-top:1px solid rgba(0,0,0,0.15); padding:10px 0;}
+  .faq-item:first-child{border-top:none; padding-top:0;}
+  .faq-item:last-child{padding-bottom:0;}
+  .faq-item-toggle{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    color:inherit;
+    text-align:left;
+    cursor:pointer;
+    padding:0;
+  }
+  .faq-item .faq-item-body{display:none; margin-top:8px;}
+  .faq-item.open .faq-item-body{display:block;}
+  .faq-item-body p{font-size:12.5px; line-height:1.6; margin-bottom:0;}
+  .faq-chevron{flex-shrink:0; font-weight:700; transition:transform .15s ease;}
+  .faq-wrap.open > .faq-main-toggle .faq-chevron{transform:rotate(45deg);}
+  .faq-item.open .faq-item-toggle .faq-chevron{transform:rotate(45deg);}
 </style>
 </head>
 <body data-page="directo-en-ableton">
@@ -346,9 +464,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="price"><span data-key-html="price_html">250€</span></div>
     <p class="note-price" data-key-html="note_price_html">Incluye las 4 sesiones de aprendizaje en el estudio, acceso al aula virtual y dossier de apuntes para cada materia.</p>
 
-    <div class="cta-row">
+        <div class="cta-row">
       <a class="btn primary" data-key="cta_primary_label" data-key-href="cta_primary_href" href="inscripcion.html?curso=Directo%20en%20Ableton">Inscripciones Oct/Nov 2026</a>
       <a class="btn" data-key="cta_secondary_label" data-key-href="cta_secondary_href" href="https://www.canva.com/design/DAHD0MAj0uU/x7L8pDnD9M67oLbzF98Byg/view?utm_content=DAHD0MAj0uU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h56e83decda" target="_blank" rel="noopener">Dossier cursos</a>
+    </div>
+
+    <div class="faq-wrap" data-key-html="faq_html">
+      <button type="button" class="faq-main-toggle" aria-expanded="false"><span>Preguntas frecuentes</span><span class="faq-chevron">+</span></button>
+      <div class="faq-main-body">
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>Preguntas frecuentes:</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p><b>¿Necesito experiencia previa?</b></p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Tengo que llevar Ableton Live ya instalado?</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p>Sí, el estudio no proporciona el DAW: cada alumno debe traer su propia licencia de Ableton Live instalada en su portátil.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Qué equipo tengo que llevar a clase?</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p>Se recomienda traer tu propio portátil y unos auriculares.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Cuántos alumnos hay por grupo?</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p>Máximo 4 alumnos por grupo, para poder dar atención personalizada a cada uno.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Cómo puedo pagar el curso?</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p>Por transferencia, Bizum o pasarela de pago; te enviamos la factura correspondiente.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Qué pasa si falto a una sesión?</span><span class="faq-chevron">+</span></button>
+          <div class="faq-item-body">
+            <p>Las sesiones no se recuperan, ya que trabajamos en grupos reducidos de 4 personas y cada una de las 4 clases avanza en conjunto con el resto del grupo.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a></p>
