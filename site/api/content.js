@@ -29,6 +29,8 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'GET') {
+    const fallback = readDefaultContent(page);
+
     try {
       const info = await head(blobKeyFor(page)).catch(() => null);
       if (info && info.url) {
@@ -38,15 +40,20 @@ module.exports = async (req, res) => {
         // rato. Se rompe la caché añadiendo un parámetro único.
         const bustedUrl = info.url + (info.url.includes('?') ? '&' : '?') + '_v=' + (info.uploadedAt ? new Date(info.uploadedAt).getTime() : Date.now());
         const response = await fetch(bustedUrl, { cache: 'no-store' });
-        const data = await response.json();
-        res.status(200).json(data);
+        const blobData = await response.json();
+        // Se combina con el contenido de fábrica en vez de sustituirlo
+        // por completo: así, cualquier campo NUEVO que se añada en el
+        // código (p. ej. un post de blog nuevo, o una clave añadida a
+        // una página ya editada alguna vez) aparece en producción sin
+        // tener que volver a guardar esa página desde /admin. Lo que sí
+        // se guardó en Blob para una clave concreta sigue mandando.
+        res.status(200).json(Object.assign({}, fallback, blobData));
         return;
       }
     } catch (err) {
       // Si Blob falla por lo que sea, caemos al contenido por defecto.
     }
 
-    const fallback = readDefaultContent(page);
     if (!fallback) {
       res.status(404).json({ error: 'No existe contenido para esta página' });
       return;
