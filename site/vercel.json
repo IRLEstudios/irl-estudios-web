@@ -19,6 +19,26 @@
       "source": "/curso-producción-intermedio",
       "destination": "/produccion-musical-avanzada.html",
       "permanent": true
+    },
+    {
+      "source": "/curso-diseño-sonoro",
+      "destination": "/diseno-sonoro-audiovisual.html",
+      "permanent": true
+    },
+    {
+      "source": "/curso-directo-en-ableton",
+      "destination": "/directo-en-ableton.html",
+      "permanent": true
+    },
+    {
+      "source": "/opiniones-de-alumn@s",
+      "destination": "/opiniones.html",
+      "permanent": true
+    },
+    {
+      "source": "/turian-boy",
+      "destination": "/turian-boy.html",
+      "permanent": true
     }
   ],
   "headers": [
