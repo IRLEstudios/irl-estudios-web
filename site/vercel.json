@@ -9,6 +9,16 @@
       "source": "/espacios",
       "destination": "/estudio-a.html",
       "permanent": true
+    },
+    {
+      "source": "/estudio-a",
+      "destination": "/estudio-a.html",
+      "permanent": true
+    },
+    {
+      "source": "/curso-producción-intermedio",
+      "destination": "/produccion-musical-avanzada.html",
+      "permanent": true
     }
   ],
   "headers": [
