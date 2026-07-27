@@ -4,6 +4,13 @@
       "includeFiles": "content/**"
     }
   },
+  "redirects": [
+    {
+      "source": "/espacios",
+      "destination": "/estudio-a.html",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
