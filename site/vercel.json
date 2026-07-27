@@ -16,12 +16,12 @@
       "permanent": true
     },
     {
-      "source": "/curso-producción-intermedio",
+      "source": "/curso-producci(.*)n-intermedio",
       "destination": "/produccion-musical-avanzada.html",
       "permanent": true
     },
     {
-      "source": "/curso-diseño-sonoro",
+      "source": "/curso-dise(.*)o-sonoro",
       "destination": "/diseno-sonoro-audiovisual.html",
       "permanent": true
     },
