@@ -1,4 +1,5 @@
 const { put } = require('@vercel/blob');
+const { sendLeadNotification } = require('./_notify');
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -47,6 +48,7 @@ module.exports = async (req, res) => {
       contentType: 'application/json',
       allowOverwrite: false,
     });
+    await sendLeadNotification(lead);
     res.status(200).json({ ok: true });
   } catch (err) {
     res.status(500).json({

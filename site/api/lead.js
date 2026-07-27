@@ -1,5 +1,6 @@
 const { put } = require('@vercel/blob');
 const crypto = require('crypto');
+const { sendLeadNotification } = require('./_notify');
 
 const REQUIRED_FIELDS = ['email', 'curso', 'horario', 'nombre', 'dni', 'autonomo'];
 const META_PIXEL_ID = '1683598329599658';
@@ -207,10 +208,12 @@ module.exports = async (req, res) => {
       ? await sendMetaLeadEvent(req, lead, body.test_event_code)
       : { skipped: 'no marketing consent' };
     const emailResult = await sendConfirmationEmail(lead);
+    const notifyResult = await sendLeadNotification(lead);
     const response = { ok: true };
     if (body.test_event_code) {
       response.capi_debug = capiResult;
       response.email_debug = emailResult;
+      response.notify_debug = notifyResult;
     }
     res.status(200).json(response);
   } catch (err) {
