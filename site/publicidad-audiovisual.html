@@ -192,19 +192,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     background:#000;
   }
 
-  /* Oculta la barra de controles nativa del vídeo hasta hacer hover
-     (soportado en navegadores basados en WebKit/Blink: Chrome, Edge,
-     Safari; en Firefox no existe este pseudo-elemento y los controles
-     se quedan siempre visibles como alternativa razonable). */
+  /* La barra de controles nativa (línea de tiempo, volumen...) se queda
+     oculta hasta que el vídeo se ha empezado a reproducir, y aun así
+     solo aparece al pasar el cursor por encima (soportado en
+     navegadores WebKit/Blink: Chrome, Edge, Safari; en Firefox no
+     existe este pseudo-elemento y los controles se quedan siempre
+     visibles como alternativa razonable). El botón grande nativo de
+     play/pausa se oculta siempre: se sustituye por uno propio centrado. */
   .card .media video::-webkit-media-controls-panel{
     opacity:0;
     transition:opacity .15s ease;
   }
-  .card .media:hover video::-webkit-media-controls-panel,
+  .card .media.is-playing:hover video::-webkit-media-controls-panel,
   .card .media video:focus::-webkit-media-controls-panel{
     opacity:1;
   }
-  .card .media video::-webkit-media-controls-start-playback-button{opacity:1;}
+  .card .media video::-webkit-media-controls-start-playback-button,
+  .card .media video::-webkit-media-controls-overlay-play-button{
+    display:none !important;
+  }
+
+  /* Botón de play propio, centrado, para los vídeos con reproductor
+     nativo (Dropbox). Se oculta en cuanto arranca la reproducción y
+     vuelve a aparecer si se pausa. */
+  .v-play{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.15);
+    border:none;
+    padding:0;
+    cursor:pointer;
+    transition:opacity .15s ease, background .15s ease;
+  }
+  .v-play:hover{background:rgba(0,0,0,0.3);}
+  .v-play-circle{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.5);
+    border:1.6px solid rgba(255,255,255,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s ease;
+  }
+  .v-play:hover .v-play-circle{transform:scale(1.07);}
+  .v-play-circle svg{display:block; margin-left:3px;}
+  .media.is-playing .v-play{display:none;}
 
   /* Tarjeta de Instagram: solo una miniatura propia con botón de play,
      sin la cabecera/perfil/likes/comentarios del widget oficial (esa
@@ -239,23 +277,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .card .ig-thumb .ig-play svg{display:block; margin-left:3px;}
   .card .ig-thumb .ig-badge{
     position:absolute;
-    top:10px;
+    bottom:10px;
     right:10px;
     width:22px;
     height:22px;
     opacity:0.9;
   }
 
-  /* Título superpuesto sobre el propio vídeo con un degradado, en vez
-     de una cajetilla blanca aparte: se integra mejor con la imagen. */
+  /* Título superpuesto ARRIBA del vídeo con un degradado (no abajo, para
+     no taparse con la barra de controles nativa ni con el botón de
+     play), en vez de una cajetilla blanca aparte. */
   .card-body{
     position:absolute;
     left:0;
     right:0;
-    bottom:0;
-    z-index:2;
-    padding:20px 10px 8px;
-    background:linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
+    top:0;
+    z-index:3;
+    padding:9px 10px 20px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.82), rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
     pointer-events:none;
   }
   .card-title{
@@ -684,6 +723,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (posterSrc2) video.poster = posterSrc2;
       video.src = url;
       mediaEl.appendChild(video);
+
+      // Botón de play propio y centrado: los controles nativos (línea
+      // de tiempo, volumen...) se quedan ocultos hasta que se pulsa,
+      // y solo entonces se pueden mostrar pasando el cursor por encima.
+      var playBtn = document.createElement('button');
+      playBtn.type = 'button';
+      playBtn.className = 'v-play';
+      playBtn.setAttribute('aria-label', 'Reproducir vídeo');
+      playBtn.innerHTML = '<span class="v-play-circle">' + IG_PLAY_SVG + '</span>';
+      playBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        video.play();
+      });
+      mediaEl.appendChild(playBtn);
+
+      video.addEventListener('play', function () { mediaEl.classList.add('is-playing'); });
+      video.addEventListener('pause', function () { mediaEl.classList.remove('is-playing'); });
     });
   }
 
