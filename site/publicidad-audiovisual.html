@@ -332,8 +332,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     background:linear-gradient(to bottom, rgba(0,0,0,0.82), rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
     pointer-events:none;
   }
+  /* .card-body lleva pointer-events:none para que, en la web pública,
+     los clics le "atraviesen" hasta el botón de play/el vídeo de
+     debajo. Pero el título y la etiqueta necesitan recibir clics igual
+     (para poder editarlos desde /admin), así que se reactivan aquí. */
   .card-title{
     display:block;
+    pointer-events:auto;
     font-family:'Archivo', sans-serif;
     font-weight:700;
     font-stretch:75%;
@@ -346,6 +351,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .card-tag{
     display:inline-block;
+    pointer-events:auto;
     font-size:8.5px;
     font-weight:700;
     letter-spacing:0.04em;
@@ -377,6 +383,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     border-bottom:1px solid rgba(0,0,0,0.15);
     font-size:9px;
   }
+  /* El título (.card-body) está pegado al borde superior de la
+     tarjeta; en /admin hay que bajarlo para que no quede tapado por
+     la fila de "Portada" que solo se muestra ahí. */
+  body.is-admin .card-body{top:36px;}
   .poster-picker-wrap{display:none;}
   body.is-admin .poster-picker-wrap{
     display:block;
