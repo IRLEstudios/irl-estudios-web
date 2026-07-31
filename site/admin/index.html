@@ -241,6 +241,7 @@ var PAGES = [
   { slug: 'opiniones', label: 'Opiniones de alumn@s' },
   { slug: 'turian-boy', label: 'turian boy' },
   { slug: 'estudio-a', label: 'Estudio A' },
+  { slug: 'publicidad-audiovisual', label: 'Publicidad y audiovisual' },
   { slug: 'inscripcion', label: 'Inscripción' },
   { slug: 'blog', label: 'Blog' },
   { slug: 'blog-efectos-de-audio', label: 'Blog · Efectos de audio' },
@@ -333,6 +334,7 @@ function onPreviewLoaded(iframe, slug) {
     currentDoc = doc;
     enableLiveEditing(doc);
     if (slug === 'blog') enableBlogReorder(doc);
+    if (slug === 'publicidad-audiovisual') enableVideoReorder(doc);
     originalSnapshot = JSON.stringify(collectData(doc));
     document.getElementById('saveButton').disabled = false;
     document.getElementById('saveStatus').textContent = '';
@@ -970,6 +972,80 @@ function swapPostItems(a, b) {
       badge.title = hidden ? 'Mostrar en la web' : 'Ocultar en la web';
     }
   });
+}
+
+// Reordenar las tarjetas de vídeo de "Publicidad y audiovisual": igual
+// que en el blog, cada tarjeta es un slot fijo en el HTML (video_1,
+// video_2...) y lo que se guarda es el CONTENIDO de cada slot, así que
+// reordenar consiste en intercambiar título, etiqueta, URL y portada
+// entre dos tarjetas adyacentes, no en mover nodos del DOM.
+function enableVideoReorder(doc) {
+  var cards = doc.querySelectorAll('#videoGrid .card');
+  cards.forEach(function (card) {
+    var row = card.querySelector('.admin-row');
+    if (!row || row.querySelector('.irl-reorder-btns')) return;
+
+    var box = doc.createElement('span');
+    box.className = 'irl-reorder-btns';
+    box.setAttribute('contenteditable', 'false');
+
+    var up = doc.createElement('button');
+    up.type = 'button';
+    up.className = 'irl-reorder-btn';
+    up.textContent = '◀';
+    up.title = 'Mover antes';
+    up.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    up.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var prev = card.previousElementSibling;
+      if (prev && prev.classList.contains('card')) swapVideoCards(prev, card);
+    });
+
+    var down = doc.createElement('button');
+    down.type = 'button';
+    down.className = 'irl-reorder-btn';
+    down.textContent = '▶';
+    down.title = 'Mover después';
+    down.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    down.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var next = card.nextElementSibling;
+      if (next && next.classList.contains('card')) swapVideoCards(card, next);
+    });
+
+    box.appendChild(up);
+    box.appendChild(down);
+    row.appendChild(box);
+  });
+}
+
+function swapVideoCards(a, b) {
+  function swapText(sel) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var t = elA.textContent;
+    elA.textContent = elB.textContent;
+    elB.textContent = t;
+  }
+  function swapAttr(sel, attr) {
+    var elA = a.querySelector(sel), elB = b.querySelector(sel);
+    if (!elA || !elB) return;
+    var v = elA.getAttribute(attr) || '';
+    elA.setAttribute(attr, elB.getAttribute(attr) || '');
+    elB.setAttribute(attr, v);
+  }
+
+  swapText('.card-title');
+  swapText('.card-tag');
+  swapAttr('.video-src-link', 'href');
+  swapAttr('.poster-picker', 'src');
+
+  // Reconstruye el reproductor de ambas tarjetas con su nuevo contenido
+  // (la función global de la propia página, expuesta para el admin).
+  var win = a.ownerDocument.defaultView;
+  if (win && win.__irlRebuildVideoPlayers) win.__irlRebuildVideoPlayers();
 }
 
 // Lee el estado actual de la vista previa (lo que se ve = lo que se guarda).

@@ -148,17 +148,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:16px;
   }
 
   .card{
     background:#fff;
     border:1.6px solid rgba(0,0,0,0.6);
-    border-radius:12.8px;
+    border-radius:11px;
     overflow:hidden;
     display:flex;
     flex-direction:column;
+    position:relative;
   }
   .card .media{
     position:relative;
@@ -173,6 +174,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     border:none;
     background:#000;
   }
+
+  /* Oculta la barra de controles nativa del vídeo hasta hacer hover
+     (soportado en navegadores basados en WebKit/Blink: Chrome, Edge,
+     Safari; en Firefox no existe este pseudo-elemento y los controles
+     se quedan siempre visibles como alternativa razonable). */
+  .card .media video::-webkit-media-controls-panel{
+    opacity:0;
+    transition:opacity .15s ease;
+  }
+  .card .media:hover video::-webkit-media-controls-panel,
+  .card .media video:focus::-webkit-media-controls-panel{
+    opacity:1;
+  }
+  .card .media video::-webkit-media-controls-start-playback-button{opacity:1;}
+
   .card .ig-media{
     width:100%;
     height:100%;
@@ -189,33 +205,72 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     text-decoration:none;
     font-family:'Inter Tight', sans-serif;
     font-weight:700;
-    font-size:11.5px;
+    font-size:10.5px;
     letter-spacing:0.03em;
     text-transform:uppercase;
     border:1.6px solid rgba(255,255,255,0.8);
-    border-radius:9.6px;
-    padding:10px 16px;
+    border-radius:8px;
+    padding:9px 14px;
   }
   .card .ig-media a:hover{background:rgba(255,255,255,0.15);}
+
   .card-body{
-    padding:12px 14px 14px;
+    padding:8px 10px 10px;
   }
   .card-title{
+    display:block;
     font-family:'Archivo', sans-serif;
     font-weight:700;
     font-stretch:75%;
-    font-size:14px;
+    font-size:12px;
     letter-spacing:-0.005em;
-    margin-bottom:2px;
+    line-height:1.25;
+    margin-bottom:1px;
   }
   .card-tag{
     display:inline-block;
-    font-size:9.5px;
+    font-size:8.5px;
     font-weight:700;
     letter-spacing:0.04em;
     text-transform:uppercase;
     color:rgba(0,0,0,0.5);
   }
+
+  /* Controles de administración (elegir portada / reordenar): solo
+     visibles dentro del editor de /admin (?admin=1), nunca en la web
+     pública, para no cambiar el diseño que ve el visitante. */
+  .admin-row{display:none;}
+  .video-src-link{display:none;}
+  body.is-admin .video-src-link{
+    display:inline-block;
+    position:relative;
+    width:22px;
+    height:22px;
+    margin:6px;
+  }
+  body.is-admin .admin-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+    padding:6px 8px;
+    background:#f2f2f2;
+    border-bottom:1px solid rgba(0,0,0,0.15);
+    font-size:9px;
+  }
+  .poster-picker-wrap{display:none;}
+  body.is-admin .poster-picker-wrap{
+    display:block;
+    width:34px;
+    height:22px;
+    flex-shrink:0;
+    border:1px dashed rgba(0,0,0,0.4);
+    border-radius:4px;
+    overflow:hidden;
+    background:#ddd;
+  }
+  body.is-admin .poster-picker-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+  .admin-row-label{font-size:8.5px; color:rgba(0,0,0,0.55); text-transform:uppercase; letter-spacing:0.03em;}
 
   .contact{
     font-size:11px;
@@ -244,6 +299,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+<script>
+  // Marca el body cuando la página se carga dentro del editor de /admin
+  // (que abre esta misma URL con ?admin=1), para revelar los controles
+  // de "elegir portada" / "editar URL" que en la web pública van ocultos.
+  if (/[?&]admin=1(&|$)/.test(location.search)) {
+    document.documentElement.classList.add('is-admin-html');
+    document.addEventListener('DOMContentLoaded', function () {
+      document.body.classList.add('is-admin');
+    });
+  }
+</script>
 
 <a href="index.html" aria-label="Volver a IRL Estudios" style="position:fixed; inset:0; z-index:0; cursor:pointer;">
   <img class="hero-bg" src="assets/hero.jpg" alt="">
@@ -254,123 +320,282 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="back" href="index.html">← IRL Estudios</a>
 
     <div class="panel">
-      <h1>Publicidad y audiovisual</h1>
-      <p class="intro">Composición, diseño sonoro y producción musical para publicidad y proyectos audiovisuales, por <b><a href="turian-boy.html">turian boy</a></b>: spots, cortometrajes, moda y arte para marcas como <b>Nissan, Baleària, CaixaBank Ontinyent y PSOE</b>, entre otras.</p>
+      <h1 data-key="title">Publicidad y audiovisual</h1>
+      <p class="intro" data-key-html="intro_html">Composición, diseño sonoro y producción musical para publicidad y proyectos audiovisuales, por <b><a href="turian-boy.html">turian boy</a></b>: spots, cortometrajes, moda y arte para marcas como <b>Nissan, Baleària, CaixaBank Ontinyent y PSOE</b>, entre otras.</p>
 
       <div class="divider"></div>
 
-      <div class="grid">
+      <div class="grid" id="videoGrid">
 
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/uuqxji3rbrp2lb2/BaleariaFINALparaMiWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Baleària</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/i1rd1fjv5n3fgxq/BaleariaSPOT2.Mix2.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Baleària — Spot 2</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/5ygt3rot55tlxok/NISSANfinalparaMiWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Nissan</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/98eltv8uwvdsl7y/Orbit.MiWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Orbit</div><span class="card-tag">Audiovisual</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/a27r4xxiednz2sl/CONSUM%20FINAL.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Consum</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/lxffjth6rvadoob/CORTO.FINAL.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Corto</div><span class="card-tag">Cortometraje</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/ziyfpt9u0t23p5u/SAONAFINAL.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Saona</div><span class="card-tag">Audiovisual</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/14m45xcysb5q5nw/EcoVidrio.NOISE.29J.v4.mp4"></video></div>
-          <div class="card-body"><div class="card-title">EcoVidrio</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/nd5uxnne2pit7fv/CaixaO.miWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">CaixaBank Ontinyent</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/fja92r92mpr8af8/MMMAD.Obras%2BMusic1.mp4"></video></div>
-          <div class="card-body"><div class="card-title">MMMAD</div><span class="card-tag">Obras + música</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/f11n8nphdv2znz9/Export-MiWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">Tank x Akoni</div><span class="card-tag">Moda</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><video controls preload="metadata" playsinline src="https://dl.dropboxusercontent.com/s/q95oy2zoigu72ut/PSOEparaMiWEB.mp4"></video></div>
-          <div class="card-body"><div class="card-title">PSOE</div><span class="card-tag">Spot publicitario</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><iframe src="https://www.youtube-nocookie.com/embed/ttZzMPHQaPU" title="Symphony of the Seas por el Mediterráneo" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-          <div class="card-body"><div class="card-title">Symphony of the Seas — Nautalia Viajes</div><span class="card-tag">Audiovisual</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><iframe src="https://www.youtube-nocookie.com/embed/e5KQdTE6DkY" title="WE ARE CP | Branded | Velo" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-          <div class="card-body"><div class="card-title">WE ARE CP — Velo</div><span class="card-tag">Branded content</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><iframe src="https://www.youtube-nocookie.com/embed/8JYkFUKeTiA" title="PURA FICCIÓN — Jordán" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-          <div class="card-body"><div class="card-title">Pura Ficción — Jordán</div><span class="card-tag">Videoclip</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><iframe src="https://www.youtube-nocookie.com/embed/TnYwH9GVBD0" title="Vlex &amp; Reflash — Colección Cápsula 2021" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-          <div class="card-body"><div class="card-title">Vlex &amp; Reflash — Cápsula 2021</div><span class="card-tag">Moda</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media"><iframe src="https://www.youtube-nocookie.com/embed/2a9rRiYxdqs" title="impias completo — el jouse" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-          <div class="card-body"><div class="card-title">Impías — el jouse</div><span class="card-tag">Videoclip</span></div>
-        </div>
-
-        <div class="card">
-          <div class="media">
-            <div class="ig-media">
-              <a href="https://www.instagram.com/reel/DQrjf4rCHWq/" target="_blank" rel="noopener">Ver Reel en Instagram</a>
-            </div>
+        <div class="card" data-slot="1">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_1_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_1_title">Baleària</span>
+            <span class="card-tag" data-key="video_1_tag">Spot publicitario</span>
           </div>
-          <div class="card-body"><div class="card-title">Reel</div><span class="card-tag">Instagram</span></div>
+          <a class="video-src-link" data-key-href="video_1_src" href="https://dl.dropboxusercontent.com/s/uuqxji3rbrp2lb2/BaleariaFINALparaMiWEB.mp4"></a>
         </div>
 
-        <div class="card">
-          <div class="media">
-            <div class="ig-media">
-              <a href="https://www.instagram.com/p/CGFPHi8K2-T/" target="_blank" rel="noopener">Ver publicación en Instagram</a>
-            </div>
+        <div class="card" data-slot="2">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_2_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_2_title">Baleària — Spot 2</span>
+            <span class="card-tag" data-key="video_2_tag">Spot publicitario</span>
           </div>
-          <div class="card-body"><div class="card-title">Publicación</div><span class="card-tag">Instagram</span></div>
+          <a class="video-src-link" data-key-href="video_2_src" href="https://dl.dropboxusercontent.com/s/i1rd1fjv5n3fgxq/BaleariaSPOT2.Mix2.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="3">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_3_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_3_title">Nissan</span>
+            <span class="card-tag" data-key="video_3_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_3_src" href="https://dl.dropboxusercontent.com/s/5ygt3rot55tlxok/NISSANfinalparaMiWEB.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="4">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_4_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_4_title">Orbit</span>
+            <span class="card-tag" data-key="video_4_tag">Audiovisual</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_4_src" href="https://dl.dropboxusercontent.com/s/98eltv8uwvdsl7y/Orbit.MiWEB.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="5">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_5_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_5_title">Consum</span>
+            <span class="card-tag" data-key="video_5_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_5_src" href="https://dl.dropboxusercontent.com/s/a27r4xxiednz2sl/CONSUM%20FINAL.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="6">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_6_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_6_title">Corto</span>
+            <span class="card-tag" data-key="video_6_tag">Cortometraje</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_6_src" href="https://dl.dropboxusercontent.com/s/lxffjth6rvadoob/CORTO.FINAL.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="7">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_7_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_7_title">Saona</span>
+            <span class="card-tag" data-key="video_7_tag">Audiovisual</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_7_src" href="https://dl.dropboxusercontent.com/s/ziyfpt9u0t23p5u/SAONAFINAL.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="8">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_8_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_8_title">EcoVidrio</span>
+            <span class="card-tag" data-key="video_8_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_8_src" href="https://dl.dropboxusercontent.com/s/14m45xcysb5q5nw/EcoVidrio.NOISE.29J.v4.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="9">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_9_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_9_title">CaixaBank Ontinyent</span>
+            <span class="card-tag" data-key="video_9_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_9_src" href="https://dl.dropboxusercontent.com/s/nd5uxnne2pit7fv/CaixaO.miWEB.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="10">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_10_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_10_title">MMMAD</span>
+            <span class="card-tag" data-key="video_10_tag">Obras + música</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_10_src" href="https://dl.dropboxusercontent.com/s/fja92r92mpr8af8/MMMAD.Obras%2BMusic1.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="11">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_11_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_11_title">Tank x Akoni</span>
+            <span class="card-tag" data-key="video_11_tag">Moda</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_11_src" href="https://dl.dropboxusercontent.com/s/f11n8nphdv2znz9/Export-MiWEB.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="12">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_12_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_12_title">PSOE</span>
+            <span class="card-tag" data-key="video_12_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_12_src" href="https://dl.dropboxusercontent.com/s/q95oy2zoigu72ut/PSOEparaMiWEB.mp4"></a>
+        </div>
+
+        <div class="card" data-slot="13">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_13_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_13_title">Symphony of the Seas — Nautalia Viajes</span>
+            <span class="card-tag" data-key="video_13_tag">Audiovisual</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_13_src" href="https://youtu.be/ttZzMPHQaPU"></a>
+        </div>
+
+        <div class="card" data-slot="14">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_14_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_14_title">WE ARE CP — Velo</span>
+            <span class="card-tag" data-key="video_14_tag">Branded content</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_14_src" href="https://www.youtube.com/watch?v=e5KQdTE6DkY"></a>
+        </div>
+
+        <div class="card" data-slot="15">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_15_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_15_title">Pura Ficción — Jordán</span>
+            <span class="card-tag" data-key="video_15_tag">Videoclip</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_15_src" href="https://www.youtube.com/watch?v=8JYkFUKeTiA"></a>
+        </div>
+
+        <div class="card" data-slot="16">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_16_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_16_title">Vlex &amp; Reflash — Cápsula 2021</span>
+            <span class="card-tag" data-key="video_16_tag">Moda</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_16_src" href="https://youtu.be/TnYwH9GVBD0"></a>
+        </div>
+
+        <div class="card" data-slot="17">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_17_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_17_title">Impías — el jouse</span>
+            <span class="card-tag" data-key="video_17_tag">Videoclip</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_17_src" href="https://www.youtube.com/watch?v=2a9rRiYxdqs"></a>
+        </div>
+
+        <div class="card" data-slot="18">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_18_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_18_title">Reel</span>
+            <span class="card-tag" data-key="video_18_tag">Instagram</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_18_src" href="https://www.instagram.com/reel/DQrjf4rCHWq/"></a>
+        </div>
+
+        <div class="card" data-slot="19">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_19_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_19_title">Publicación</span>
+            <span class="card-tag" data-key="video_19_tag">Instagram</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_19_src" href="https://www.instagram.com/p/CGFPHi8K2-T/"></a>
         </div>
 
       </div>
 
-      <p class="contact">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a> · o síguenos en <a href="https://www.instagram.com/irl_estudios/" target="_blank" rel="noopener">Instagram</a></p>
+      <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a> · o síguenos en <a href="https://www.instagram.com/irl_estudios/" target="_blank" rel="noopener">Instagram</a></p>
     </div>
   </div>
 </div>
 
 </body>
 <script src="assets/content-loader.js"></script>
+<script>
+(function () {
+  // Construye el reproductor de cada tarjeta (vídeo propio, embed de
+  // YouTube o tarjeta de Instagram) a partir de la URL guardada en
+  // [data-key-href="video_N_src"], una vez el contenido editable desde
+  // /admin ya se ha aplicado (evento irl:content-ready de content-loader.js).
+  function youtubeId(url) {
+    var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function buildPlayers() {
+    document.querySelectorAll('#videoGrid .card').forEach(function (card) {
+      var link = card.querySelector('.video-src-link');
+      var mediaEl = card.querySelector('.media');
+      var posterImg = card.querySelector('.poster-picker');
+      if (!link || !mediaEl) return;
+      var url = (link.getAttribute('href') || '').trim();
+      if (!url) { card.style.display = 'none'; return; }
+
+      mediaEl.innerHTML = '';
+
+      if (/instagram\.com/.test(url)) {
+        var wrap = document.createElement('div');
+        wrap.className = 'ig-media';
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = /\/reel\//.test(url) ? 'Ver Reel en Instagram' : 'Ver publicación en Instagram';
+        wrap.appendChild(a);
+        mediaEl.appendChild(wrap);
+        return;
+      }
+
+      var ytId = youtubeId(url);
+      if (ytId) {
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + ytId;
+        iframe.loading = 'lazy';
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        mediaEl.appendChild(iframe);
+        return;
+      }
+
+      var video = document.createElement('video');
+      video.controls = true;
+      video.preload = 'metadata';
+      video.playsInline = true;
+      var posterSrc = posterImg ? posterImg.getAttribute('src') : '';
+      if (posterSrc) video.poster = posterSrc;
+      video.src = url;
+      mediaEl.appendChild(video);
+    });
+  }
+
+  // Expuesta para que /admin pueda reconstruir el reproductor de las
+  // tarjetas afectadas justo después de reordenarlas o cambiar su URL.
+  window.__irlRebuildVideoPlayers = buildPlayers;
+
+  if (document.body.getAttribute('data-page')) {
+    if (document.__irlContentReady) buildPlayers();
+    else {
+      document.addEventListener('irl:content-ready', buildPlayers, { once: true });
+      setTimeout(buildPlayers, 2500);
+    }
+  } else {
+    buildPlayers();
+  }
+})();
+</script>
 </html>
