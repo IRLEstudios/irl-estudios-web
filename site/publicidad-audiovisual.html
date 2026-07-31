@@ -148,38 +148,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .divider{border-top:1px solid var(--line-light); margin:22px 0;}
 
-  /* Galería tipo "masonry" (columnas de ancho fijo, altura libre) en vez
-     de una cuadrícula rígida: así los vídeos verticales y horizontales
-     conviven ordenados sin dejar huecos, parecido a un portfolio. Dentro
-     de cada columna, todos los vídeos horizontales comparten la MISMA
-     caja 16:9 y todos los verticales la MISMA caja 4:5 (recortados con
-     object-fit:cover), para que se vean uniformes entre sí. */
+  /* Cuadrícula real (no masonry): las 3 columnas quedan perfectamente
+     alineadas entre filas. Todas las tarjetas comparten la MISMA caja
+     16:9 (recortada con object-fit:cover), incluidas las verticales y
+     los vídeos de Instagram, para que nada quede descuadrado. */
   .grid{
-    column-count:3;
-    column-gap:22px;
-  }
-  .grid .card{
-    break-inside:avoid;
-    -webkit-column-break-inside:avoid;
-    margin-bottom:22px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
   }
 
   .card{
-    background:#fff;
-    border:1.6px solid rgba(0,0,0,0.6);
     border-radius:10px;
     overflow:hidden;
     display:block;
     position:relative;
+    aspect-ratio:16/9;
+    background:#000;
+    box-shadow:0 0 0 1.3px rgba(0,0,0,0.55);
   }
   .card .media{
-    position:relative;
+    position:absolute;
+    inset:0;
+    z-index:1;
     width:100%;
+    height:100%;
     background:#000;
     overflow:hidden;
-    aspect-ratio:16/9;
   }
-  .card .media.is-portrait{aspect-ratio:4/5;}
   .card .media video{
     display:block;
     width:100%;
@@ -210,41 +206,77 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .card .media video::-webkit-media-controls-start-playback-button{opacity:1;}
 
-  /* Embed nativo de Instagram (reel o publicación): se fuerza a rellenar
-     por completo la caja 4:5 del vídeo (en vez de quedarse en la caja
-     pequeña con cabecera/pie que trae por defecto el widget de Instagram). */
-  .card .ig-embed{position:absolute; inset:0; width:100%; height:100%; overflow:hidden;}
-  .card .ig-embed iframe{
-    position:absolute !important;
-    top:50% !important;
-    left:50% !important;
-    transform:translate(-50%,-50%) !important;
-    width:100% !important;
-    height:100% !important;
-    min-width:100% !important;
-    min-height:100% !important;
+  /* Tarjeta de Instagram: solo una miniatura propia con botón de play,
+     sin la cabecera/perfil/likes/comentarios del widget oficial (esa
+     información no se puede quitar del embed real de Instagram, así
+     que en su lugar se enlaza limpiamente a la publicación). */
+  .card .ig-thumb{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#4c3a8f,#833ab4 45%,#c13584 75%,#fd1d1d);
+    background-size:cover;
+    background-position:center;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .card .ig-thumb .ig-play{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.45);
+    border:1.6px solid rgba(255,255,255,0.85);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .card .ig-thumb:hover .ig-play{background:rgba(0,0,0,0.65); transform:scale(1.06);}
+  .card .ig-thumb .ig-play svg{display:block; margin-left:3px;}
+  .card .ig-thumb .ig-badge{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:22px;
+    height:22px;
+    opacity:0.9;
   }
 
+  /* Título superpuesto sobre el propio vídeo con un degradado, en vez
+     de una cajetilla blanca aparte: se integra mejor con la imagen. */
   .card-body{
-    padding:6px 9px 8px;
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:2;
+    padding:20px 10px 8px;
+    background:linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.5) 55%, rgba(0,0,0,0) 100%);
+    pointer-events:none;
   }
   .card-title{
     display:block;
     font-family:'Archivo', sans-serif;
     font-weight:700;
     font-stretch:75%;
-    font-size:11.5px;
+    font-size:12.5px;
     letter-spacing:-0.005em;
     line-height:1.25;
+    color:#fff;
+    text-shadow:0 1px 3px rgba(0,0,0,0.5);
     margin-bottom:1px;
   }
   .card-tag{
     display:inline-block;
-    font-size:8px;
+    font-size:8.5px;
     font-weight:700;
     letter-spacing:0.04em;
     text-transform:uppercase;
-    color:rgba(0,0,0,0.5);
+    color:rgba(255,255,255,0.75);
   }
 
   /* Controles de administración (elegir portada / reordenar): solo
@@ -260,6 +292,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin:6px;
   }
   body.is-admin .admin-row{
+    position:relative;
+    z-index:5;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -293,11 +327,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .contact a{color:var(--ink);}
 
   @media (max-width:900px){
-    .grid{column-count:2;}
+    .grid{grid-template-columns:repeat(2, 1fr);}
   }
   @media (max-width:600px){
     .panel{padding:20px;}
-    .grid{column-count:1;}
+    .grid{grid-template-columns:1fr;}
   }
 
   a:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
@@ -568,21 +602,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return m ? m[1] : null;
   }
 
-  var igEmbedRequested = false;
-  function ensureInstagramEmbed() {
-    if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); return; }
-    if (igEmbedRequested) return;
-    igEmbedRequested = true;
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.instagram.com/embed.js';
-    s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
-    document.body.appendChild(s);
-  }
+  var IG_PLAY_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>';
+  var IG_BADGE_SVG = '<svg class="ig-badge" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="#fff" stroke="none"/></svg>';
 
   function buildPlayers() {
-    var hasInstagram = false;
-
     document.querySelectorAll('#videoGrid .card').forEach(function (card) {
       var link = card.querySelector('.video-src-link');
       var mediaEl = card.querySelector('.media');
@@ -592,29 +615,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!url) { card.style.display = 'none'; return; }
 
       mediaEl.innerHTML = '';
-      mediaEl.classList.remove('is-portrait');
 
       if (/instagram\.com/.test(url)) {
-        hasInstagram = true;
-        // Los reels y la mayoría de publicaciones de Instagram son
-        // verticales: se usa la caja 4:5 y el iframe que genera el
-        // propio widget se fuerza (por CSS) a rellenarla entera.
-        mediaEl.classList.add('is-portrait');
-        var bq = document.createElement('blockquote');
-        bq.className = 'instagram-media ig-embed';
-        bq.setAttribute('data-instgrm-permalink', url);
-        bq.setAttribute('data-instgrm-version', '14');
-        bq.style.margin = '0';
-        bq.style.background = '#fff';
-        bq.style.border = '0';
-        bq.style.width = '100%';
-        var fallbackLink = document.createElement('a');
-        fallbackLink.href = url;
-        fallbackLink.target = '_blank';
-        fallbackLink.rel = 'noopener';
-        fallbackLink.textContent = 'Ver en Instagram';
-        bq.appendChild(fallbackLink);
-        mediaEl.appendChild(bq);
+        // El widget oficial de Instagram siempre incluye cabecera de
+        // perfil, likes y comentarios (no se puede quitar), así que en
+        // vez de "embeberlo" recortado y feo se muestra una miniatura
+        // propia (la portada elegida en /admin, o un fondo de marca) con
+        // un botón de play que abre el vídeo real en Instagram.
+        var a = document.createElement('a');
+        a.className = 'ig-thumb';
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.setAttribute('aria-label', 'Ver en Instagram');
+        var posterSrc = posterImg ? posterImg.getAttribute('src') : '';
+        if (posterSrc) a.style.backgroundImage = 'url(' + posterSrc + ')';
+        a.innerHTML = IG_BADGE_SVG + '<span class="ig-play">' + IG_PLAY_SVG + '</span>';
+        mediaEl.appendChild(a);
         return;
       }
 
@@ -633,20 +650,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       video.controls = true;
       video.preload = 'metadata';
       video.playsInline = true;
-      var posterSrc = posterImg ? posterImg.getAttribute('src') : '';
-      if (posterSrc) video.poster = posterSrc;
+      var posterSrc2 = posterImg ? posterImg.getAttribute('src') : '';
+      if (posterSrc2) video.poster = posterSrc2;
       video.src = url;
-      // El vídeo va recortado con object-fit:cover dentro de una caja
-      // fija (16:9 u horizontal por defecto); si sus dimensiones reales
-      // son verticales, se cambia a la caja 4:5 en cuanto se conocen.
-      video.addEventListener('loadedmetadata', function () {
-        if (video.videoHeight > video.videoWidth) mediaEl.classList.add('is-portrait');
-        else mediaEl.classList.remove('is-portrait');
-      });
       mediaEl.appendChild(video);
     });
-
-    if (hasInstagram) ensureInstagramEmbed();
   }
 
   // Expuesta para que /admin pueda reconstruir el reproductor de las
