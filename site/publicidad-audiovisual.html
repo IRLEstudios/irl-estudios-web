@@ -184,6 +184,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     border:none;
     background:#000;
   }
+  /* En la tarjeta se recorta con cover para que todas las cajas midan
+     igual, pero al entrar en pantalla completa (p. ej. un vídeo
+     vertical como "Tank x Akoni") debe verse con su formato original,
+     sin recortar. */
+  .card .media video:fullscreen,
+  .card .media video:-webkit-full-screen{
+    object-fit:contain;
+    background:#000;
+  }
   .card .media iframe{
     display:block;
     width:100%;
