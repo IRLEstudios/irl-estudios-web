@@ -104,7 +104,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     padding:28px;
     pointer-events:none;
   }
-  .col{width:min(1180px, 96vw); pointer-events:auto;}
+  .col{width:min(1400px, 96vw); pointer-events:auto;}
 
   .back{
     display:inline-block;
@@ -138,8 +138,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .intro{
     font-size:13px;
     line-height:1.6;
-    max-width:75ch;
+    max-width:none;
     margin-top:10px;
+    text-align:justify;
+    text-justify:inter-word;
   }
   .intro b{font-weight:700;}
   .intro a{color:var(--ink);}
@@ -148,8 +150,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
-    gap:16px;
+    grid-template-columns:repeat(3, 1fr);
+    align-items:start;
+    gap:26px 24px;
   }
 
   .card{
@@ -161,16 +164,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     flex-direction:column;
     position:relative;
   }
+  /* Cada tarjeta respeta el formato propio de su vídeo (horizontal,
+     vertical o cuadrado) en vez de forzar un 16:9 que recorta o
+     deforma el contenido. */
   .card .media{
     position:relative;
     width:100%;
-    aspect-ratio:16/9;
     background:#000;
+    display:flex;
   }
-  .card video, .card iframe{
+  .card .media video{
     display:block;
     width:100%;
-    height:100%;
+    height:auto;
+    border:none;
+    background:#000;
+  }
+  .card .media iframe{
+    display:block;
+    width:100%;
+    aspect-ratio:16/9;
+    height:auto;
     border:none;
     background:#000;
   }
@@ -189,47 +203,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .card .media video::-webkit-media-controls-start-playback-button{opacity:1;}
 
-  .card .ig-media{
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#405de6,#5851db 25%,#833ab4 50%,#c13584 75%,#fd1d1d);
-  }
-  .card .ig-media a{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:#fff;
-    text-decoration:none;
-    font-family:'Inter Tight', sans-serif;
-    font-weight:700;
-    font-size:10.5px;
-    letter-spacing:0.03em;
-    text-transform:uppercase;
-    border:1.6px solid rgba(255,255,255,0.8);
-    border-radius:8px;
-    padding:9px 14px;
-  }
-  .card .ig-media a:hover{background:rgba(255,255,255,0.15);}
+  /* Embed nativo de Instagram (reel o publicación): se reprocesa con
+     window.instgrm.Embeds.process() tras insertarlo, y él mismo ajusta
+     su propio ancho/alto al formato real del contenido. */
+  .card .ig-embed{width:100%; min-height:180px;}
+  .card .ig-embed iframe{width:100% !important;}
 
   .card-body{
-    padding:8px 10px 10px;
+    padding:10px 12px 12px;
   }
   .card-title{
     display:block;
     font-family:'Archivo', sans-serif;
     font-weight:700;
     font-stretch:75%;
-    font-size:12px;
+    font-size:14px;
     letter-spacing:-0.005em;
     line-height:1.25;
-    margin-bottom:1px;
+    margin-bottom:2px;
   }
   .card-tag{
     display:inline-block;
-    font-size:8.5px;
+    font-size:9.5px;
     font-weight:700;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -281,11 +276,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .contact a{color:var(--ink);}
 
-  @media (max-width:600px){
-    .panel{padding:20px;}
+  @media (max-width:900px){
     .grid{grid-template-columns:1fr 1fr;}
   }
-  @media (max-width:420px){
+  @media (max-width:600px){
+    .panel{padding:20px;}
     .grid{grid-template-columns:1fr;}
   }
 
@@ -529,7 +524,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 (function () {
   // Construye el reproductor de cada tarjeta (vídeo propio, embed de
-  // YouTube o tarjeta de Instagram) a partir de la URL guardada en
+  // YouTube o embed nativo de Instagram) a partir de la URL guardada en
   // [data-key-href="video_N_src"], una vez el contenido editable desde
   // /admin ya se ha aplicado (evento irl:content-ready de content-loader.js).
   function youtubeId(url) {
@@ -537,7 +532,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return m ? m[1] : null;
   }
 
+  var igEmbedRequested = false;
+  function ensureInstagramEmbed() {
+    if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); return; }
+    if (igEmbedRequested) return;
+    igEmbedRequested = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.instagram.com/embed.js';
+    s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+    document.body.appendChild(s);
+  }
+
   function buildPlayers() {
+    var hasInstagram = false;
+
     document.querySelectorAll('#videoGrid .card').forEach(function (card) {
       var link = card.querySelector('.video-src-link');
       var mediaEl = card.querySelector('.media');
@@ -549,15 +558,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       mediaEl.innerHTML = '';
 
       if (/instagram\.com/.test(url)) {
-        var wrap = document.createElement('div');
-        wrap.className = 'ig-media';
-        var a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = /\/reel\//.test(url) ? 'Ver Reel en Instagram' : 'Ver publicación en Instagram';
-        wrap.appendChild(a);
-        mediaEl.appendChild(wrap);
+        hasInstagram = true;
+        var bq = document.createElement('blockquote');
+        bq.className = 'instagram-media ig-embed';
+        bq.setAttribute('data-instgrm-permalink', url);
+        bq.setAttribute('data-instgrm-version', '14');
+        bq.style.margin = '0';
+        bq.style.background = '#fff';
+        bq.style.border = '0';
+        bq.style.width = '100%';
+        var fallbackLink = document.createElement('a');
+        fallbackLink.href = url;
+        fallbackLink.target = '_blank';
+        fallbackLink.rel = 'noopener';
+        fallbackLink.textContent = 'Ver en Instagram';
+        bq.appendChild(fallbackLink);
+        mediaEl.appendChild(bq);
         return;
       }
 
@@ -581,6 +597,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       video.src = url;
       mediaEl.appendChild(video);
     });
+
+    if (hasInstagram) ensureInstagramEmbed();
   }
 
   // Expuesta para que /admin pueda reconstruir el reproductor de las
