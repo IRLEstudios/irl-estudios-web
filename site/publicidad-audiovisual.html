@@ -148,43 +148,50 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .divider{border-top:1px solid var(--line-light); margin:22px 0;}
 
+  /* Galería tipo "masonry" (columnas de ancho fijo, altura libre) en vez
+     de una cuadrícula rígida: así los vídeos verticales y horizontales
+     conviven ordenados sin dejar huecos, parecido a un portfolio. Dentro
+     de cada columna, todos los vídeos horizontales comparten la MISMA
+     caja 16:9 y todos los verticales la MISMA caja 4:5 (recortados con
+     object-fit:cover), para que se vean uniformes entre sí. */
   .grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    align-items:start;
-    gap:26px 24px;
+    column-count:3;
+    column-gap:22px;
+  }
+  .grid .card{
+    break-inside:avoid;
+    -webkit-column-break-inside:avoid;
+    margin-bottom:22px;
   }
 
   .card{
     background:#fff;
     border:1.6px solid rgba(0,0,0,0.6);
-    border-radius:11px;
+    border-radius:10px;
     overflow:hidden;
-    display:flex;
-    flex-direction:column;
+    display:block;
     position:relative;
   }
-  /* Cada tarjeta respeta el formato propio de su vídeo (horizontal,
-     vertical o cuadrado) en vez de forzar un 16:9 que recorta o
-     deforma el contenido. */
   .card .media{
     position:relative;
     width:100%;
     background:#000;
-    display:flex;
+    overflow:hidden;
+    aspect-ratio:16/9;
   }
+  .card .media.is-portrait{aspect-ratio:4/5;}
   .card .media video{
     display:block;
     width:100%;
-    height:auto;
+    height:100%;
+    object-fit:cover;
     border:none;
     background:#000;
   }
   .card .media iframe{
     display:block;
     width:100%;
-    aspect-ratio:16/9;
-    height:auto;
+    height:100%;
     border:none;
     background:#000;
   }
@@ -203,28 +210,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .card .media video::-webkit-media-controls-start-playback-button{opacity:1;}
 
-  /* Embed nativo de Instagram (reel o publicación): se reprocesa con
-     window.instgrm.Embeds.process() tras insertarlo, y él mismo ajusta
-     su propio ancho/alto al formato real del contenido. */
-  .card .ig-embed{width:100%; min-height:180px;}
-  .card .ig-embed iframe{width:100% !important;}
+  /* Embed nativo de Instagram (reel o publicación): se fuerza a rellenar
+     por completo la caja 4:5 del vídeo (en vez de quedarse en la caja
+     pequeña con cabecera/pie que trae por defecto el widget de Instagram). */
+  .card .ig-embed{position:absolute; inset:0; width:100%; height:100%; overflow:hidden;}
+  .card .ig-embed iframe{
+    position:absolute !important;
+    top:50% !important;
+    left:50% !important;
+    transform:translate(-50%,-50%) !important;
+    width:100% !important;
+    height:100% !important;
+    min-width:100% !important;
+    min-height:100% !important;
+  }
 
   .card-body{
-    padding:10px 12px 12px;
+    padding:6px 9px 8px;
   }
   .card-title{
     display:block;
     font-family:'Archivo', sans-serif;
     font-weight:700;
     font-stretch:75%;
-    font-size:14px;
+    font-size:11.5px;
     letter-spacing:-0.005em;
     line-height:1.25;
-    margin-bottom:2px;
+    margin-bottom:1px;
   }
   .card-tag{
     display:inline-block;
-    font-size:9.5px;
+    font-size:8px;
     font-weight:700;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -277,11 +293,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .contact a{color:var(--ink);}
 
   @media (max-width:900px){
-    .grid{grid-template-columns:1fr 1fr;}
+    .grid{column-count:2;}
   }
   @media (max-width:600px){
     .panel{padding:20px;}
-    .grid{grid-template-columns:1fr;}
+    .grid{column-count:1;}
   }
 
   a:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
@@ -512,6 +528,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <a class="video-src-link" data-key-href="video_19_src" href="https://www.instagram.com/p/CGFPHi8K2-T/"></a>
         </div>
 
+        <div class="card" data-slot="20">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_20_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_20_title">Vídeo carnet jove 2026</span>
+            <span class="card-tag" data-key="video_20_tag">Spot institucional</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_20_src" href="https://www.youtube.com/watch?v=yylYgQ8J_Ag"></a>
+        </div>
+
+        <div class="card" data-slot="21">
+          <div class="admin-row"><span class="admin-row-label">Portada</span><span class="poster-picker-wrap"><img class="poster-picker" data-key-src="video_21_poster" src="" alt="Portada del vídeo"></span></div>
+          <div class="media"></div>
+          <div class="card-body">
+            <span class="card-title" data-key="video_21_title">Nissan Micra x Aitana Bonmatí</span>
+            <span class="card-tag" data-key="video_21_tag">Spot publicitario</span>
+          </div>
+          <a class="video-src-link" data-key-href="video_21_src" href="https://www.youtube.com/watch?v=8gMiAnLGXok"></a>
+        </div>
+
       </div>
 
       <p class="contact" data-key-html="contact_html">Para más info escríbenos a nuestro mail: <a href="mailto:irlestudiosmadrid@gmail.com">irlestudiosmadrid@gmail.com</a> · o síguenos en <a href="https://www.instagram.com/irl_estudios/" target="_blank" rel="noopener">Instagram</a></p>
@@ -556,9 +592,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!url) { card.style.display = 'none'; return; }
 
       mediaEl.innerHTML = '';
+      mediaEl.classList.remove('is-portrait');
 
       if (/instagram\.com/.test(url)) {
         hasInstagram = true;
+        // Los reels y la mayoría de publicaciones de Instagram son
+        // verticales: se usa la caja 4:5 y el iframe que genera el
+        // propio widget se fuerza (por CSS) a rellenarla entera.
+        mediaEl.classList.add('is-portrait');
         var bq = document.createElement('blockquote');
         bq.className = 'instagram-media ig-embed';
         bq.setAttribute('data-instgrm-permalink', url);
@@ -595,6 +636,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var posterSrc = posterImg ? posterImg.getAttribute('src') : '';
       if (posterSrc) video.poster = posterSrc;
       video.src = url;
+      // El vídeo va recortado con object-fit:cover dentro de una caja
+      // fija (16:9 u horizontal por defecto); si sus dimensiones reales
+      // son verticales, se cambia a la caja 4:5 en cuanto se conocen.
+      video.addEventListener('loadedmetadata', function () {
+        if (video.videoHeight > video.videoWidth) mediaEl.classList.add('is-portrait');
+        else mediaEl.classList.remove('is-portrait');
+      });
       mediaEl.appendChild(video);
     });
 
