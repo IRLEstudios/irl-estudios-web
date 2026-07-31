@@ -222,11 +222,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(0,0,0,0.15);
+    background:rgba(0,0,0,0);
     border:none;
     padding:0;
     cursor:pointer;
+    opacity:0;
     transition:opacity .15s ease, background .15s ease;
+  }
+  .media:hover .v-play, .v-play:focus-visible{
+    opacity:1;
+    background:rgba(0,0,0,0.15);
   }
   .v-play:hover{background:rgba(0,0,0,0.3);}
   .v-play-circle{
