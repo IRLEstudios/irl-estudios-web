@@ -81,17 +81,20 @@
   function showCookieBanner() {
     if (document.getElementById('irl-cookie-modal')) return;
 
+    // Fondo sin oscurecer ni desenfocar la página (no bloquea la lectura
+    // de lo que hay detrás): solo la tarjeta central es interactiva.
     var backdrop = document.createElement('div');
     backdrop.id = 'irl-cookie-modal';
     backdrop.style.cssText = 'position:fixed;inset:0;z-index:9999;' +
-      'background:rgba(0,0,0,0.6);backdrop-filter:blur(2px);' +
+      'pointer-events:none;' +
       'display:flex;align-items:center;justify-content:center;padding:20px;';
 
     var modal = document.createElement('div');
-    modal.style.cssText = 'width:min(400px, 100%);background:#eaeaea;color:#232323;' +
+    modal.style.cssText = 'width:min(400px, 100%);pointer-events:auto;' +
+      'background:rgba(234,234,234,0.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#232323;' +
       'border:1.6px solid rgba(0,0,0,0.15);border-radius:12.8px;padding:24px;' +
       'font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;' +
-      'box-shadow:0 20px 60px rgba(0,0,0,0.45);';
+      'box-shadow:0 20px 60px rgba(0,0,0,0.35);';
     modal.innerHTML =
       '<p style="font-size:13.5px;font-weight:700;margin-bottom:8px;">🍪 Usamos cookies</p>' +
       '<p style="font-size:12.5px;line-height:1.6;color:rgba(0,0,0,0.75);margin-bottom:18px;">Las usamos para saber cómo nos encontráis y mejorar la web. Puedes aceptarlas o rechazarlas cuando quieras.</p>' +
@@ -224,7 +227,29 @@
     }
   });
 
-  if (!page) return;
+  // La pregunta "¿Dónde se encuentra el estudio?" tiene que estar
+  // siempre dentro de "Preguntas frecuentes" en las páginas de curso,
+  // aunque el contenido de ese bloque venga ya guardado en Blob desde
+  // antes de añadirla (en cuyo caso sobrescribiría el HTML nuevo). Si
+  // no está, se añade aquí mismo tras cargar el contenido.
+  function ensureLocationFaqItem() {
+    document.querySelectorAll('.faq-wrap[data-key-html] .faq-main-body').forEach(function (body) {
+      var already = Array.prototype.some.call(
+        body.querySelectorAll('.faq-item-toggle span'),
+        function (span) { return span.textContent.trim() === '¿Dónde se encuentra el estudio?'; }
+      );
+      if (already) return;
+
+      var item = document.createElement('div');
+      item.className = 'faq-item';
+      item.innerHTML =
+        '<button type="button" class="faq-item-toggle" aria-expanded="false"><span>¿Dónde se encuentra el estudio?</span><span class="faq-chevron">+</span></button>' +
+        '<div class="faq-item-body"><p>El estudio está en Calle Lenguas 14, en el barrio de Villaverde Alto (Madrid).</p></div>';
+      body.appendChild(item);
+    });
+  }
+
+  if (!page) { ensureLocationFaqItem(); return; }
 
   fetch('/api/content?page=' + encodeURIComponent(page), { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -294,6 +319,8 @@
       document.querySelectorAll('[data-key-left]').forEach(function (el) {
         el.style.opacity = '1';
       });
+
+      ensureLocationFaqItem();
 
       // Avisa (éxito o fallo) de que ya se terminó de intentar aplicar el
       // contenido remoto. Lo usa el editor visual del admin para saber
