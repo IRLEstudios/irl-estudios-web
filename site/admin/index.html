@@ -205,6 +205,10 @@
       <div class="sidebar-sep"></div>
       <div class="sidebar-section-label">Inscripciones</div>
       <button id="leadsNavButton">📋 Leads</button>
+      <button id="softLeadsNavButton">🌱 Leads suaves</button>
+      <div class="sidebar-sep"></div>
+      <div class="sidebar-section-label">Cookies</div>
+      <button id="cookiesNavButton">🍪 Aceptación</button>
     </div>
     <div class="content" id="pageEditorContent">
       <div class="hint-bar">Vista previa en vivo: haz clic directamente sobre cualquier texto para editarlo, o sobre una imagen para cambiarla. Así se verá en la web real.</div>
@@ -220,6 +224,7 @@
     </div>
     <div class="leads-view" id="leadsView" style="display:none;">
       <div class="leads-toolbar">
+        <span id="leadsTitle" style="font-weight:700; font-size:13px;">Leads</span>
         <button id="leadsRefreshButton">Actualizar</button>
         <button class="secondary" id="leadsExportButton">Exportar CSV</button>
         <span class="status" id="leadsStatus"></span>
@@ -227,6 +232,14 @@
       <div class="leads-table-wrap" id="leadsTableWrap">
         <div class="leads-empty">Cargando...</div>
       </div>
+    </div>
+    <div class="leads-view" id="cookiesView" style="display:none;">
+      <div class="leads-toolbar">
+        <span style="font-weight:700; font-size:13px;">Aceptación de cookies</span>
+        <button id="cookiesRefreshButton">Actualizar</button>
+        <span class="status" id="cookiesStatus"></span>
+      </div>
+      <div id="cookiesStatsWrap" style="padding:24px; color:rgba(255,255,255,0.8); font-size:13px;">Cargando...</div>
     </div>
   </div>
 </div>
@@ -1159,24 +1172,30 @@ document.getElementById('discardButton').onclick = function () {
   loadPage(currentSlug, null);
 };
 
-// ---------- Pestaña de Leads (inscripciones del formulario) ----------
+// ---------- Pestañas de Leads / Leads suaves (inscripciones del formulario) ----------
 
 function showPageEditorView() {
   document.getElementById('leadsView').style.display = 'none';
+  document.getElementById('cookiesView').style.display = 'none';
   document.getElementById('pageEditorContent').style.display = 'flex';
 }
 
-function showLeadsView() {
+var currentLeadsFilter = 'lead_completo';
+var allLeads = [];
+
+function showLeadsView(filter) {
+  currentLeadsFilter = filter;
   document.querySelectorAll('.sidebar button').forEach(function (b) { b.classList.remove('active'); });
-  document.getElementById('leadsNavButton').classList.add('active');
+  document.getElementById(filter === 'lead_suave' ? 'softLeadsNavButton' : 'leadsNavButton').classList.add('active');
   document.getElementById('pageEditorContent').style.display = 'none';
+  document.getElementById('cookiesView').style.display = 'none';
   document.getElementById('leadsView').style.display = 'flex';
+  document.getElementById('leadsTitle').textContent = filter === 'lead_suave' ? 'Leads suaves' : 'Leads (inscripciones completas)';
   loadLeads();
 }
 
-var LEADS_COLUMNS = [
+var LEADS_COLUMNS_FULL = [
   { key: 'fecha', label: 'Fecha' },
-  { key: 'tipo', label: 'Tipo' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'email', label: 'Email' },
   { key: 'curso', label: 'Curso' },
@@ -1187,6 +1206,18 @@ var LEADS_COLUMNS = [
   { key: 'comentarios', label: 'Comentarios' },
   { key: 'origen', label: 'Origen' }
 ];
+
+var LEADS_COLUMNS_SOFT = [
+  { key: 'fecha', label: 'Fecha' },
+  { key: 'nombre', label: 'Nombre' },
+  { key: 'email', label: 'Email' },
+  { key: 'curso', label: 'Curso' },
+  { key: 'origen', label: 'Origen' }
+];
+
+function currentLeadsColumns() {
+  return currentLeadsFilter === 'lead_suave' ? LEADS_COLUMNS_SOFT : LEADS_COLUMNS_FULL;
+}
 
 function loadLeads() {
   var wrap = document.getElementById('leadsTableWrap');
@@ -1202,8 +1233,9 @@ function loadLeads() {
         status.textContent = '';
         return;
       }
-      currentLeads = result.body.leads || [];
-      status.textContent = currentLeads.length + ' inscripcion' + (currentLeads.length === 1 ? '' : 'es');
+      allLeads = result.body.leads || [];
+      currentLeads = allLeads.filter(function (l) { return (l.tipo || 'lead_completo') === currentLeadsFilter; });
+      status.textContent = currentLeads.length + ' resultado' + (currentLeads.length === 1 ? '' : 's');
       renderLeadsTable(currentLeads);
     })
     .catch(function () {
@@ -1219,12 +1251,13 @@ function renderLeadsTable(leads) {
     return;
   }
 
+  var columns = currentLeadsColumns();
   var table = document.createElement('table');
   table.className = 'leads-table';
 
   var thead = document.createElement('thead');
   var headRow = document.createElement('tr');
-  LEADS_COLUMNS.forEach(function (col) {
+  columns.forEach(function (col) {
     var th = document.createElement('th');
     th.textContent = col.label;
     headRow.appendChild(th);
@@ -1236,7 +1269,7 @@ function renderLeadsTable(leads) {
   var tbody = document.createElement('tbody');
   leads.forEach(function (lead) {
     var tr = document.createElement('tr');
-    LEADS_COLUMNS.forEach(function (col) {
+    columns.forEach(function (col) {
       var td = document.createElement('td');
       var value = lead[col.key] || '';
       if (col.key === 'fecha' && value) {
@@ -1280,7 +1313,7 @@ function deleteLead(lead, btn) {
     .then(function (result) {
       if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al borrar');
       currentLeads = currentLeads.filter(function (l) { return l._blobUrl !== lead._blobUrl; });
-      document.getElementById('leadsStatus').textContent = currentLeads.length + ' inscripcion' + (currentLeads.length === 1 ? '' : 'es');
+      document.getElementById('leadsStatus').textContent = currentLeads.length + ' resultado' + (currentLeads.length === 1 ? '' : 's');
       renderLeadsTable(currentLeads);
     })
     .catch(function () {
@@ -1298,8 +1331,9 @@ function csvEscape(value) {
 
 function exportLeadsCSV() {
   if (!currentLeads.length) return;
-  var keys = LEADS_COLUMNS.map(function (c) { return c.key; });
-  var rows = [LEADS_COLUMNS.map(function (c) { return csvEscape(c.label); }).join(',')];
+  var columns = currentLeadsColumns();
+  var keys = columns.map(function (c) { return c.key; });
+  var rows = [columns.map(function (c) { return csvEscape(c.label); }).join(',')];
   currentLeads.forEach(function (lead) {
     rows.push(keys.map(function (key) { return csvEscape(lead[key]); }).join(','));
   });
@@ -1309,7 +1343,7 @@ function exportLeadsCSV() {
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'leads-irl-estudios-' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.download = (currentLeadsFilter === 'lead_suave' ? 'leads-suaves-' : 'leads-') + 'irl-estudios-' + new Date().toISOString().slice(0, 10) + '.csv';
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -1320,10 +1354,67 @@ document.getElementById('leadsNavButton').onclick = function () {
   if (hasUnsavedChanges() && !confirm('Tienes cambios sin guardar en esta página. ¿Seguro que quieres salir sin guardarlos?')) {
     return;
   }
-  showLeadsView();
+  showLeadsView('lead_completo');
+};
+document.getElementById('softLeadsNavButton').onclick = function () {
+  if (hasUnsavedChanges() && !confirm('Tienes cambios sin guardar en esta página. ¿Seguro que quieres salir sin guardarlos?')) {
+    return;
+  }
+  showLeadsView('lead_suave');
 };
 document.getElementById('leadsRefreshButton').onclick = loadLeads;
 document.getElementById('leadsExportButton').onclick = exportLeadsCSV;
+
+// ---------- Pestaña de aceptación de cookies ----------
+
+function showCookiesView() {
+  document.querySelectorAll('.sidebar button').forEach(function (b) { b.classList.remove('active'); });
+  document.getElementById('cookiesNavButton').classList.add('active');
+  document.getElementById('pageEditorContent').style.display = 'none';
+  document.getElementById('leadsView').style.display = 'none';
+  document.getElementById('cookiesView').style.display = 'flex';
+  loadCookiesStats();
+}
+
+function loadCookiesStats() {
+  var wrap = document.getElementById('cookiesStatsWrap');
+  var status = document.getElementById('cookiesStatus');
+  status.textContent = 'Cargando...';
+  wrap.textContent = 'Cargando...';
+
+  fetch('/api/consent')
+    .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
+    .then(function (result) {
+      status.textContent = '';
+      if (!result.ok) {
+        wrap.textContent = (result.body && result.body.error) || 'Error al cargar los datos.';
+        return;
+      }
+      var d = result.body;
+      if (!d.total) {
+        wrap.textContent = 'Todavía no hay datos de aceptación de cookies.';
+        return;
+      }
+      wrap.innerHTML =
+        '<div style="display:flex; gap:24px; flex-wrap:wrap;">' +
+          '<div><div style="font-size:28px; font-weight:700; color:#c8ff3d;">' + d.granted + '</div><div>Aceptadas (' + d.granted_pct + '%)</div></div>' +
+          '<div><div style="font-size:28px; font-weight:700; color:#ff6b6b;">' + d.denied + '</div><div>Rechazadas (' + d.denied_pct + '%)</div></div>' +
+          '<div><div style="font-size:28px; font-weight:700;">' + d.total + '</div><div>Total de respuestas</div></div>' +
+        '</div>';
+    })
+    .catch(function () {
+      status.textContent = '';
+      wrap.textContent = 'Error de conexión al cargar los datos.';
+    });
+}
+
+document.getElementById('cookiesNavButton').onclick = function () {
+  if (hasUnsavedChanges() && !confirm('Tienes cambios sin guardar en esta página. ¿Seguro que quieres salir sin guardarlos?')) {
+    return;
+  }
+  showCookiesView();
+};
+document.getElementById('cookiesRefreshButton').onclick = loadCookiesStats;
 
 window.addEventListener('beforeunload', function (e) {
   if (hasUnsavedChanges()) { e.preventDefault(); e.returnValue = ''; }

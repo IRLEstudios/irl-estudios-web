@@ -65,41 +65,52 @@
     }
   }
 
+  // Registro propio (best-effort, no bloquea la interacción) de cuántas
+  // personas aceptan/rechazan las cookies, para poder verlo en /admin.
+  function logConsentChoice(granted) {
+    try {
+      fetch('/api/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ choice: granted ? 'granted' : 'denied', pagina: (document.body.getAttribute('data-page') || '') }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   function showCookieBanner() {
-    if (document.getElementById('irl-cookie-banner')) return;
+    if (document.getElementById('irl-cookie-modal')) return;
 
-    // Alinea el hueco derecho del banner con el margen que usa el panel
-    // principal de cada página (28px en escritorio, 16px en móvil, igual
-    // que .wrap), para que "Rechazar" termine justo donde termina el panel.
-    var bannerStyle = document.createElement('style');
-    bannerStyle.textContent =
-      '#irl-cookie-banner{padding:16px 28px;}' +
-      '@media (max-width:700px){#irl-cookie-banner{padding:16px;}}';
-    document.head.appendChild(bannerStyle);
+    var backdrop = document.createElement('div');
+    backdrop.id = 'irl-cookie-modal';
+    backdrop.style.cssText = 'position:fixed;inset:0;z-index:9999;' +
+      'background:rgba(0,0,0,0.6);backdrop-filter:blur(2px);' +
+      'display:flex;align-items:center;justify-content:center;padding:20px;';
 
-    var banner = document.createElement('div');
-    banner.id = 'irl-cookie-banner';
-    banner.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;' +
-      'background:transparent;color:#fff;' +
-      'display:flex;flex-wrap:wrap;gap:14px;align-items:center;' +
-      'justify-content:space-between;font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;' +
-      'font-size:12.5px;line-height:1.5;text-shadow:0 1px 4px rgba(0,0,0,0.6);' +
-      'overflow-x:auto;';
-    banner.innerHTML =
-      '<span style="white-space:nowrap;">Usamos cookies para saber cómo nos encontráis y mejorar la web.</span>' +
-      '<span style="display:flex;gap:16px;align-items:center;flex-shrink:0;">' +
-        '<button id="irl-cookie-accept" style="font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#fff;color:#232323;border:none;border-radius:9.6px;padding:9px 16px;cursor:pointer;text-shadow:none;">Aceptar</button>' +
-        '<button id="irl-cookie-reject" style="font-family:inherit;font-size:10px;font-weight:400;letter-spacing:0.03em;text-transform:uppercase;background:transparent;color:#fff;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-shadow:inherit;">Rechazar</button>' +
-      '</span>';
-    document.body.appendChild(banner);
+    var modal = document.createElement('div');
+    modal.style.cssText = 'width:min(400px, 100%);background:#eaeaea;color:#232323;' +
+      'border:1.6px solid rgba(0,0,0,0.15);border-radius:12.8px;padding:24px;' +
+      'font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;' +
+      'box-shadow:0 20px 60px rgba(0,0,0,0.45);';
+    modal.innerHTML =
+      '<p style="font-size:13.5px;font-weight:700;margin-bottom:8px;">🍪 Usamos cookies</p>' +
+      '<p style="font-size:12.5px;line-height:1.6;color:rgba(0,0,0,0.75);margin-bottom:18px;">Las usamos para saber cómo nos encontráis y mejorar la web. Puedes aceptarlas o rechazarlas cuando quieras.</p>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+        '<button id="irl-cookie-accept" style="flex:1;min-width:120px;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:#232323;color:#eaeaea;border:1.6px solid #232323;border-radius:9.6px;padding:11px 16px;cursor:pointer;">Aceptar</button>' +
+        '<button id="irl-cookie-reject" style="flex:1;min-width:120px;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;background:transparent;color:#232323;border:1.6px solid rgba(0,0,0,0.3);border-radius:9.6px;padding:11px 16px;cursor:pointer;">Rechazar</button>' +
+      '</div>';
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
 
     document.getElementById('irl-cookie-accept').addEventListener('click', function () {
       updateConsent(true);
-      banner.remove();
+      logConsentChoice(true);
+      backdrop.remove();
     });
     document.getElementById('irl-cookie-reject').addEventListener('click', function () {
       updateConsent(false);
-      banner.remove();
+      logConsentChoice(false);
+      backdrop.remove();
     });
   }
 
