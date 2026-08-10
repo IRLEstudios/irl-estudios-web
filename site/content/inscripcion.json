@@ -18,5 +18,6 @@
   "label_comentarios": "¿Algo más que quieras añadir?",
   "submit_label": "Enviar inscripción",
   "success_title": "¡Nos vemos en el estudio!",
-  "success_text": "Hemos recibido tu inscripción. Te contactaremos en breve a través del email que nos has dado con los siguientes pasos."
+  "success_text": "Hemos recibido tu inscripción. Te contactaremos en breve a través del email que nos has dado con los siguientes pasos.",
+  "hint_dni": "Lo necesitamos para emitir la factura del curso"
 }
