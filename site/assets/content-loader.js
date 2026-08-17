@@ -267,6 +267,10 @@
         var key = el.getAttribute('data-key-html');
         if (Object.prototype.hasOwnProperty.call(data, key)) {
           el.innerHTML = data[key];
+          // Un campo guardado vacío desde /admin (o solo con un <br>) no debe
+          // dejar un hueco en blanco entre los bloques de alrededor.
+          var isEmpty = !el.textContent.replace(/ /g, ' ').trim();
+          el.style.display = isEmpty ? 'none' : '';
           // Las imágenes que vengan dentro de este bloque son nuevas para
           // el DOM: sin esto se quedarían con opacity:0 para siempre, ya
           // que el fundido inicial solo se aplicó a las imágenes que
