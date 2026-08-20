@@ -181,6 +181,32 @@
   }
   .leads-delete-btn:hover{background:rgba(179,38,30,0.08);}
   .leads-delete-btn:disabled{opacity:0.5; cursor:default;}
+  .leads-edit-btn{
+    font-family:inherit;
+    font-size:10.5px;
+    font-weight:700;
+    background:transparent;
+    color:#232323;
+    border:1.3px solid rgba(0,0,0,0.3);
+    border-radius:6px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .leads-edit-btn:hover{background:rgba(0,0,0,0.06);}
+  .leads-edit-btn:disabled{opacity:0.5; cursor:default;}
+  table.leads-table td.leads-editing-cell{white-space:normal; overflow:visible;}
+  .leads-edit-input{
+    font-family:inherit;
+    font-size:12px;
+    width:100%;
+    min-width:90px;
+    padding:4px 6px;
+    border:1.3px solid rgba(0,0,0,0.25);
+    border-radius:5px;
+    background:#fff;
+    color:inherit;
+    box-sizing:border-box;
+  }
 </style>
 </head>
 <body>
@@ -1245,6 +1271,8 @@ function loadLeads() {
     });
 }
 
+var editingLeadUrl = null;
+
 function renderLeadsTable(leads) {
   var wrap = document.getElementById('leadsTableWrap');
   if (!leads.length) {
@@ -1270,6 +1298,9 @@ function renderLeadsTable(leads) {
   var tbody = document.createElement('tbody');
   leads.forEach(function (lead) {
     var tr = document.createElement('tr');
+    var isEditing = editingLeadUrl && editingLeadUrl === lead._blobUrl;
+    var inputs = {};
+
     columns.forEach(function (col) {
       var td = document.createElement('td');
       var value = lead[col.key] || '';
@@ -1277,17 +1308,54 @@ function renderLeadsTable(leads) {
         var d = new Date(value);
         if (!isNaN(d.getTime())) value = d.toLocaleString('es-ES');
       }
-      td.textContent = value;
-      td.title = value;
+
+      if (isEditing && col.key !== 'fecha') {
+        td.className = 'leads-editing-cell';
+        var input = document.createElement('input');
+        input.className = 'leads-edit-input';
+        input.type = 'text';
+        input.value = lead[col.key] || '';
+        td.appendChild(input);
+        inputs[col.key] = input;
+      } else {
+        td.textContent = value;
+        td.title = value;
+      }
       tr.appendChild(td);
     });
 
     var actionTd = document.createElement('td');
-    var delBtn = document.createElement('button');
-    delBtn.className = 'leads-delete-btn';
-    delBtn.textContent = 'Borrar';
-    delBtn.onclick = function () { deleteLead(lead, delBtn); };
-    actionTd.appendChild(delBtn);
+    actionTd.style.whiteSpace = 'nowrap';
+
+    if (isEditing) {
+      var saveBtn = document.createElement('button');
+      saveBtn.className = 'leads-edit-btn';
+      saveBtn.textContent = 'Guardar';
+      saveBtn.onclick = function () { saveLeadEdit(lead, inputs, saveBtn); };
+
+      var cancelBtn = document.createElement('button');
+      cancelBtn.className = 'leads-delete-btn';
+      cancelBtn.textContent = 'Cancelar';
+      cancelBtn.style.marginLeft = '6px';
+      cancelBtn.onclick = function () { editingLeadUrl = null; renderLeadsTable(currentLeads); };
+
+      actionTd.appendChild(saveBtn);
+      actionTd.appendChild(cancelBtn);
+    } else {
+      var editBtn = document.createElement('button');
+      editBtn.className = 'leads-edit-btn';
+      editBtn.textContent = 'Editar';
+      editBtn.onclick = function () { editingLeadUrl = lead._blobUrl; renderLeadsTable(currentLeads); };
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'leads-delete-btn';
+      delBtn.textContent = 'Borrar';
+      delBtn.style.marginLeft = '6px';
+      delBtn.onclick = function () { deleteLead(lead, delBtn); };
+
+      actionTd.appendChild(editBtn);
+      actionTd.appendChild(delBtn);
+    }
     tr.appendChild(actionTd);
 
     tbody.appendChild(tr);
@@ -1296,6 +1364,39 @@ function renderLeadsTable(leads) {
 
   wrap.innerHTML = '';
   wrap.appendChild(table);
+}
+
+function saveLeadEdit(lead, inputs, btn) {
+  var updated = {};
+  Object.keys(lead).forEach(function (k) { if (k !== '_blobUrl') updated[k] = lead[k]; });
+  Object.keys(inputs).forEach(function (field) { updated[field] = inputs[field].value.trim(); });
+
+  if (!updated.nombre) { alert('El nombre no puede quedar vacío.'); return; }
+  if (!updated.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updated.email)) {
+    alert('Email no válido.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  fetch('/api/leads', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: lead._blobUrl, data: updated }),
+  })
+    .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+    .then(function (result) {
+      if (!result.ok) throw new Error((result.data && result.data.error) || 'Error al guardar');
+      Object.assign(lead, updated);
+      editingLeadUrl = null;
+      renderLeadsTable(currentLeads);
+    })
+    .catch(function (err) {
+      alert(err.message || 'No se pudo guardar. Inténtalo de nuevo.');
+      btn.disabled = false;
+      btn.textContent = 'Guardar';
+    });
 }
 
 function deleteLead(lead, btn) {
