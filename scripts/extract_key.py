@@ -13,6 +13,15 @@ tipo de atributo, termina con código de salida 2 y un aviso en stderr.
 import sys
 from html.parser import HTMLParser
 
+# Elementos "vacíos" de HTML que nunca llevan etiqueta de cierre. Si no se
+# excluyen aquí, cada uno de ellos incrementa la profundidad sin que nunca
+# llegue el handle_endtag que la compense, y el extractor sigue capturando
+# mucho más allá del cierre real del elemento objetivo.
+VOID_ELEMENTS = {
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr',
+}
+
 
 class KeyExtractor(HTMLParser):
     """Extrae el innerHTML de [data-key-html="target_value"]."""
@@ -32,7 +41,8 @@ class KeyExtractor(HTMLParser):
             self.depth = 1
             return
         if self.capturing:
-            self.depth += 1
+            if tag.lower() not in VOID_ELEMENTS:
+                self.depth += 1
             self.parts.append(self.get_starttag_text())
 
     def handle_startendtag(self, tag, attrs):
@@ -83,7 +93,7 @@ class AttrExtractor(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attrs_d = dict(attrs)
         if attrs_d.get(self.data_attr) != self.target_value:
-            if self.capturing_text:
+            if self.capturing_text and tag.lower() not in VOID_ELEMENTS:
                 self.depth += 1
             return
         if self.attr_name is None:
