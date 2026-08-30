@@ -51,11 +51,12 @@ while IFS=, read -r nombre email; do
 
   echo "Enviando a $nombre <$email>..."
   html="$(python3 "$SCRIPT_DIR/build_clase_muestra_email.py" "$nombre")"
+  payload_file="$TMPDIR_SEND/payload.json"
 
-  python3 - "$html" "$email" "$nombre" "$FROM_EMAIL" "$REPLY_TO" "$SUBJECT" "$API_KEY" "$TMPDIR_SEND" <<'PYEOF'
-import json, sys, urllib.request
+  python3 - "$html" "$email" "$nombre" "$FROM_EMAIL" "$REPLY_TO" "$SUBJECT" "$payload_file" <<'PYEOF'
+import json, sys
 
-html, email, nombre, from_email, reply_to, subject, api_key, tmpdir = sys.argv[1:9]
+html, email, nombre, from_email, reply_to, subject, payload_file = sys.argv[1:8]
 
 text = (
     f"Hola {nombre},\n\n"
@@ -75,7 +76,7 @@ text = (
     "Si prefieres no recibir más información sobre este curso, responde a este email y te damos de baja."
 )
 
-payload = json.dumps({
+payload = {
     "from": from_email,
     "to": [email],
     "reply_to": reply_to,
@@ -85,23 +86,16 @@ payload = json.dumps({
     "headers": {
         "List-Unsubscribe": f"<mailto:{reply_to}?subject=Baja>",
     },
-}).encode("utf-8")
-
-req = urllib.request.Request(
-    "https://api.resend.com/emails",
-    data=payload,
-    method="POST",
-    headers={
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    },
-)
-try:
-    with urllib.request.urlopen(req) as r:
-        print("  -> status:", r.status, r.read().decode("utf-8"))
-except urllib.error.HTTPError as e:
-    print("  -> ERROR status:", e.code, e.read().decode("utf-8"))
+}
+with open(payload_file, "w", encoding="utf-8") as f:
+    json.dump(payload, f, ensure_ascii=False)
 PYEOF
+
+  curl -s -X POST "https://api.resend.com/emails" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    --data-binary "@$payload_file" \
+    -w "\n  -> status: %{http_code}\n"
 
 done < "$CSV"
 
