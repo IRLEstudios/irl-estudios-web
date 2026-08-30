@@ -11,11 +11,17 @@
 # Rellena scripts/clase-muestra-leads.csv (nombre,email por fila, con
 # cabecera) antes de ejecutar. Repasa scripts/build_clase_muestra_email.py
 # si quieres cambiar el texto del email.
+#
+# Para probar antes de mandarlo a la lista real, pasa un CSV distinto como
+# primer argumento, p.ej.: send-clase-muestra.sh clase-muestra-test.csv
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CSV="$SCRIPT_DIR/clase-muestra-leads.csv"
+CSV="${1:-$SCRIPT_DIR/clase-muestra-leads.csv}"
+if [ "${1:-}" ] && [[ "$1" != /* ]]; then
+  CSV="$SCRIPT_DIR/$1"
+fi
 FROM_EMAIL="IRL Estudios <inscripciones@irlestudios.com>"
 REPLY_TO="irlestudiosmadrid@gmail.com"
 SUBJECT="Un adelanto de cómo doy clase — Producción Musical Iniciación"
