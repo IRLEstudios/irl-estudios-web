@@ -76,6 +76,9 @@ payload = json.dumps({
     "subject": subject,
     "html": html,
     "text": text,
+    "headers": {
+        "List-Unsubscribe": f"<mailto:{reply_to}?subject=Baja>",
+    },
 }).encode("utf-8")
 
 req = urllib.request.Request(
