@@ -44,7 +44,7 @@ def build_html(nombre_raw):
         f'<p style="margin:0 0 16px;{BODY_FONT}font-size:15px;line-height:1.6;color:#232323;">Hola {nombre},</p>'
         f'<p style="margin:0 0 20px;{BODY_FONT}font-size:15px;line-height:1.6;color:#232323;">Hace un tiempo dejaste tu contacto porque te interesaba el curso'
         f' <span style="display:inline-block;background:rgba(0,0,0,0.6);color:#eaeaea;{MONO_FONT}font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;border-radius:6px;padding:4px 9px;">Producción Musical Iniciación</span>'
-        '. Para que puedas hacerte una idea real de cómo son las clases grabé este vídeo para ti hablando sobre cómo entiendo la manera de enseñar y un pequeño adelanto haciendo un beat.</p>'
+        ' Para que puedas hacerte una idea real de cómo son las clases, grabé este vídeo para ti hablando sobre mi método de aprendizaje y un pequeño adelanto haciendo un beat.</p>'
 
         '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">'
         '<tr><td style="background:#232323;border-radius:9px;">'
@@ -54,7 +54,7 @@ def build_html(nombre_raw):
         f'<p style="margin:0 0 8px;{BODY_FONT}font-size:15px;line-height:1.6;color:#232323;"><b>Qué incluye el curso:</b></p>'
         f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">{bullets_html}</table>'
 
-        f'<p style="margin:0 0 20px;{BODY_FONT}font-size:15px;line-height:1.6;color:#232323;">Si quieres apuntarte, aquí tienes el link directo de inscripción:</p>'
+        f'<p style="margin:0 0 20px;{BODY_FONT}font-size:15px;line-height:1.6;color:#232323;">La próxima convocatoria empieza la semana del <b>5 de octubre</b>. Si quieres apuntarte, aquí tienes el link directo de inscripción:</p>'
 
         '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">'
         '<tr><td style="border:1.6px solid rgba(0,0,0,0.6);border-radius:9px;">'
