@@ -22,7 +22,7 @@ CSV="${1:-$SCRIPT_DIR/clase-muestra-leads.csv}"
 if [ "${1:-}" ] && [[ "$1" != /* ]]; then
   CSV="$SCRIPT_DIR/$1"
 fi
-FROM_EMAIL="IRL Estudios <inscripciones@irlestudios.com>"
+FROM_EMAIL="Alex - IRL Estudios <inscripciones@irlestudios.com>"
 REPLY_TO="irlestudiosmadrid@gmail.com"
 SUBJECT="Un adelanto de cómo doy clase — Producción Musical Iniciación"
 
@@ -83,9 +83,6 @@ payload = {
     "subject": subject,
     "html": html,
     "text": text,
-    "headers": {
-        "List-Unsubscribe": f"<mailto:{reply_to}?subject=Baja>",
-    },
 }
 with open(payload_file, "w", encoding="utf-8") as f:
     json.dump(payload, f, ensure_ascii=False)
