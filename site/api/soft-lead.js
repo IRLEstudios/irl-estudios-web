@@ -45,7 +45,8 @@ async function sendWelcomeEmail(lead) {
   ];
 
   const extraText = info.esProduccion
-    ? 'Te adjunto también la guía "Cómo detectar la tonalidad de una canción" (https://irlestudios.com/assets/blog/guia-detectar-tonalidad.pdf) — un adelanto de cómo trabajamos. Y te invito a echarle un vistazo a nuestro blog (https://irlestudios.com/blog.html), donde ya vamos dando algunas pinceladas de los temas que profundizamos en clase.\n\n'
+    ? 'Grabé un vídeo corto contándote cómo son las clases y haciendo un pequeño adelanto de un beat, para que le eches un vistazo antes de decidir: https://youtu.be/zmW5EDQQwds\n\n' +
+      'Te adjunto también la guía "Cómo detectar la tonalidad de una canción" (https://irlestudios.com/assets/blog/guia-detectar-tonalidad.pdf) — otro adelanto de cómo trabajamos. Y te invito a echarle un vistazo a nuestro blog (https://irlestudios.com/blog.html), donde ya vamos dando algunas pinceladas de los temas que profundizamos en clase.\n\n'
     : 'Te invito también a echarle un vistazo a nuestro blog (https://irlestudios.com/blog.html), donde ya vamos dando algunas pinceladas de los temas que profundizamos en clase.\n\n';
 
   const text =
@@ -54,7 +55,7 @@ async function sendWelcomeEmail(lead) {
     bullets.map((b) => `- ${b}`).join('\n') + '\n\n' +
     extraText +
     `Si tienes cualquier duda —sobre el nivel que hace falta, horarios, o lo que sea— puedes responder directamente a este email, lo leo yo mismo.\n\n` +
-    `Un abrazo,\nAlex — Turian Boy\nIRL Estudios`;
+    `¡Nos vemos en el estudio!\nAlex — Turian Boy\nIRL Estudios`;
 
   const bodyFont = "font-family:-apple-system,Helvetica,Arial,sans-serif;";
   const monoFont = "font-family:ui-monospace,'SF Mono','JetBrains Mono',Menlo,monospace;";
@@ -73,9 +74,14 @@ async function sendWelcomeEmail(lead) {
     .join('');
 
   const extraHtml = info.esProduccion
-    ? `<p style="margin:0 0 20px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Te adjunto también la guía` +
+    ? `<p style="margin:0 0 16px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Grabé un vídeo corto contándote cómo son las clases y haciendo un pequeño adelanto de un beat, para que le eches un vistazo antes de decidir:</p>` +
+      `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">` +
+      `<tr><td style="background:#232323;border-radius:9px;">` +
+      `<a href="https://youtu.be/zmW5EDQQwds" style="display:inline-block;padding:13px 22px;${bodyFont}font-size:14px;font-weight:700;letter-spacing:0.02em;color:#eaeaea;text-decoration:none;">Ver la clase de muestra</a>` +
+      `</td></tr></table>` +
+      `<p style="margin:0 0 20px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Te adjunto también la guía` +
       ` <a href="https://irlestudios.com/assets/blog/guia-detectar-tonalidad.pdf" style="${linkStyle}">"Cómo detectar la tonalidad de una canción"</a>` +
-      ` — un adelanto de cómo trabajamos. Y te invito a echarle un vistazo a nuestro <a href="https://irlestudios.com/blog.html" style="${linkStyle}">blog</a>,` +
+      ` — otro adelanto de cómo trabajamos. Y te invito a echarle un vistazo a nuestro <a href="https://irlestudios.com/blog.html" style="${linkStyle}">blog</a>,` +
       ` donde ya vamos dando algunas pinceladas de los temas que profundizamos en clase.</p>`
     : `<p style="margin:0 0 20px;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Te invito también a echarle un vistazo a nuestro` +
       ` <a href="https://irlestudios.com/blog.html" style="${linkStyle}">blog</a>, donde ya vamos dando algunas pinceladas de los temas que profundizamos en clase.</p>`;
@@ -103,7 +109,7 @@ async function sendWelcomeEmail(lead) {
     `<div style="border-top:1px solid rgba(0,0,0,0.15);margin:0 0 20px;"></div>` +
 
     `<p style="margin:0;${bodyFont}font-size:15px;line-height:1.6;color:#232323;">Si tienes cualquier duda —sobre el nivel que hace falta, horarios, o lo que sea— puedes responder directamente a este email, lo leo yo mismo.</p>` +
-    `<p style="margin:20px 0 0;${bodyFont}font-size:15px;line-height:1.4;color:#232323;">Un abrazo,<br>Alex — Turian Boy<br>IRL Estudios</p>` +
+    `<p style="margin:20px 0 0;${bodyFont}font-size:15px;line-height:1.4;color:#232323;">¡Nos vemos en el estudio!<br>Alex — Turian Boy<br>IRL Estudios</p>` +
     `</td></tr>` +
 
     `<tr><td align="center" style="padding-top:22px;">` +
